@@ -41,12 +41,16 @@ namespace CapaPresentacion
             if (string.IsNullOrEmpty(usuario))
             {
                 MessageBox.Show("Por favor, completa el campo de usuario", "Campo usuario requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtUsername.Clear();
+                txtPassword.Clear();
                 return;
             }
 
             if (string.IsNullOrEmpty(contraseña))
             {
                 MessageBox.Show("Por favor, completa el campo de contraseña", "Campo contraseña requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtUsername.Clear();
+                txtPassword.Clear();
                 return;
             }
 
