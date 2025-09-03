@@ -103,5 +103,10 @@ namespace CapaPresentacion
                 childForm.Close();
             }
         }
+
+        private void MdiDahsboard_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

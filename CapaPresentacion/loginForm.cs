@@ -57,9 +57,13 @@ namespace CapaPresentacion
             // Validación de credenciales
             if (usuario == "admin" && contraseña == "1234")
             {
-                MessageBox.Show("Inicio de sesión exitoso", "Bienvenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Aquí podrías abrir otro formulario, ocultar este, etc.
-                this.Close();
+                // Ocultar el login
+                this.Hide();
+
+                // Crear e iniciar el formulario MDI
+                var mdi = new MdiDahsboard();   // <-- usa el nombre exacto de tu clase MDI
+                mdi.FormClosed += (s, args) => this.Close(); // al cerrar MDI, cerrar login también
+                mdi.Show();
             }
             else
             {

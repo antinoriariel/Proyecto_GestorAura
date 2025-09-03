@@ -492,7 +492,10 @@
             MainMenuStrip = menuStrip;
             Margin = new Padding(4, 3, 4, 3);
             Name = "MdiDahsboard";
-            Text = "MDIParent1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Medic - Administracion general";
+            WindowState = FormWindowState.Maximized;
+            Load += MdiDahsboard_Load;
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
             toolStrip.ResumeLayout(false);
