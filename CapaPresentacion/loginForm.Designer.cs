@@ -1,6 +1,6 @@
 ﻿namespace CapaPresentacion
 {
-    partial class loginForm
+    partial class LoginForm
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -32,6 +32,7 @@
             btnLogin.TabIndex = 0;
             btnLogin.Text = "Iniciar sesión";
             btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.Click += BtnLogin_Click;
             // 
             // lblUsername
             // 
@@ -96,7 +97,7 @@
             Name = "loginForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Medic - Inicio de sesión";
-            Load += loginForm_Load;
+            Load += LoginForm_Load;
             ((System.ComponentModel.ISupportInitialize)imgMedic).EndInit();
             ResumeLayout(false);
             PerformLayout();
