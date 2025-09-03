@@ -10,6 +10,7 @@ namespace CapaPresentacion
         {
             InitializeComponent();
             this.Load += LoginForm_Load; // <- aquí se conecta el evento
+            this.AcceptButton = btnLogin; // <- Ejecuta el botón al presionar Enter
         }
 
         //Renderizador para rounded en las esquinas de la imagen de medic
@@ -31,13 +32,19 @@ namespace CapaPresentacion
 
         private void BtnLogin_Click(object sender, EventArgs e)
         {
-            string usuario = txtUsername.Text.Trim();
+            string usuario = txtUsername.Text.Trim(); //elimina los espacios vacios en el texto ingresado al campo usuario
             string contraseña = txtPassword.Text;
 
             // Validación de campos vacíos
-            if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(contraseña))
+            if (string.IsNullOrEmpty(usuario))
             {
-                MessageBox.Show("Por favor, completa todos los campos.", "Campos requeridos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, completa el campo de usuario", "Campo usuario requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(contraseña))
+            {
+                MessageBox.Show("Por favor, completa el campo de contraseña", "Campo contraseña requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -46,10 +53,14 @@ namespace CapaPresentacion
             {
                 MessageBox.Show("Inicio de sesión exitoso", "Bienvenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 // Aquí podrías abrir otro formulario, ocultar este, etc.
+                this.Close();
             }
             else
             {
                 MessageBox.Show("Usuario o contraseña incorrectos.", "Error de autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtUsername.Clear();
+                txtPassword.Clear();
+                txtUsername.Focus();
             }
         }
     }
