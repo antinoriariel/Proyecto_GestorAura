@@ -1,35 +1,21 @@
 ﻿namespace CapaPresentacion
 {
-    partial class login
+    partial class loginForm
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             btnLogin = new Button();
-            btnClose = new Button();
             lblUsername = new Label();
             lblPassword = new Label();
             txtUsername = new TextBox();
@@ -40,80 +26,77 @@
             // 
             // btnLogin
             // 
-            btnLogin.Location = new Point(254, 166);
+            btnLogin.Location = new Point(223, 157);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(96, 31);
+            btnLogin.Size = new Size(151, 30);
             btnLogin.TabIndex = 0;
             btnLogin.Text = "Iniciar sesión";
             btnLogin.UseVisualStyleBackColor = true;
             // 
-            // btnClose
-            // 
-            btnClose.Location = new Point(369, 166);
-            btnClose.Name = "btnClose";
-            btnClose.Size = new Size(96, 31);
-            btnClose.TabIndex = 1;
-            btnClose.Text = "Salir";
-            btnClose.UseVisualStyleBackColor = true;
-            // 
             // lblUsername
             // 
             lblUsername.AutoSize = true;
-            lblUsername.Location = new Point(254, 33);
+            lblUsername.Font = new Font("Segoe UI", 10F);
+            lblUsername.Location = new Point(223, 25);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(109, 15);
+            lblUsername.Size = new Size(56, 19);
             lblUsername.TabIndex = 2;
-            lblUsername.Text = "Nombre de usuario";
+            lblUsername.Text = "Usuario";
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Location = new Point(254, 97);
+            lblPassword.Font = new Font("Segoe UI", 10F);
+            lblPassword.Location = new Point(223, 85);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(67, 15);
+            lblPassword.Size = new Size(79, 19);
             lblPassword.TabIndex = 3;
             lblPassword.Text = "Contraseña";
             // 
             // txtUsername
             // 
-            txtUsername.Location = new Point(254, 51);
+            txtUsername.Location = new Point(223, 47);
             txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(211, 23);
+            txtUsername.Size = new Size(151, 23);
             txtUsername.TabIndex = 4;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(254, 115);
+            txtPassword.Location = new Point(223, 107);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(211, 23);
+            txtPassword.Size = new Size(151, 23);
             txtPassword.TabIndex = 5;
+            txtPassword.UseSystemPasswordChar = true;
             // 
             // imgMedic
             // 
-            imgMedic.Location = new Point(12, 12);
+            imgMedic.Image = Properties.Resources.medic_1;
+            imgMedic.Location = new Point(36, 12);
             imgMedic.Name = "imgMedic";
-            imgMedic.Size = new Size(201, 208);
+            imgMedic.Size = new Size(150, 193);
+            imgMedic.SizeMode = PictureBoxSizeMode.Zoom;
             imgMedic.TabIndex = 6;
             imgMedic.TabStop = false;
-            imgMedic.Click += this.imgMedic_Click;
             // 
-            // login
+            // loginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(506, 236);
+            BackColor = SystemColors.ControlLight;
+            ClientSize = new Size(395, 218);
             Controls.Add(imgMedic);
             Controls.Add(txtPassword);
             Controls.Add(txtUsername);
             Controls.Add(lblPassword);
             Controls.Add(lblUsername);
-            Controls.Add(btnClose);
             Controls.Add(btnLogin);
             Margin = new Padding(3, 2, 3, 2);
-            Name = "login";
+            MaximumSize = new Size(411, 257);
+            MinimumSize = new Size(411, 257);
+            Name = "loginForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Medic - Inicio de sesión";
+            Load += loginForm_Load;
             ((System.ComponentModel.ISupportInitialize)imgMedic).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -122,7 +105,6 @@
         #endregion
 
         private Button btnLogin;
-        private Button btnClose;
         private Label lblUsername;
         private Label lblPassword;
         private TextBox txtUsername;
