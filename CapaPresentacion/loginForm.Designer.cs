@@ -26,7 +26,7 @@
             // 
             // btnLogin
             // 
-            btnLogin.Location = new Point(223, 157);
+            btnLogin.Location = new Point(223, 145);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(151, 30);
             btnLogin.TabIndex = 0;
@@ -38,7 +38,7 @@
             // 
             lblUsername.AutoSize = true;
             lblUsername.Font = new Font("Segoe UI", 10F);
-            lblUsername.Location = new Point(223, 25);
+            lblUsername.Location = new Point(223, 37);
             lblUsername.Name = "lblUsername";
             lblUsername.Size = new Size(56, 19);
             lblUsername.TabIndex = 2;
@@ -56,7 +56,7 @@
             // 
             // txtUsername
             // 
-            txtUsername.Location = new Point(223, 47);
+            txtUsername.Location = new Point(223, 59);
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(151, 23);
             txtUsername.TabIndex = 4;
@@ -79,7 +79,7 @@
             imgMedic.TabIndex = 6;
             imgMedic.TabStop = false;
             // 
-            // loginForm
+            // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -94,7 +94,7 @@
             Margin = new Padding(3, 2, 3, 2);
             MaximumSize = new Size(411, 257);
             MinimumSize = new Size(411, 257);
-            Name = "loginForm";
+            Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Medic - Inicio de sesión";
             Load += LoginForm_Load;

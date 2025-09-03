@@ -6,6 +6,8 @@ namespace CapaPresentacion
 {
     public partial class LoginForm : Form
     {
+        private int intentosFallidos = 0; //Para contabilizar los intentos de login
+
         public LoginForm()
         {
             InitializeComponent();
@@ -57,6 +59,15 @@ namespace CapaPresentacion
             }
             else
             {
+                intentosFallidos++;
+
+                if (intentosFallidos >= 3)
+                {
+                    MessageBox.Show("Demasiados intentos fallidos. Cerrando la aplicación.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    this.Close(); // o Application.Exit() si quieres cerrar toda la app
+                    return;
+                }
+
                 MessageBox.Show("Usuario o contraseña incorrectos.", "Error de autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtUsername.Clear();
                 txtPassword.Clear();
