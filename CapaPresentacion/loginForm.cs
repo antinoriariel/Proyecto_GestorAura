@@ -13,6 +13,19 @@ namespace CapaPresentacion
             InitializeComponent();
             this.Load += LoginForm_Load; // <- aquí se conecta el evento
             this.AcceptButton = btnLogin; // <- Ejecuta el botón al presionar Enter
+
+            this.KeyPreview = true; // <-- Necesario para capturar las teclas
+            this.KeyDown += LoginForm_KeyDown; // <-- Manejo de teclas
+        }
+
+        //Usamos este metodo para cerrar el login form con ctrl + s
+        private void LoginForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                this.Close();
+                //Application.Exit(); // <- opcional si querés cerrar toda la app
+            }
         }
 
         //Renderizador para rounded en las esquinas de la imagen de medic
