@@ -72,12 +72,13 @@
             // imgMedic
             // 
             imgMedic.Image = Properties.Resources.medic_1;
-            imgMedic.Location = new Point(36, 12);
+            imgMedic.Location = new Point(23, 12);
             imgMedic.Name = "imgMedic";
-            imgMedic.Size = new Size(150, 193);
-            imgMedic.SizeMode = PictureBoxSizeMode.Zoom;
+            imgMedic.Size = new Size(173, 193);
+            imgMedic.SizeMode = PictureBoxSizeMode.StretchImage;
             imgMedic.TabIndex = 6;
             imgMedic.TabStop = false;
+            imgMedic.Click += imgMedic_Click;
             // 
             // LoginForm
             // 

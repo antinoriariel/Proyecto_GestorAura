@@ -17,6 +17,8 @@ namespace CapaPresentacion
         public MdiDahsboard()
         {
             InitializeComponent();
+            // Cargar el menú según el rol del usuario
+            CargarMenu("Administrador"); // Cambiar "Administrador" por el rol real del usuarioaa
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -124,6 +126,157 @@ namespace CapaPresentacion
                  "\n© 2025 Medic - Todos los derechos reservados";
 
             MessageBox.Show(mensaje, "Acerca de", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void CargarMenu(string rolUsuario)
+        {
+            panel1.Controls.Clear(); // Limpia por si ya tenía botones
+
+            FlowLayoutPanel menu = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown,
+                AutoScroll = true,
+                WrapContents = false
+            };
+
+            // Opciones del Administrador
+            if (rolUsuario == "Administrador")
+            {
+                menu.Controls.Add(CrearBoton("Gestión de usuarios", cBtnUsuarios_Click));
+                menu.Controls.Add(CrearBoton("Permisos y roles", BtnPermisos_Click));
+                menu.Controls.Add(CrearBoton("Reportes estadísticos", BtnReportes_Click));
+                menu.Controls.Add(CrearBoton("Configuración del sistema", BtnConfig_Click));
+                menu.Controls.Add(CrearBoton("Auditoría de accesos", BtnAuditoria_Click));
+            }
+
+            // Opciones del Médico
+            if (rolUsuario == "Medico")
+            {
+                menu.Controls.Add(CrearBoton("Agenda de turnos", BtnAgenda_Click));
+                menu.Controls.Add(CrearBoton("Historia clínica", BtnHistoria_Click));
+                menu.Controls.Add(CrearBoton("Recetas y órdenes", BtnRecetas_Click));
+                menu.Controls.Add(CrearBoton("Estudios y resultados", BtnEstudios_Click));
+                menu.Controls.Add(CrearBoton("Evoluciones", BtnEvoluciones_Click));
+            }
+
+            // Opciones de la Secretaria
+            if (rolUsuario == "Secretaria")
+            {
+                menu.Controls.Add(CrearBoton("Gestión de turnos", BtnTurnos_Click));
+                menu.Controls.Add(CrearBoton("Registro de pacientes", BtnPacientes_Click));
+                menu.Controls.Add(CrearBoton("Búsqueda de pacientes", BtnBusqueda_Click));
+                menu.Controls.Add(CrearBoton("Impresión de comprobantes", BtnImpresion_Click));
+                menu.Controls.Add(CrearBoton("Notificaciones", BtnNotificaciones_Click));
+            }
+
+            panel1.Controls.Add(menu);
+        }
+
+        // Método auxiliar para crear botones con estilo
+        private Button CrearBoton(string texto, EventHandler eventoClick)
+        {
+            Button btn = new Button
+            {
+                Text = texto,
+                Width = panel1.Width - 10,
+                Height = 40,
+                Margin = new Padding(5),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.LightSteelBlue
+            };
+            btn.Click += eventoClick;
+            return btn;
+        }
+
+        private void BtnUsuarios_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Gestión de usuarios");
+        }
+
+        private void BtnPermisos_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Permisos y roles");
+        }
+
+        private void BtnReportes_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Reportes estadísticos");
+        }
+
+        private void BtnConfig_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Configuración del sistema");
+        }
+
+        private void BtnAuditoria_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Auditoría de accesos");
+        }
+
+        private void BtnAgenda_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Agenda de turnos");
+        }
+
+        private void BtnHistoria_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Historia clínica");
+        }
+
+        private void BtnRecetas_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Recetas y órdenes");
+        }
+
+        private void BtnEstudios_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Estudios y resultados");
+        }
+
+        private void BtnEvoluciones_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Evoluciones médicas");
+        }
+
+        private void BtnTurnos_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Gestión de turnos");
+        }
+
+        private void BtnPacientes_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Registro de pacientes");
+        }
+
+        private void BtnBusqueda_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Búsqueda de pacientes");
+        }
+
+        private void BtnImpresion_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Impresión de comprobantes");
+        }
+
+        private void BtnNotificaciones_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Notificaciones a pacientes");
+        }
+
+        private void cBtnUsuarios_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Gestión de usuarios");
+        }
+
+        private void menuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }
