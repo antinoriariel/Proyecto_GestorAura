@@ -66,11 +66,6 @@ namespace CapaPresentacion
         {
         }
 
-        private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            toolStrip.Visible = toolBarToolStripMenuItem.Checked;
-        }
-
         private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             statusStrip.Visible = statusBarToolStripMenuItem.Checked;
@@ -107,6 +102,28 @@ namespace CapaPresentacion
         private void MdiDahsboard_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void indexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://github.com/antinoriariel/Proyecto_GestorAura",
+                UseShellExecute = true
+            };
+            System.Diagnostics.Process.Start(psi);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string mensaje = "Gestor de Historias Clínicas - MedicSys\n\n" +
+                 "Versión: 1.0\n" +
+                 "Desarrolladores:\n" +
+                 "- Antinori, Ariel\n" +
+                 "- Alegre, Leonel\n" +
+                 "\n© 2025 Medic - Todos los derechos reservados";
+
+            MessageBox.Show(mensaje, "Acerca de", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
