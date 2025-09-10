@@ -27,6 +27,7 @@
             // 
             // btnLogin
             // 
+            btnLogin.Font = new Font("Lucida Console", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnLogin.Location = new Point(223, 145);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(151, 30);
@@ -38,20 +39,20 @@
             // lblUsername
             // 
             lblUsername.AutoSize = true;
-            lblUsername.Font = new Font("Segoe UI", 10F);
-            lblUsername.Location = new Point(223, 37);
+            lblUsername.Font = new Font("Lucida Console", 9.75F, FontStyle.Bold);
+            lblUsername.Location = new Point(223, 43);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(56, 19);
+            lblUsername.Size = new Size(70, 13);
             lblUsername.TabIndex = 2;
             lblUsername.Text = "Usuario";
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Font = new Font("Segoe UI", 10F);
-            lblPassword.Location = new Point(223, 85);
+            lblPassword.Font = new Font("Lucida Console", 9.75F, FontStyle.Bold);
+            lblPassword.Location = new Point(223, 91);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(79, 19);
+            lblPassword.Size = new Size(97, 13);
             lblPassword.TabIndex = 3;
             lblPassword.Text = "Contraseña";
             // 
@@ -75,7 +76,7 @@
             imgMedic.Image = Properties.Resources.medic_1;
             imgMedic.Location = new Point(30, 12);
             imgMedic.Name = "imgMedic";
-            imgMedic.Size = new Size(159, 163);
+            imgMedic.Size = new Size(159, 172);
             imgMedic.SizeMode = PictureBoxSizeMode.StretchImage;
             imgMedic.TabIndex = 6;
             imgMedic.TabStop = false;
@@ -84,12 +85,13 @@
             // lblLeyenda
             // 
             lblLeyenda.AutoSize = true;
-            lblLeyenda.Font = new Font("Tahoma", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblLeyenda.Location = new Point(48, 178);
+            lblLeyenda.Font = new Font("Lucida Console", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLeyenda.Location = new Point(30, 187);
             lblLeyenda.Name = "lblLeyenda";
-            lblLeyenda.Size = new Size(125, 29);
+            lblLeyenda.Size = new Size(161, 16);
             lblLeyenda.TabIndex = 7;
-            lblLeyenda.Text = "G - Medic";
+            lblLeyenda.Text = "Gestor - Medic";
+            lblLeyenda.Click += lblLeyenda_Click;
             // 
             // LoginForm
             // 

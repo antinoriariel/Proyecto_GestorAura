@@ -106,5 +106,10 @@ namespace CapaPresentacion
         {
 
         }
+
+        private void lblLeyenda_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
