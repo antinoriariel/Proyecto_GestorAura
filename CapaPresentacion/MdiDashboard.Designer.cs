@@ -58,11 +58,10 @@
             panel1 = new Panel();
             pictureBox1 = new PictureBox();
             label1 = new Label();
-            panel3 = new Panel();
             menuStrip.SuspendLayout();
             statusStrip.SuspendLayout();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            panel3.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip
@@ -95,6 +94,7 @@
             salirToolStripMenuItem.Name = "salirToolStripMenuItem";
             salirToolStripMenuItem.Size = new Size(225, 26);
             salirToolStripMenuItem.Text = "Salir";
+            salirToolStripMenuItem.Click += salirToolStripMenuItem_Click;
             // 
             // editMenu
             // 
@@ -256,6 +256,8 @@
             // 
             panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             panel1.BackColor = SystemColors.ControlDarkDark;
+            panel1.Controls.Add(pictureBox1);
+            panel1.Controls.Add(label1);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 30);
             panel1.Margin = new Padding(3, 4, 3, 4);
@@ -268,7 +270,7 @@
             // 
             pictureBox1.BackgroundImage = Properties.Resources.medic_1;
             pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
-            pictureBox1.Location = new Point(79, 16);
+            pictureBox1.Location = new Point(64, 27);
             pictureBox1.Margin = new Padding(3, 4, 3, 4);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(93, 88);
@@ -279,30 +281,18 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(79, 108);
+            label1.Location = new Point(64, 119);
             label1.Name = "label1";
             label1.Size = new Size(97, 20);
             label1.TabIndex = 1;
             label1.Text = "Gestor Medic";
             label1.Click += label1_Click;
             // 
-            // panel3
-            // 
-            panel3.BackColor = SystemColors.HighlightText;
-            panel3.Controls.Add(label1);
-            panel3.Controls.Add(pictureBox1);
-            panel3.Location = new Point(0, 36);
-            panel3.Margin = new Padding(3, 4, 3, 4);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(246, 148);
-            panel3.TabIndex = 0;
-            // 
             // MdiDahsboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(842, 697);
-            Controls.Add(panel3);
             Controls.Add(panel1);
             Controls.Add(statusStrip);
             Controls.Add(menuStrip);
@@ -318,9 +308,9 @@
             menuStrip.PerformLayout();
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            panel3.ResumeLayout(false);
-            panel3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
 
@@ -363,7 +353,6 @@
         private Panel panel1;
         private PictureBox pictureBox1;
         private Label label1;
-        private Panel panel3;
     }
 }
 
