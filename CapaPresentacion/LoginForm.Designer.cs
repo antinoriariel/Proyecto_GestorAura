@@ -21,6 +21,7 @@
             txtUsername = new TextBox();
             txtPassword = new TextBox();
             imgMedic = new PictureBox();
+            lblLeyenda = new Label();
             ((System.ComponentModel.ISupportInitialize)imgMedic).BeginInit();
             SuspendLayout();
             // 
@@ -72,13 +73,23 @@
             // imgMedic
             // 
             imgMedic.Image = Properties.Resources.medic_1;
-            imgMedic.Location = new Point(23, 12);
+            imgMedic.Location = new Point(30, 12);
             imgMedic.Name = "imgMedic";
-            imgMedic.Size = new Size(173, 193);
+            imgMedic.Size = new Size(159, 163);
             imgMedic.SizeMode = PictureBoxSizeMode.StretchImage;
             imgMedic.TabIndex = 6;
             imgMedic.TabStop = false;
             imgMedic.Click += imgMedic_Click;
+            // 
+            // lblLeyenda
+            // 
+            lblLeyenda.AutoSize = true;
+            lblLeyenda.Font = new Font("Tahoma", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLeyenda.Location = new Point(48, 178);
+            lblLeyenda.Name = "lblLeyenda";
+            lblLeyenda.Size = new Size(125, 29);
+            lblLeyenda.TabIndex = 7;
+            lblLeyenda.Text = "G - Medic";
             // 
             // LoginForm
             // 
@@ -86,6 +97,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLight;
             ClientSize = new Size(395, 218);
+            Controls.Add(lblLeyenda);
             Controls.Add(imgMedic);
             Controls.Add(txtPassword);
             Controls.Add(txtUsername);
@@ -112,5 +124,6 @@
         private TextBox txtUsername;
         private TextBox txtPassword;
         private PictureBox imgMedic;
+        private Label lblLeyenda;
     }
 }
