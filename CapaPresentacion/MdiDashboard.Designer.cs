@@ -274,17 +274,18 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(87, 81);
+            label1.Location = new Point(69, 81);
             label1.Name = "label1";
-            label1.Size = new Size(38, 15);
+            label1.Size = new Size(77, 15);
             label1.TabIndex = 1;
-            label1.Text = "label1";
+            label1.Text = "Gestor Medic";
+            label1.Click += label1_Click;
             // 
             // pictureBox1
             // 
             pictureBox1.BackgroundImage = Properties.Resources.medic_1;
             pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
-            pictureBox1.Location = new Point(65, 12);
+            pictureBox1.Location = new Point(69, 12);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(81, 66);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;

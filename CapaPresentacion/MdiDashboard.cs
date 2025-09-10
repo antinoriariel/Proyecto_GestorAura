@@ -304,5 +304,10 @@ namespace CapaPresentacion
         {
             MessageBox.Show("Has hecho clic en el botón de opciones");
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
