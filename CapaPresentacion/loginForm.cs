@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace CapaPresentacion
@@ -16,6 +17,11 @@ namespace CapaPresentacion
 
             this.KeyPreview = true; // <-- Necesario para capturar las teclas
             this.KeyDown += LoginForm_KeyDown; // <-- Manejo de teclas
+
+            //esta parte hay que eliminarla en produccion
+            /*var mdi = new MdiDahsboard();   // <-- usa el nombre exacto de tu clase MDI
+            mdi.FormClosed += (s, args) => this.Close(); // al cerrar MDI, cerrar login también
+            mdi.Show();*/
         }
 
         //Usamos este metodo para cerrar el login form con ctrl + s
@@ -68,13 +74,13 @@ namespace CapaPresentacion
             }
 
             // Validación de credenciales
-            if (usuario == "admin" && contraseña == "1234")
+            if (usuario == "admin" || usuario == "medico" || usuario == "secre" && contraseña == "1234")
             {
                 // Ocultar el login
                 this.Hide();
 
                 // Crear e iniciar el formulario MDI
-                var mdi = new MdiDahsboard();   // <-- usa el nombre exacto de tu clase MDI
+                var mdi = new MdiDahsboard(usuario);   // <-- usa el nombre exacto de tu clase MDI
                 mdi.FormClosed += (s, args) => this.Close(); // al cerrar MDI, cerrar login también
                 mdi.Show();
             }
@@ -94,6 +100,11 @@ namespace CapaPresentacion
                 txtPassword.Clear();
                 txtUsername.Focus();
             }
+        }
+
+        private void imgMedic_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

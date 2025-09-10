@@ -18,14 +18,15 @@ namespace CapaPresentacion
         {
             InitializeComponent();
             // Cargar el menú según el rol del usuario
-            if(userName == "admin")
+            if (userName == "admin")
             {
                 CargarMenu("Administrador");
-            }else if(userName == "medico")
+            }
+            else if (userName == "medico")
             {
                 CargarMenu("Medico");
             }
-            else if(userName == "secre")
+            else if (userName == "secre")
             {
                 CargarMenu("Secretaria");
             }
@@ -297,6 +298,11 @@ namespace CapaPresentacion
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Has hecho clic en el botón de ejemplo.");
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Has hecho clic en el botón de opciones");
         }
     }
 }
