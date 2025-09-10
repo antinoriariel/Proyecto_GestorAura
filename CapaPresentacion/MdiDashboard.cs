@@ -14,11 +14,21 @@ namespace CapaPresentacion
     {
         private int childFormNumber = 0;
 
-        public MdiDahsboard()
+        public MdiDahsboard(string userName)
         {
             InitializeComponent();
             // Cargar el menú según el rol del usuario
-            CargarMenu("Administrador"); // Cambiar "Administrador" por el rol real del usuarioaa
+            if(userName == "admin")
+            {
+                CargarMenu("Administrador");
+            }else if(userName == "medico")
+            {
+                CargarMenu("Medico");
+            }
+            else if(userName == "secre")
+            {
+                CargarMenu("Secretaria");
+            }
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -277,6 +287,16 @@ namespace CapaPresentacion
         private void menuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Has hecho clic en el botón de ejemplo.");
         }
     }
 }

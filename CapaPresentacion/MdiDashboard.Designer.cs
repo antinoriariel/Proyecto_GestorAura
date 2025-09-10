@@ -59,10 +59,14 @@
             panel3 = new Panel();
             label1 = new Label();
             pictureBox1 = new PictureBox();
+            panel2 = new Panel();
+            button1 = new Button();
+            button2 = new Button();
             menuStrip.SuspendLayout();
             statusStrip.SuspendLayout();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip
@@ -290,11 +294,42 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
+            // panel2
+            // 
+            panel2.Controls.Add(button2);
+            panel2.Controls.Add(button1);
+            panel2.Dock = DockStyle.Right;
+            panel2.Location = new Point(583, 24);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(154, 477);
+            panel2.TabIndex = 6;
+            panel2.Paint += panel2_Paint;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(18, 34);
+            button1.Name = "button1";
+            button1.Size = new Size(124, 23);
+            button1.TabIndex = 0;
+            button1.Text = "Aceptar";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(18, 63);
+            button2.Name = "button2";
+            button2.Size = new Size(124, 23);
+            button2.TabIndex = 1;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            // 
             // MdiDahsboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(737, 523);
+            Controls.Add(panel2);
             Controls.Add(panel3);
             Controls.Add(panel1);
             Controls.Add(statusStrip);
@@ -314,6 +349,7 @@
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            panel2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
 
@@ -357,6 +393,9 @@
         private Panel panel3;
         private Label label1;
         private PictureBox pictureBox1;
+        private Panel panel2;
+        private Button button2;
+        private Button button1;
     }
 }
 

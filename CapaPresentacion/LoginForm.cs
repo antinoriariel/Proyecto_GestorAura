@@ -74,13 +74,13 @@ namespace CapaPresentacion
             }
 
             // Validación de credenciales
-            if (usuario == "admin" && contraseña == "1234")
+            if (usuario == "admin" || usuario == "medico" || usuario == "secre" && contraseña == "1234")
             {
                 // Ocultar el login
                 this.Hide();
 
                 // Crear e iniciar el formulario MDI
-                var mdi = new MdiDahsboard();   // <-- usa el nombre exacto de tu clase MDI
+                var mdi = new MdiDahsboard(usuario);   // <-- usa el nombre exacto de tu clase MDI
                 mdi.FormClosed += (s, args) => this.Close(); // al cerrar MDI, cerrar login también
                 mdi.Show();
             }
