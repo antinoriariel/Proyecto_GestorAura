@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Configuration; // Para ConfigurationManager de la base de datos
 using System.Data.SqlClient; // Para SqlConnection, SqlCommand, SqlDataReader
 
+
 namespace CapaPresentacion
 {
     public partial class Login : Form
@@ -51,54 +52,62 @@ namespace CapaPresentacion
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string usuario = txtUsername.Text.Trim(); //elimina los espacios vacios en el texto ingresado al campo usuario
+            string usuario = txtUsername.Text.Trim();
             string contraseña = txtPassword.Text;
 
-            // Validación de campos vacíos
-            if (string.IsNullOrEmpty(usuario))
+            if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(contraseña))
             {
-                MessageBox.Show("Por favor, completa el campo de usuario", "Campo usuario requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtUsername.Clear();
-                txtPassword.Clear();
+                MessageBox.Show("Por favor, completa todos los campos", "Campos requeridos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (string.IsNullOrEmpty(contraseña))
-            {
-                MessageBox.Show("Por favor, completa el campo de contraseña", "Campo contraseña requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtUsername.Clear();
-                txtPassword.Clear();
-                return;
-            }
+            // 👇 Usa el mismo nombre definido en App.config
+            string conexion = ConfigurationManager.ConnectionStrings["conexionBD"].ConnectionString;
 
-            // Validación de credenciales
-            if (usuario == "admin" || usuario == "medico" || usuario == "secre" && contraseña == "1234")
+            using (SqlConnection conn = new SqlConnection(conexion))
             {
-                // Ocultar el login
-                this.Hide();
-
-                // Crear e iniciar el formulario MDI
-                var mdi = new MdiDahsboard(usuario);   // <-- usa el nombre exacto de tu clase MDI
-                mdi.FormClosed += (s, args) => this.Close(); // al cerrar MDI, cerrar login también
-                mdi.Show();
-            }
-            else
-            {
-                intentosFallidos++;
-
-                if (intentosFallidos >= 3)
+                try
                 {
-                    MessageBox.Show("Demasiados intentos fallidos. Cerrando la aplicación.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    this.Close(); // o Application.Exit() si quieres cerrar toda la app
-                    return;
-                }
+                    conn.Open();
 
-                MessageBox.Show("Usuario o contraseña incorrectos.", "Error de autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtUsername.Clear();
-                txtPassword.Clear();
-                txtUsername.Focus();
+                    string query = "SELECT rol FROM users WHERE username = @user AND password = @pass AND activo = 1";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@user", usuario);
+                        cmd.Parameters.AddWithValue("@pass", contraseña);
+
+                        object rol = cmd.ExecuteScalar(); // Devuelve el rol o null si no existe
+
+                        if (rol != null)
+                        {
+                            // Ocultar el login
+                            this.Hide();
+
+                            // Abrir el dashboard
+                            var mdi = new MdiDahsboard(usuario);
+                            mdi.FormClosed += (s, args) => this.Close();
+                            mdi.Show();
+                        }
+                        else
+                        {
+                            intentosFallidos++;
+                            MessageBox.Show("Usuario o contraseña incorrectos.", "Error de autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            if (intentosFallidos >= 3)
+                            {
+                                MessageBox.Show("Demasiados intentos fallidos. Cerrando la aplicación.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                                this.Close();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar con la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
+
 
         //Usamos este metodo para cerrar el login form con ctrl + s
         private void LoginForm_KeyDown(object? sender, KeyEventArgs e)
