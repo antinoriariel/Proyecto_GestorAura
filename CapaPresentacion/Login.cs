@@ -127,9 +127,12 @@ namespace CapaPresentacion
                             this.Hide();
 
                             //Aca hacemos lo que sea que hagamos cuando el login es exitoso
-                            var mdi = new MdiDahsboard(rol.ToString());
-                            mdi.FormClosed += (s, args) => this.Close();
-                            mdi.Show();
+                            var dashboard_form = new Dashboard(/*rol.ToString()*/);
+
+                            // Cierra el formulario actual (Login) cuando se cierra Dashboard
+                            dashboard_form.FormClosed += (s, args) => this.Close();
+
+                            dashboard_form.Show();
                         }
                         else
                         {
