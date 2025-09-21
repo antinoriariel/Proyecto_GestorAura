@@ -1,4 +1,6 @@
-﻿namespace CapaPresentacion
+﻿using System.Windows.Forms;
+
+namespace CapaPresentacion
 {
     partial class Login
     {
@@ -28,6 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             txtPassword = new TextBox();
             txtUsername = new TextBox();
@@ -36,7 +39,9 @@
             btnLogin = new Button();
             pictureBox1 = new PictureBox();
             btnClose = new Button();
+            ErrorProvider1 = new ErrorProvider(components);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ErrorProvider1).BeginInit();
             SuspendLayout();
             // 
             // txtPassword
@@ -44,7 +49,7 @@
             txtPassword.Location = new Point(240, 117);
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(187, 19);
-            txtPassword.TabIndex = 10;
+            txtPassword.TabIndex = 1;
             txtPassword.UseSystemPasswordChar = true;
             // 
             // txtUsername
@@ -52,7 +57,7 @@
             txtUsername.Location = new Point(240, 69);
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(187, 19);
-            txtUsername.TabIndex = 9;
+            txtUsername.TabIndex = 0;
             // 
             // lblPassword
             // 
@@ -82,7 +87,7 @@
             btnLogin.Location = new Point(240, 155);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(187, 34);
-            btnLogin.TabIndex = 6;
+            btnLogin.TabIndex = 2;
             btnLogin.Text = "Iniciar sesión";
             btnLogin.UseVisualStyleBackColor = true;
             btnLogin.Click += btnLogin_Click;
@@ -99,7 +104,7 @@
             // 
             // btnClose
             // 
-            btnClose.BackColor = Color.FromArgb(192, 0, 0);
+            btnClose.BackColor = Color.FromArgb(231, 76, 60); // Rojo error
             btnClose.Cursor = Cursors.Hand;
             btnClose.FlatStyle = FlatStyle.Popup;
             btnClose.ForeColor = Color.Transparent;
@@ -108,10 +113,14 @@
             btnClose.Name = "btnClose";
             btnClose.RightToLeft = RightToLeft.No;
             btnClose.Size = new Size(47, 18);
-            btnClose.TabIndex = 12;
+            btnClose.TabIndex = 3;
             btnClose.Text = "x";
             btnClose.UseVisualStyleBackColor = false;
             btnClose.Click += btnClose_click;
+            // 
+            // ErrorProvider1
+            // 
+            ErrorProvider1.ContainerControl = this;
             // 
             // Login
             // 
@@ -133,6 +142,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Iniciar sesión";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ErrorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -146,5 +156,7 @@
         private Button btnLogin;
         private PictureBox pictureBox1;
         private Button btnClose;
+
+        private System.Windows.Forms.ErrorProvider ErrorProvider1;
     }
 }

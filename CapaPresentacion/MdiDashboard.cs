@@ -18,7 +18,7 @@ namespace CapaPresentacion
         {
             InitializeComponent();
             // Cargar el menú según el rol del usuario
-            if (userName == "admin")
+            if (userName == "administrador")
             {
                 CargarMenu("Administrador");
             }
@@ -26,7 +26,7 @@ namespace CapaPresentacion
             {
                 CargarMenu("Medico");
             }
-            else if (userName == "secre")
+            else if (userName == "secretaria")
             {
                 CargarMenu("Secretaria");
             }

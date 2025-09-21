@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.Configuration; // Para ConfigurationManager de la base de datos
 using System.Data.SqlClient; // Para SqlConnection, SqlCommand, SqlDataReader
 
-
 namespace CapaPresentacion
 {
     public partial class Login : Form
@@ -22,9 +21,9 @@ namespace CapaPresentacion
         public Login()
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None; // Quitar borde predeterminado
-
             this.AcceptButton = btnLogin; // <- Ejecuta el botón al presionar Enter
+            this.CancelButton = btnClose; // <- Ejecuta el botón al presionar Esc
+
             this.KeyPreview = true; // <-- Necesario para capturar las teclas
             this.KeyDown += LoginForm_KeyDown; // <-- Manejo de teclas
         }
@@ -45,9 +44,34 @@ namespace CapaPresentacion
             }
         }
 
+        // Evento click del botón cerrar (X)
         private void btnClose_click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        // Validar que los campos no estén vacíos
+        private bool ValidarCampos()
+        {
+            bool valido = true;
+
+            // Limpiar errores anteriores
+            ErrorProvider1.SetError(txtUsername, "");
+            ErrorProvider1.SetError(txtPassword, "");
+
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
+            {
+                ErrorProvider1.SetError(txtUsername, "El campo usuario es obligatorio.");
+                valido = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                ErrorProvider1.SetError(txtPassword, "La contraseña es obligatoria.");
+                valido = false;
+            }
+
+            return valido;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -55,13 +79,31 @@ namespace CapaPresentacion
             string usuario = txtUsername.Text.Trim();
             string contraseña = txtPassword.Text;
 
-            if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(contraseña))
+            // 🔹 Limpiar errores previos
+            ErrorProvider1.SetError(txtUsername, "");
+            ErrorProvider1.SetError(txtPassword, "");
+
+            bool valido = true;
+
+            // 🔹 Validaciones
+            if (string.IsNullOrWhiteSpace(usuario))
             {
-                MessageBox.Show("Por favor, completa todos los campos", "Campos requeridos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                ErrorProvider1.SetError(txtUsername, "El campo usuario es obligatorio.");
+                valido = false;
             }
 
-            // 👇 Usa el mismo nombre definido en App.config
+            if (string.IsNullOrWhiteSpace(contraseña))
+            {
+                ErrorProvider1.SetError(txtPassword, "La contraseña es obligatoria.");
+                valido = false;
+            }
+
+            if (!valido)
+            {
+                return; // No sigue si hay errores
+            }
+
+            // 🔹 Conexión SQL
             string conexion = ConfigurationManager.ConnectionStrings["conexionBD"].ConnectionString;
 
             using (SqlConnection conn = new SqlConnection(conexion))
@@ -71,6 +113,7 @@ namespace CapaPresentacion
                     conn.Open();
 
                     string query = "SELECT rol FROM users WHERE username = @user AND password = @pass AND activo = 1";
+
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@user", usuario);
@@ -80,22 +123,25 @@ namespace CapaPresentacion
 
                         if (rol != null)
                         {
-                            // Ocultar el login
+                            // 🔹 Si login es válido
                             this.Hide();
 
-                            // Abrir el dashboard
-                            var mdi = new MdiDahsboard(usuario);
+                            //Aca hacemos lo que sea que hagamos cuando el login es exitoso
+                            var mdi = new MdiDahsboard(rol.ToString());
                             mdi.FormClosed += (s, args) => this.Close();
                             mdi.Show();
                         }
                         else
                         {
                             intentosFallidos++;
-                            MessageBox.Show("Usuario o contraseña incorrectos.", "Error de autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            ErrorProvider1.SetError(txtPassword, "Usuario o contraseña incorrectos.");
+                            txtPassword.Clear();
+                            txtPassword.Focus();
 
                             if (intentosFallidos >= 3)
                             {
-                                MessageBox.Show("Demasiados intentos fallidos. Cerrando la aplicación.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                                MessageBox.Show("Demasiados intentos fallidos. Cerrando la aplicación.",
+                                    "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                                 this.Close();
                             }
                         }
@@ -103,7 +149,8 @@ namespace CapaPresentacion
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al conectar con la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error al conectar con la base de datos: " + ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
