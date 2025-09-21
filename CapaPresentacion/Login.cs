@@ -88,12 +88,17 @@ namespace CapaPresentacion
                 {
                     conn.Open();
 
-                    string query = "SELECT rol FROM users WHERE username = @user AND password = @pass AND activo = 1";
+                    string query = @"
+                    SELECT rol 
+                    FROM users 
+                    WHERE username COLLATE Latin1_General_CS_AS = @user
+                      AND password COLLATE Latin1_General_CS_AS = @pass
+                      AND activo = 1";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@user", usuario);
-                        cmd.Parameters.AddWithValue("@pass", contraseña);
+                        cmd.Parameters.Add("@user", SqlDbType.VarChar, 30).Value = usuario;      // ¡VarChar!
+                        cmd.Parameters.Add("@pass", SqlDbType.VarChar, 255).Value = contraseña;  // ¡VarChar!
 
                         object rol = cmd.ExecuteScalar(); // Devuelve el rol o null si no existe
 
