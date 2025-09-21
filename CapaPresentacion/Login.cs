@@ -50,30 +50,6 @@ namespace CapaPresentacion
             this.Close();
         }
 
-        // Validar que los campos no estén vacíos
-        private bool ValidarCampos()
-        {
-            bool valido = true;
-
-            // Limpiar errores anteriores
-            ErrorProvider1.SetError(txtUsername, "");
-            ErrorProvider1.SetError(txtPassword, "");
-
-            if (string.IsNullOrWhiteSpace(txtUsername.Text))
-            {
-                ErrorProvider1.SetError(txtUsername, "El campo usuario es obligatorio.");
-                valido = false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtPassword.Text))
-            {
-                ErrorProvider1.SetError(txtPassword, "La contraseña es obligatoria.");
-                valido = false;
-            }
-
-            return valido;
-        }
-
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string usuario = txtUsername.Text.Trim();
