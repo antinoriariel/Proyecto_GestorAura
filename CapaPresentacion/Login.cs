@@ -12,26 +12,36 @@ namespace CapaPresentacion
         public Login()
         {
             InitializeComponent();
-            this.AcceptButton = btnLogin;
-            this.CancelButton = btnClose;
+            this.AcceptButton = btnLogin;  // Enter hace login
+            this.CancelButton = btnClose;  // Esc hace this.Close()
+            this.KeyPreview = true;        // Permite capturar teclas a nivel de formulario
+            this.KeyDown += Login_KeyDown;
         }
 
+        private void Login_KeyDown(object? sender, KeyEventArgs e)
+        {
+            // ESC o Ctrl+S cierran el formulario
+            if (e.KeyCode == Keys.Escape || (e.Control && e.KeyCode == Keys.S))
+            {
+                this.Close();
+            }
+        }
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string usuario = txtUsername.Text.Trim();
             string contraseña = txtPassword.Text;
 
-            ErrorProvider1.SetError(txtUsername, "");
-            ErrorProvider1.SetError(txtPassword, "");
-
             if (string.IsNullOrWhiteSpace(usuario))
             {
-                ErrorProvider1.SetError(txtUsername, "El campo usuario es obligatorio.");
+                MessageBox.Show("El campo usuario es obligatorio.",
+                    "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(contraseña))
             {
-                ErrorProvider1.SetError(txtPassword, "La contraseña es obligatoria.");
+                MessageBox.Show("La contraseña es obligatoria.",
+                    "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -47,7 +57,9 @@ namespace CapaPresentacion
             else
             {
                 intentosFallidos++;
-                ErrorProvider1.SetError(txtPassword, "Usuario o contraseña incorrectos.");
+                MessageBox.Show("Usuario o contraseña incorrectos.",
+                    "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 txtPassword.Clear();
                 txtPassword.Focus();
 
@@ -58,6 +70,11 @@ namespace CapaPresentacion
                     this.Close();
                 }
             }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -104,7 +104,7 @@ namespace CapaPresentacion
             // 
             // btnClose
             // 
-            btnClose.BackColor = Color.FromArgb(231, 76, 60); // Rojo error
+            btnClose.BackColor = Color.FromArgb(231, 76, 60);
             btnClose.Cursor = Cursors.Hand;
             btnClose.FlatStyle = FlatStyle.Popup;
             btnClose.ForeColor = Color.Transparent;
@@ -116,7 +116,7 @@ namespace CapaPresentacion
             btnClose.TabIndex = 3;
             btnClose.Text = "x";
             btnClose.UseVisualStyleBackColor = false;
-            //btnClose.Click += btnClose_click;
+            btnClose.Click += btnClose_Click;
             // 
             // ErrorProvider1
             // 
