@@ -116,7 +116,7 @@ namespace CapaPresentacion
             btnClose.TabIndex = 3;
             btnClose.Text = "x";
             btnClose.UseVisualStyleBackColor = false;
-            btnClose.Click += btnClose_click;
+            //btnClose.Click += btnClose_click;
             // 
             // ErrorProvider1
             // 
