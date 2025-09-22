@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Linq;
 
-namespace CapaPresentacion // o si preferís, CapaNegocio
+namespace CapaNegocio
 {
     public static class PasswordHelper
     {
