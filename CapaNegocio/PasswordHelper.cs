@@ -7,16 +7,13 @@ namespace CapaNegocio
     {
         public static (byte[] hash, byte[] salt) CrearPasswordHash(string password)
         {
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                byte[] salt = new byte[16];
-                rng.GetBytes(salt);
+            byte[] salt = new byte[16];
+            RandomNumberGenerator.Fill(salt); // ✅ reemplaza RNGCryptoServiceProvider
 
-                var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000, HashAlgorithmName.SHA256);
-                byte[] hash = pbkdf2.GetBytes(32);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000, HashAlgorithmName.SHA256);
+            byte[] hash = pbkdf2.GetBytes(32);
 
-                return (hash, salt);
-            }
+            return (hash, salt);
         }
 
         public static bool ValidarPassword(string password, byte[] storedHash, byte[] storedSalt)
@@ -24,7 +21,7 @@ namespace CapaNegocio
             var pbkdf2 = new Rfc2898DeriveBytes(password, storedSalt, 100000, HashAlgorithmName.SHA256);
             byte[] hash = pbkdf2.GetBytes(32);
 
-            return hash.SequenceEqual(storedHash);
+            return hash.SequenceEqual(storedHash); // retorna true o false dependiendo si coinciden
         }
     }
 }

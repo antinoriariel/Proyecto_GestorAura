@@ -224,7 +224,7 @@
             // 
             // aboutToolStripMenuItem
             // 
-            aboutToolStripMenuItem.Image = Properties.Resources.medic_1;
+            //aboutToolStripMenuItem.Image = Properties.Resources.medic_1;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.Size = new Size(180, 26);
             aboutToolStripMenuItem.Text = "&Acerca de... ...";
@@ -268,7 +268,7 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.BackgroundImage = Properties.Resources.medic_1;
+            //pictureBox1.BackgroundImage = Properties.Resources.medic_1;
             pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
             pictureBox1.Location = new Point(64, 27);
             pictureBox1.Margin = new Padding(3, 4, 3, 4);
