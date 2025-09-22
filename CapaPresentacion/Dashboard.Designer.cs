@@ -28,14 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
-            menuStrip = new MenuStrip();
-            fileMenu = new ToolStripMenuItem();
-            toolStripSeparator5 = new ToolStripSeparator();
-            exitToolStripMenuItem = new ToolStripMenuItem();
-            ayudaToolStripMenuItem = new ToolStripMenuItem();
-            webDelProyectoToolStripMenuItem1 = new ToolStripMenuItem();
-            aboutToolStripMenuItem1 = new ToolStripMenuItem();
             undoToolStripMenuItem = new ToolStripMenuItem();
             redoToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator6 = new ToolStripSeparator();
@@ -57,61 +49,7 @@
             toolStripSeparator8 = new ToolStripSeparator();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             panel1 = new Panel();
-            ayudaToolStripMenuItem1 = new ToolStripMenuItem();
-            menuStrip.SuspendLayout();
             SuspendLayout();
-            // 
-            // menuStrip
-            // 
-            menuStrip.Items.AddRange(new ToolStripItem[] { fileMenu, ayudaToolStripMenuItem });
-            menuStrip.Location = new Point(0, 0);
-            menuStrip.Name = "menuStrip";
-            menuStrip.Size = new Size(1235, 24);
-            menuStrip.TabIndex = 0;
-            menuStrip.Text = "MenuStrip";
-            // 
-            // fileMenu
-            // 
-            fileMenu.DropDownItems.AddRange(new ToolStripItem[] { toolStripSeparator5, exitToolStripMenuItem });
-            fileMenu.ImageTransparentColor = SystemColors.ActiveBorder;
-            fileMenu.Name = "fileMenu";
-            fileMenu.Size = new Size(60, 20);
-            fileMenu.Text = "&Archivo";
-            // 
-            // toolStripSeparator5
-            // 
-            toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(177, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
-            exitToolStripMenuItem.Text = "&Salir";
-            exitToolStripMenuItem.Click += ExitToolsStripMenuItem_Click;
-            // 
-            // ayudaToolStripMenuItem
-            // 
-            ayudaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { webDelProyectoToolStripMenuItem1, aboutToolStripMenuItem1, ayudaToolStripMenuItem1 });
-            ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
-            ayudaToolStripMenuItem.Size = new Size(44, 20);
-            ayudaToolStripMenuItem.Text = "Help";
-            // 
-            // webDelProyectoToolStripMenuItem1
-            // 
-            webDelProyectoToolStripMenuItem1.Image = (Image)resources.GetObject("webDelProyectoToolStripMenuItem1.Image");
-            webDelProyectoToolStripMenuItem1.Name = "webDelProyectoToolStripMenuItem1";
-            webDelProyectoToolStripMenuItem1.Size = new Size(180, 22);
-            webDelProyectoToolStripMenuItem1.Text = "Webpage";
-            webDelProyectoToolStripMenuItem1.Click += webDelProyectoToolStripMenuItem1_Click;
-            // 
-            // aboutToolStripMenuItem1
-            // 
-            aboutToolStripMenuItem1.Image = (Image)resources.GetObject("aboutToolStripMenuItem1.Image");
-            aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            aboutToolStripMenuItem1.Size = new Size(180, 22);
-            aboutToolStripMenuItem1.Text = "About";
-            aboutToolStripMenuItem1.Click += aboutToolStripMenuItem1_Click;
             // 
             // undoToolStripMenuItem
             // 
@@ -217,16 +155,10 @@
             // 
             panel1.BackgroundImageLayout = ImageLayout.Stretch;
             panel1.Dock = DockStyle.Left;
-            panel1.Location = new Point(0, 24);
+            panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(159, 499);
+            panel1.Size = new Size(159, 523);
             panel1.TabIndex = 4;
-            // 
-            // ayudaToolStripMenuItem1
-            // 
-            ayudaToolStripMenuItem1.Name = "ayudaToolStripMenuItem1";
-            ayudaToolStripMenuItem1.Size = new Size(180, 22);
-            ayudaToolStripMenuItem1.Text = "Ayuda";
             // 
             // Dashboard
             // 
@@ -234,28 +166,18 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1235, 523);
             Controls.Add(panel1);
-            Controls.Add(menuStrip);
             IsMdiContainer = true;
-            MainMenuStrip = menuStrip;
             Name = "Dashboard";
             Text = "Dashboard - Medic";
-            menuStrip.ResumeLayout(false);
-            menuStrip.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tileHorizontalToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fileMenu;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem redoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
@@ -272,9 +194,5 @@
         private System.Windows.Forms.ToolStripMenuItem arrangeIconsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem indexToolStripMenuItem;
         private System.Windows.Forms.Panel panel1;
-        private ToolStripMenuItem ayudaToolStripMenuItem;
-        private ToolStripMenuItem aboutToolStripMenuItem1;
-        private ToolStripMenuItem webDelProyectoToolStripMenuItem1;
-        private ToolStripMenuItem ayudaToolStripMenuItem1;
     }
 }

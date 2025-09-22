@@ -225,8 +225,11 @@
             Controls.Add(lblRol);
             Controls.Add(cmbRol);
             Controls.Add(btnGuardar);
+            FormBorderStyle = FormBorderStyle.None;
             Name = "FormCargaUsuarios";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Carga de Usuarios";
+            WindowState = FormWindowState.Maximized;
             ResumeLayout(false);
             PerformLayout();
         }
