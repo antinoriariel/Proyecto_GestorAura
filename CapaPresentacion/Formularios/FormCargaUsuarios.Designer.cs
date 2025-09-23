@@ -229,7 +229,6 @@
             Name = "FormCargaUsuarios";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Carga de Usuarios";
-            WindowState = FormWindowState.Maximized;
             ResumeLayout(false);
             PerformLayout();
         }
