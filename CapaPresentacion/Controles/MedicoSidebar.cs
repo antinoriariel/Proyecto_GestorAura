@@ -1,13 +1,27 @@
-﻿using System;
+using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CapaPresentacion.Controles
 {
-    public partial class MenuLateral : UserControl
+    public partial class MedicoSidebar : UserControl
     {
-        public MenuLateral()
+        public MedicoSidebar()
         {
             InitializeComponent();
+
+            foreach (Control ctrl in tableLayoutPanelMenu.Controls)
+            {
+                if (ctrl is Button btn)
+                {
+                    btn.FlatAppearance.BorderSize = 0;
+                    btn.BackColor = Color.LightSeaGreen;
+                    btn.ForeColor = Color.White;
+
+                    btn.MouseEnter += (s, e) => btn.BackColor = Color.Teal;
+                    btn.MouseLeave += (s, e) => btn.BackColor = Color.LightSeaGreen;
+                }
+            }
         }
 
         public event EventHandler BtnDashboardClick;
