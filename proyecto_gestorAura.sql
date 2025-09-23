@@ -257,8 +257,14 @@ BEGIN
 END
 GO
 
-
 ------------------------------------------------------------------------------------------------------------------
+-- Usuarios basicos insert
+INSERT INTO users (username,password_hash,password_salt,email,nombre,apellido,dni,f_nacimiento,telefono,created_at,activo,rol) VALUES (
+    'admin',0xC2804C7D19E7D63F72DCD5FA53B56DE0EDD5CE12164AD813C1E4FD52F6010A07,0x650ED8353D8DF63924D2F4DB294FB26B,'admin@mail.com','Leonel','Alegre',11222333,'2000-01-01','3794001122','2025-09-22T16:07:34.050',1,'administrador');
+
+INSERT INTO users (username,password_hash,password_salt,email,nombre,apellido,dni,f_nacimiento,telefono,created_at,activo,rol) VALUES (
+    'antinori',0xC2804C7D19E7D63F72DCD5FA53B56DE0EDD5CE12164AD813C1E4FD52F6010A07,0x650ED8353D8DF63924D2F4DB294FB26B,'antinori@mail.com','Ariel','Antinori',11222334,'2000-01-01','3794001122','2025-09-22T16:07:34.050',1,'medico');
+
 -- Provincias Insert
 INSERT INTO provincias (nombre, codigo_iso) VALUES 
 ('Buenos Aires', 'AR-B'),
