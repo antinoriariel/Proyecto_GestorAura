@@ -88,10 +88,10 @@ namespace CapaPresentacion
         /// </summary>
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
-            sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardAdmin());
-            sidebar.BtnUsuariosClick += (s, e) => MostrarForm(new FormUsuarios());
-            sidebar.BtnReportesClick += (s, e) => MostrarForm(new FormReportes());
-            sidebar.BtnConfiguracionClick += (s, e) => MostrarForm(new FormConfiguracion());
+            //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardAdmin());
+            //sidebar.BtnUsuariosClick += (s, e) => MostrarForm(new FormUsuarios());
+            //sidebar.BtnReportesClick += (s, e) => MostrarForm(new FormReportes());
+            //sidebar.BtnConfiguracionClick += (s, e) => MostrarForm(new FormConfiguracion());
             sidebar.BtnCerrarSesionClick += (s, e) => Application.Exit();
         }
 
@@ -100,7 +100,7 @@ namespace CapaPresentacion
         /// </summary>
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
-            sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardMedico());
+            //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardMedico());
             sidebar.BtnPacientesClick += (s, e) => MostrarForm(new FormPacientes());
             sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
             sidebar.BtnHistoriasClick += (s, e) => MostrarForm(new FormHC());
@@ -112,7 +112,7 @@ namespace CapaPresentacion
         /// </summary>
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
-            sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardSecretaria());
+            //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardSecretaria());
             sidebar.BtnPacientesClick += (s, e) => MostrarForm(new FormPacientes());
             sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
             sidebar.BtnCerrarSesionClick += (s, e) => Application.Exit();

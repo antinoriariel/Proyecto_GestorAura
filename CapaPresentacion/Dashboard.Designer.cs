@@ -19,7 +19,7 @@
             // 
             // panelMenu
             // 
-            panelMenu.BackColor = Color.LightSeaGreen;
+            panelMenu.BackColor = Color.Turquoise;
             panelMenu.Dock = DockStyle.Left;
             panelMenu.Location = new Point(0, 0);
             panelMenu.Name = "panelMenu";
@@ -32,6 +32,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1000, 600);
             Controls.Add(panelMenu);
+            FormBorderStyle = FormBorderStyle.None;
             Name = "Dashboard";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Gestor Aura";

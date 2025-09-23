@@ -50,7 +50,7 @@ namespace CapaPresentacion
             if (rol != null)
             {
                 this.Hide();
-                var dashboard_form = new Dashboard(/*rol*/);
+                var dashboard_form = new Dashboard(rol);
                 dashboard_form.FormClosed += (s, args) => this.Close();
                 dashboard_form.Show();
             }
