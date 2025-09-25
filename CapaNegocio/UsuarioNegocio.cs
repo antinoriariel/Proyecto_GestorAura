@@ -1,4 +1,5 @@
 ﻿using CapaDatos;
+using System;
 using System.Data;
 
 namespace CapaNegocio
@@ -7,7 +8,7 @@ namespace CapaNegocio
     {
         private readonly UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-        public string? Login(string username, string password)
+        public UsuarioLoginResult? Login(string username, string password)
         {
             DataRow? row = usuarioDAO.ObtenerUsuarioPorUsername(username);
             if (row == null) return null; // usuario no existe
@@ -20,7 +21,11 @@ namespace CapaNegocio
             bool valido = PasswordHelper.ValidarPassword(password, hash, salt);
             if (valido)
             {
-                return row["rol"].ToString();
+                return new UsuarioLoginResult
+                {
+                    Rol = row["rol"].ToString()!,
+                    NombreCompleto = $"{row["nombre"]} {row["apellido"]}"
+                };
             }
 
             return null;

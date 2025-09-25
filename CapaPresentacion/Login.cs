@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Drawing.Drawing2D;
 using CapaNegocio;
 
 namespace CapaPresentacion
@@ -12,20 +11,41 @@ namespace CapaPresentacion
         public Login()
         {
             InitializeComponent();
+
             this.AcceptButton = btnLogin;  // Enter hace login
             this.CancelButton = btnClose;  // Esc hace this.Close()
             this.KeyPreview = true;        // Permite capturar teclas a nivel de formulario
             this.KeyDown += Login_KeyDown;
+
+            // Esquinas redondeadas
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.BackColor = Color.Teal;
+            this.Load += (s, e) => AplicarEsquinasRedondeadas(12);
+            this.Resize += (s, e) => AplicarEsquinasRedondeadas(12);
+        }
+
+        private void AplicarEsquinasRedondeadas(int radio)
+        {
+            Rectangle bounds = new Rectangle(0, 0, this.Width, this.Height);
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddArc(bounds.X, bounds.Y, radio, radio, 180, 90);
+                path.AddArc(bounds.Right - radio, bounds.Y, radio, radio, 270, 90);
+                path.AddArc(bounds.Right - radio, bounds.Bottom - radio, radio, radio, 0, 90);
+                path.AddArc(bounds.X, bounds.Bottom - radio, radio, radio, 90, 90);
+                path.CloseAllFigures();
+                this.Region = new Region(path);
+            }
         }
 
         private void Login_KeyDown(object? sender, KeyEventArgs e)
         {
-            // ESC o Ctrl+S cierran el formulario
             if (e.KeyCode == Keys.Escape || (e.Control && e.KeyCode == Keys.S))
             {
                 this.Close();
             }
         }
+
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string usuario = txtUsername.Text.Trim();
@@ -45,12 +65,13 @@ namespace CapaPresentacion
                 return;
             }
 
-            string? rol = usuarioNegocio.Login(usuario, contraseña);
+            UsuarioLoginResult? userData = usuarioNegocio.Login(usuario, contraseña);
 
-            if (rol != null)
+            if (userData != null)
             {
                 this.Hide();
-                var dashboard_form = new Dashboard(rol, "Antinori Ariel");
+                // 🔥 Pasamos rol y nombre completo real
+                var dashboard_form = new Dashboard(userData.Rol, userData.NombreCompleto);
                 dashboard_form.FormClosed += (s, args) => this.Close();
                 dashboard_form.Show();
             }

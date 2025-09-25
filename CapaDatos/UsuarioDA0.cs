@@ -14,13 +14,21 @@ namespace CapaDatos
             using (SqlConnection conn = new SqlConnection(conexion))
             {
                 string query = @"
-                SELECT id_usuario, username, password_hash, password_salt, rol, activo
+                SELECT id_usuario,
+                       username,
+                       password_hash,
+                       password_salt,
+                       rol,
+                       activo,
+                       nombre,
+                       apellido
                 FROM users
                 WHERE username COLLATE Latin1_General_CS_AS = @user";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.Add("@user", SqlDbType.VarChar, 30).Value = username;
+
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
