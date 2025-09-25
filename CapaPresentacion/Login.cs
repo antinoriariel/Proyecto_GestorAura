@@ -20,8 +20,19 @@ namespace CapaPresentacion
             // Esquinas redondeadas
             this.FormBorderStyle = FormBorderStyle.None;
             this.BackColor = Color.Teal;
-            this.Load += (s, e) => AplicarEsquinasRedondeadas(12);
-            this.Resize += (s, e) => AplicarEsquinasRedondeadas(12);
+
+            // Esquinas redondeadas
+            this.Load += (s, e) =>
+            {
+                AplicarEsquinasRedondeadas(12);
+                AplicarEsquinasRedondeadasPictureBox(pictureBox1, 12);
+            };
+
+            this.Resize += (s, e) =>
+            {
+                AplicarEsquinasRedondeadas(12);
+                AplicarEsquinasRedondeadasPictureBox(pictureBox1, 12);
+            };
         }
 
         private void AplicarEsquinasRedondeadas(int radio)
@@ -97,5 +108,23 @@ namespace CapaPresentacion
         {
             this.Close();
         }
+
+        // Método para aplicar esquinas redondeadas a un PictureBox
+        private void AplicarEsquinasRedondeadasPictureBox(PictureBox pb, int radio)
+        {
+            if (pb.Image == null) return;
+
+            Rectangle bounds = new Rectangle(0, 0, pb.Width, pb.Height);
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddArc(bounds.X, bounds.Y, radio, radio, 180, 90);
+                path.AddArc(bounds.Right - radio, bounds.Y, radio, radio, 270, 90);
+                path.AddArc(bounds.Right - radio, bounds.Bottom - radio, radio, radio, 0, 90);
+                path.AddArc(bounds.X, bounds.Bottom - radio, radio, radio, 90, 90);
+                path.CloseAllFigures();
+                pb.Region = new Region(path);
+            }
+        }
+
     }
 }

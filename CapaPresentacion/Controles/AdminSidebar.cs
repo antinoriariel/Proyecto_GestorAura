@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
+﻿using System.Drawing.Drawing2D;
 
 namespace CapaPresentacion.Controles
 {
@@ -38,7 +35,7 @@ namespace CapaPresentacion.Controles
                         btn.MouseLeave += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#27d9cf");
                     }
 
-                    // Bordes redondeados sin borde negro
+                    // Bordes redondeados con antialiasing
                     btn.Paint += (s, e) =>
                     {
                         int radio = 15;
@@ -54,10 +51,12 @@ namespace CapaPresentacion.Controles
 
                             btn.Region = new Region(path);
 
-                            // opcional: sombra sutil
+                            // antialiasing
+                            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                            // sombra sutil
                             using (Pen pen = new Pen(Color.FromArgb(50, 0, 0, 0), 2))
                             {
-                                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                                 e.Graphics.DrawPath(pen, path);
                             }
                         }
@@ -65,7 +64,7 @@ namespace CapaPresentacion.Controles
                 }
             }
 
-            // Bordes redondeados al userPanel sin borde negro
+            // Bordes redondeados al userPanel con antialiasing
             userPanel.Paint += (s, e) =>
             {
                 int radio = 20;
@@ -80,6 +79,15 @@ namespace CapaPresentacion.Controles
                     path.CloseAllFigures();
 
                     userPanel.Region = new Region(path);
+
+                    // antialiasing
+                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                    // borde blanco opcional para resaltar
+                    using (Pen pen = new Pen(Color.White, 2))
+                    {
+                        e.Graphics.DrawPath(pen, path);
+                    }
                 }
             };
         }

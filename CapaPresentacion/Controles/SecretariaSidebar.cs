@@ -37,7 +37,7 @@ namespace CapaPresentacion.Controles
                         btn.MouseLeave += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#27d9cf");
                     }
 
-                    // Bordes redondeados en botones
+                    // Bordes redondeados con antialiasing
                     btn.Paint += (s, e) =>
                     {
                         int radio = 15;
@@ -53,9 +53,12 @@ namespace CapaPresentacion.Controles
 
                             btn.Region = new Region(path);
 
+                            // 🔹 Antialiasing activado
+                            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                            // sombra/borde sutil
                             using (Pen pen = new Pen(Color.FromArgb(50, 0, 0, 0), 2))
                             {
-                                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                                 e.Graphics.DrawPath(pen, path);
                             }
                         }
@@ -63,7 +66,7 @@ namespace CapaPresentacion.Controles
                 }
             }
 
-            // 🔹 Bordes redondeados al userPanel
+            // Bordes redondeados al userPanel con antialiasing
             userPanel.Paint += (s, e) =>
             {
                 int radio = 20;
@@ -78,6 +81,15 @@ namespace CapaPresentacion.Controles
                     path.CloseAllFigures();
 
                     userPanel.Region = new Region(path);
+
+                    // 🔹 Antialiasing activado
+                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                    // borde blanco opcional
+                    using (Pen pen = new Pen(Color.White, 2))
+                    {
+                        e.Graphics.DrawPath(pen, path);
+                    }
                 }
             };
         }

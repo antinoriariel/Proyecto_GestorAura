@@ -15,7 +15,7 @@ namespace CapaPresentacion.Controles
             userPanel.BackColor = Color.White;
             lblRolUsuario.ForeColor = Color.Black;
 
-            // Estilo moderno a botones
+            // Aplicar estilo moderno a botones
             foreach (Control ctrl in tableLayoutPanelMenu.Controls)
             {
                 if (ctrl is Button btn)
@@ -24,20 +24,21 @@ namespace CapaPresentacion.Controles
                     btn.ForeColor = Color.Black;
                     btn.Font = new Font("Lucida Console", 9F, FontStyle.Bold);
 
+                    // Color base y hover
                     if (btn == btnCerrarSesion)
                     {
-                        btn.BackColor = ColorTranslator.FromHtml("#f0331f");
+                        btn.BackColor = ColorTranslator.FromHtml("#f0331f"); // rojo
                         btn.MouseEnter += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#C0392B");
                         btn.MouseLeave += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#f0331f");
                     }
                     else
                     {
-                        btn.BackColor = ColorTranslator.FromHtml("#27d9cf");
+                        btn.BackColor = ColorTranslator.FromHtml("#27d9cf"); // turquesa
                         btn.MouseEnter += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#1FA29C");
                         btn.MouseLeave += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#27d9cf");
                     }
 
-                    // Bordes redondeados en botones
+                    // Bordes redondeados con antialiasing
                     btn.Paint += (s, e) =>
                     {
                         int radio = 15;
@@ -53,9 +54,12 @@ namespace CapaPresentacion.Controles
 
                             btn.Region = new Region(path);
 
+                            // antialiasing
+                            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                            // sombra sutil
                             using (Pen pen = new Pen(Color.FromArgb(50, 0, 0, 0), 2))
                             {
-                                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                                 e.Graphics.DrawPath(pen, path);
                             }
                         }
@@ -63,7 +67,7 @@ namespace CapaPresentacion.Controles
                 }
             }
 
-            // 🔹 Bordes redondeados al userPanel
+            // Bordes redondeados al userPanel con antialiasing
             userPanel.Paint += (s, e) =>
             {
                 int radio = 20;
@@ -78,6 +82,15 @@ namespace CapaPresentacion.Controles
                     path.CloseAllFigures();
 
                     userPanel.Region = new Region(path);
+
+                    // antialiasing
+                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                    // borde blanco opcional
+                    using (Pen pen = new Pen(Color.White, 2))
+                    {
+                        e.Graphics.DrawPath(pen, path);
+                    }
                 }
             };
         }
@@ -89,7 +102,14 @@ namespace CapaPresentacion.Controles
         public event EventHandler BtnHistoriasClick;
         public event EventHandler BtnCerrarSesionClick;
 
-        // Propiedades
+        // Métodos privados
+        private void btnDashboard_Click(object sender, EventArgs e) => BtnDashboardClick?.Invoke(this, e);
+        private void btnPacientes_Click(object sender, EventArgs e) => BtnPacientesClick?.Invoke(this, e);
+        private void btnTurnos_Click(object sender, EventArgs e) => BtnTurnosClick?.Invoke(this, e);
+        private void btnHistorias_Click(object sender, EventArgs e) => BtnHistoriasClick?.Invoke(this, e);
+        private void btnCerrarSesion_Click(object sender, EventArgs e) => BtnCerrarSesionClick?.Invoke(this, e);
+
+        // Propiedades públicas para mostrar el usuario logueado
         public string Username
         {
             get => lblUsername.Text;
@@ -101,12 +121,5 @@ namespace CapaPresentacion.Controles
             get => lblRolUsuario.Text;
             set => lblRolUsuario.Text = value;
         }
-
-        // Métodos privados
-        private void btnDashboard_Click(object sender, EventArgs e) => BtnDashboardClick?.Invoke(this, e);
-        private void btnPacientes_Click(object sender, EventArgs e) => BtnPacientesClick?.Invoke(this, e);
-        private void btnTurnos_Click(object sender, EventArgs e) => BtnTurnosClick?.Invoke(this, e);
-        private void btnHistorias_Click(object sender, EventArgs e) => BtnHistoriasClick?.Invoke(this, e);
-        private void btnCerrarSesion_Click(object sender, EventArgs e) => BtnCerrarSesionClick?.Invoke(this, e);
     }
 }

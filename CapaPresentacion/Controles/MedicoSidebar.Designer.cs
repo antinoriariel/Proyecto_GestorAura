@@ -13,6 +13,7 @@ namespace CapaPresentacion.Controles
         private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.Label lblRolUsuario;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutUser;
 
         protected override void Dispose(bool disposing)
         {
@@ -45,18 +46,19 @@ namespace CapaPresentacion.Controles
             // 
             tableLayoutPanelMenu.ColumnCount = 1;
             tableLayoutPanelMenu.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanelMenu.Controls.Add(btnDashboard, 0, 1);
-            tableLayoutPanelMenu.Controls.Add(btnPacientes, 0, 2);
-            tableLayoutPanelMenu.Controls.Add(btnTurnos, 0, 3);
-            tableLayoutPanelMenu.Controls.Add(btnHistorias, 0, 4);
-            tableLayoutPanelMenu.Controls.Add(btnCerrarSesion, 0, 6);
+            tableLayoutPanelMenu.Controls.Add(btnDashboard, 0, 2);
+            tableLayoutPanelMenu.Controls.Add(btnPacientes, 0, 3);
+            tableLayoutPanelMenu.Controls.Add(btnTurnos, 0, 4);
+            tableLayoutPanelMenu.Controls.Add(btnHistorias, 0, 5);
+            tableLayoutPanelMenu.Controls.Add(btnCerrarSesion, 0, 7);
             tableLayoutPanelMenu.Controls.Add(userPanel, 0, 0);
             tableLayoutPanelMenu.Dock = DockStyle.Fill;
             tableLayoutPanelMenu.Location = new Point(0, 0);
             tableLayoutPanelMenu.Name = "tableLayoutPanelMenu";
             tableLayoutPanelMenu.Padding = new Padding(5);
-            tableLayoutPanelMenu.RowCount = 7;
+            tableLayoutPanelMenu.RowCount = 8;
             tableLayoutPanelMenu.RowStyles.Add(new RowStyle(SizeType.Absolute, 152F));
+            tableLayoutPanelMenu.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanelMenu.RowStyles.Add(new RowStyle(SizeType.Absolute, 42F));
             tableLayoutPanelMenu.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
             tableLayoutPanelMenu.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
@@ -70,10 +72,10 @@ namespace CapaPresentacion.Controles
             // 
             btnDashboard.Dock = DockStyle.Fill;
             btnDashboard.FlatStyle = FlatStyle.Flat;
-            btnDashboard.Font = new Font("Lucida Console", 9F, FontStyle.Bold);
+            btnDashboard.Font = new Font("Consolas", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDashboard.Image = (Image)resources.GetObject("btnDashboard.Image");
             btnDashboard.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDashboard.Location = new Point(8, 160);
+            btnDashboard.Location = new Point(8, 180);
             btnDashboard.Name = "btnDashboard";
             btnDashboard.Padding = new Padding(15, 0, 0, 0);
             btnDashboard.Size = new Size(164, 36);
@@ -85,10 +87,10 @@ namespace CapaPresentacion.Controles
             // 
             btnPacientes.Dock = DockStyle.Fill;
             btnPacientes.FlatStyle = FlatStyle.Flat;
-            btnPacientes.Font = new Font("Lucida Console", 9F, FontStyle.Bold);
+            btnPacientes.Font = new Font("Consolas", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnPacientes.Image = (Image)resources.GetObject("btnPacientes.Image");
             btnPacientes.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPacientes.Location = new Point(8, 202);
+            btnPacientes.Location = new Point(8, 222);
             btnPacientes.Name = "btnPacientes";
             btnPacientes.Padding = new Padding(15, 0, 0, 0);
             btnPacientes.Size = new Size(164, 39);
@@ -100,10 +102,10 @@ namespace CapaPresentacion.Controles
             // 
             btnTurnos.Dock = DockStyle.Fill;
             btnTurnos.FlatStyle = FlatStyle.Flat;
-            btnTurnos.Font = new Font("Lucida Console", 9F, FontStyle.Bold);
+            btnTurnos.Font = new Font("Consolas", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnTurnos.Image = (Image)resources.GetObject("btnTurnos.Image");
             btnTurnos.ImageAlign = ContentAlignment.MiddleLeft;
-            btnTurnos.Location = new Point(8, 247);
+            btnTurnos.Location = new Point(8, 267);
             btnTurnos.Name = "btnTurnos";
             btnTurnos.Padding = new Padding(15, 0, 0, 0);
             btnTurnos.Size = new Size(164, 38);
@@ -115,10 +117,10 @@ namespace CapaPresentacion.Controles
             // 
             btnHistorias.Dock = DockStyle.Fill;
             btnHistorias.FlatStyle = FlatStyle.Flat;
-            btnHistorias.Font = new Font("Lucida Console", 9F, FontStyle.Bold);
+            btnHistorias.Font = new Font("Consolas", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnHistorias.Image = (Image)resources.GetObject("btnHistorias.Image");
             btnHistorias.ImageAlign = ContentAlignment.MiddleLeft;
-            btnHistorias.Location = new Point(8, 291);
+            btnHistorias.Location = new Point(8, 311);
             btnHistorias.Name = "btnHistorias";
             btnHistorias.Padding = new Padding(15, 0, 0, 0);
             btnHistorias.Size = new Size(164, 39);
@@ -130,7 +132,7 @@ namespace CapaPresentacion.Controles
             // 
             btnCerrarSesion.Dock = DockStyle.Fill;
             btnCerrarSesion.FlatStyle = FlatStyle.Flat;
-            btnCerrarSesion.Font = new Font("Lucida Console", 9F, FontStyle.Bold);
+            btnCerrarSesion.Font = new Font("Consolas", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnCerrarSesion.Image = (Image)resources.GetObject("btnCerrarSesion.Image");
             btnCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             btnCerrarSesion.Location = new Point(8, 448);
@@ -154,7 +156,7 @@ namespace CapaPresentacion.Controles
             // tableLayoutUser
             // 
             tableLayoutUser.ColumnCount = 1;
-            tableLayoutUser.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutUser.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutUser.Controls.Add(lblRolUsuario, 0, 0);
             tableLayoutUser.Controls.Add(pictureBox1, 0, 1);
             tableLayoutUser.Controls.Add(lblUsername, 0, 2);
@@ -170,10 +172,12 @@ namespace CapaPresentacion.Controles
             // 
             // lblRolUsuario
             // 
+            lblRolUsuario.BackColor = Color.Transparent;
             lblRolUsuario.Dock = DockStyle.Fill;
-            lblRolUsuario.Font = new Font("Lucida Console", 9F, FontStyle.Bold);
+            lblRolUsuario.Font = new Font("Consolas", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblRolUsuario.Location = new Point(3, 0);
             lblRolUsuario.Name = "lblRolUsuario";
+            lblRolUsuario.Padding = new Padding(0, 13, 0, 0);
             lblRolUsuario.Size = new Size(158, 25);
             lblRolUsuario.TabIndex = 0;
             lblRolUsuario.Text = "Médico";
@@ -192,10 +196,12 @@ namespace CapaPresentacion.Controles
             // 
             // lblUsername
             // 
+            lblUsername.BackColor = Color.Transparent;
             lblUsername.Dock = DockStyle.Fill;
-            lblUsername.Font = new Font("Lucida Console", 9F, FontStyle.Bold | FontStyle.Italic);
+            lblUsername.Font = new Font("Consolas", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblUsername.Location = new Point(3, 121);
             lblUsername.Name = "lblUsername";
+            lblUsername.Padding = new Padding(0, 0, 0, 12);
             lblUsername.Size = new Size(158, 25);
             lblUsername.TabIndex = 2;
             lblUsername.Text = "Nombre Médico";
@@ -212,6 +218,5 @@ namespace CapaPresentacion.Controles
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
-        private TableLayoutPanel tableLayoutUser;
     }
 }
