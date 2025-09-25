@@ -44,7 +44,7 @@ namespace CapaPresentacion
             {
                 if (ctrl is MdiClient client)
                 {
-                    client.BackColor = Color.White; // Verde agua
+                    client.BackColor = ColorTranslator.FromHtml("#D7DADB"); // Este es el color del contenedor del MDI, el gris claro
                 }
             }
 
@@ -74,7 +74,7 @@ namespace CapaPresentacion
                     sidebar = adminSidebar;
                     break;
 
-                /*case "medico":
+                case "medico":
                     var medicoSidebar = new MedicoSidebar
                     {
                         Username = nombreUsuario,
@@ -92,7 +92,7 @@ namespace CapaPresentacion
                     };
                     ConfigurarEventosSecretaria(secretariaSidebar);
                     sidebar = secretariaSidebar;
-                    break;*/
+                    break;
 
                 default:
                     MessageBox.Show("Rol no reconocido. No se cargará el menú lateral.",
@@ -158,6 +158,11 @@ namespace CapaPresentacion
             // Mostrar el formulario y traerlo al frente
             form.Show();
             form.BringToFront();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
