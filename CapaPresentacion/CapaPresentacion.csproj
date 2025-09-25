@@ -9,6 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Formularios\FormPacientes.cs" />
+    <Compile Remove="Formularios\FormPacientes.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Formularios\FormPacientes.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Img\" />
   </ItemGroup>
 

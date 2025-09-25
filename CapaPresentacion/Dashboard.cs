@@ -126,7 +126,7 @@ namespace CapaPresentacion
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
             //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardMedico());
-            sidebar.BtnPacientesClick += (s, e) => MostrarForm(new FormPacientes());
+            //sidebar.BtnPacientesClick += (s, e) => MostrarForm(new FormPacientes());
             sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
             sidebar.BtnHistoriasClick += (s, e) => MostrarForm(new FormHC());
             sidebar.BtnCerrarSesionClick += (s, e) => Application.Exit();
@@ -135,7 +135,7 @@ namespace CapaPresentacion
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
             //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardSecretaria());
-            sidebar.BtnPacientesClick += (s, e) => MostrarForm(new FormPacientes());
+            //sidebar.BtnPacientesClick += (s, e) => MostrarForm(new FormPacientes());
             sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
             sidebar.BtnCerrarSesionClick += (s, e) => Application.Exit();
         }

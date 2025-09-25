@@ -12,7 +12,7 @@ namespace CapaPresentacion.Controles
             InitializeComponent();
 
             // Estilizar userPanel
-            userPanel.BackColor = Color.White; // color del panel
+            userPanel.BackColor = Color.White; // color del panel de usuario
             lblRolUsuario.ForeColor = Color.Black;
 
             // Aplicar estilo moderno a botones
