@@ -1,95 +1,61 @@
-﻿using System.Drawing.Drawing2D;
+﻿using System;
+using System.Windows.Forms;
 
 namespace CapaPresentacion.Controles
 {
-    public partial class AdminSidebar : UserControl
+    public class AdminSidebar : SidebarBase
     {
-        public AdminSidebar()
+        private Button btnDashboard, btnUsuarios, btnReportes, btnConfiguracion, btnCerrarSesion;
+
+        public AdminSidebar() : base() { }
+
+        protected override void CrearBotones()
         {
-            InitializeComponent();
+            // Inicio
+            btnDashboard = new Button { Text = "Inicio", Dock = DockStyle.Fill, Padding = new Padding(15, 0, 0, 0) };
+            btnDashboard.Image = Properties.Resources.inicioIcon;
+            btnDashboard.ImageAlign = ContentAlignment.MiddleLeft;
 
-            // Estilizar userPanel
-            userPanel.BackColor = Color.White; // color del panel de usuario
-            lblRolUsuario.ForeColor = Color.Black;
+            // Usuarios
+            btnUsuarios = new Button { Text = "Usuarios", Dock = DockStyle.Fill, Padding = new Padding(15, 0, 0, 0) };
+            btnUsuarios.Image = Properties.Resources.usuarioIcon;
+            btnUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
 
-            // Aplicar estilo moderno a botones
-            foreach (Control ctrl in tableLayoutPanelMenu.Controls)
-            {
-                if (ctrl is Button btn)
-                {
-                    btn.FlatAppearance.BorderSize = 0;
-                    btn.ForeColor = Color.Black;
-                    btn.Font = new Font("Lucida Console", 9F, FontStyle.Bold);
+            // Médicos
+            btnReportes = new Button { Text = "Médicos", Dock = DockStyle.Fill, Padding = new Padding(15, 0, 0, 0) };
+            btnReportes.Image = Properties.Resources.medicoIcon;
+            btnReportes.ImageAlign = ContentAlignment.MiddleLeft;
 
-                    // Color base y hover
-                    if (btn == btnCerrarSesion)
-                    {
-                        btn.BackColor = ColorTranslator.FromHtml("#f0331f"); // rojo
-                        btn.MouseEnter += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#C0392B");
-                        btn.MouseLeave += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#f0331f");
-                    }
-                    else
-                    {
-                        btn.BackColor = ColorTranslator.FromHtml("#27d9cf"); // turquesa
-                        btn.MouseEnter += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#1FA29C");
-                        btn.MouseLeave += (s, e) => btn.BackColor = ColorTranslator.FromHtml("#27d9cf");
-                    }
+            // Ajustes
+            btnConfiguracion = new Button { Text = "Ajustes", Dock = DockStyle.Fill, Padding = new Padding(15, 0, 0, 0) };
+            btnConfiguracion.Image = Properties.Resources.ajustesIcon;
+            btnConfiguracion.ImageAlign = ContentAlignment.MiddleLeft;
 
-                    // Bordes redondeados con antialiasing
-                    btn.Paint += (s, e) =>
-                    {
-                        int radio = 15;
-                        Rectangle rect = new Rectangle(0, 0, btn.Width, btn.Height);
+            // Salir
+            btnCerrarSesion = new Button { Text = "Salir", Dock = DockStyle.Fill, Padding = new Padding(15, 0, 0, 0) };
+            btnCerrarSesion.Image = Properties.Resources.salidaIcon;
+            btnCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
 
-                        using (GraphicsPath path = new GraphicsPath())
-                        {
-                            path.AddArc(rect.X, rect.Y, radio, radio, 180, 90);
-                            path.AddArc(rect.Right - radio, rect.Y, radio, radio, 270, 90);
-                            path.AddArc(rect.Right - radio, rect.Bottom - radio, radio, radio, 0, 90);
-                            path.AddArc(rect.X, rect.Bottom - radio, radio, radio, 90, 90);
-                            path.CloseAllFigures();
+            // Aplicar estilos
+            AplicarEstiloBoton(btnDashboard);
+            AplicarEstiloBoton(btnUsuarios);
+            AplicarEstiloBoton(btnReportes);
+            AplicarEstiloBoton(btnConfiguracion);
+            AplicarEstiloBoton(btnCerrarSesion, true);
 
-                            btn.Region = new Region(path);
+            // Eventos
+            btnDashboard.Click += (s, e) => BtnDashboardClick?.Invoke(this, e);
+            btnUsuarios.Click += (s, e) => BtnUsuariosClick?.Invoke(this, e);
+            btnReportes.Click += (s, e) => BtnReportesClick?.Invoke(this, e);
+            btnConfiguracion.Click += (s, e) => BtnConfiguracionClick?.Invoke(this, e);
+            btnCerrarSesion.Click += (s, e) => BtnCerrarSesionClick?.Invoke(this, e);
 
-                            // antialiasing
-                            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                            // sombra sutil
-                            using (Pen pen = new Pen(Color.FromArgb(50, 0, 0, 0), 2))
-                            {
-                                e.Graphics.DrawPath(pen, path);
-                            }
-                        }
-                    };
-                }
-            }
-
-            // Bordes redondeados al userPanel con antialiasing
-            userPanel.Paint += (s, e) =>
-            {
-                int radio = 20;
-                Rectangle rect = new Rectangle(0, 0, userPanel.Width, userPanel.Height);
-
-                using (GraphicsPath path = new GraphicsPath())
-                {
-                    path.AddArc(rect.X, rect.Y, radio, radio, 180, 90);
-                    path.AddArc(rect.Right - radio, rect.Y, radio, radio, 270, 90);
-                    path.AddArc(rect.Right - radio, rect.Bottom - radio, radio, radio, 0, 90);
-                    path.AddArc(rect.X, rect.Bottom - radio, radio, radio, 90, 90);
-                    path.CloseAllFigures();
-
-                    userPanel.Region = new Region(path);
-
-                    // antialiasing
-                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                    // borde blanco opcional para resaltar
-                    using (Pen pen = new Pen(Color.White, 2))
-                    {
-                        e.Graphics.DrawPath(pen, path);
-                    }
-                }
-            };
+            // Agregar al layout
+            tableLayoutPanelMenu.Controls.Add(btnDashboard, 0, 2);
+            tableLayoutPanelMenu.Controls.Add(btnUsuarios, 0, 3);
+            tableLayoutPanelMenu.Controls.Add(btnReportes, 0, 4);
+            tableLayoutPanelMenu.Controls.Add(btnConfiguracion, 0, 5);
+            tableLayoutPanelMenu.Controls.Add(btnCerrarSesion, 0, 7);
         }
 
         // Eventos públicos
@@ -98,25 +64,5 @@ namespace CapaPresentacion.Controles
         public event EventHandler BtnReportesClick;
         public event EventHandler BtnConfiguracionClick;
         public event EventHandler BtnCerrarSesionClick;
-
-        // Métodos privados
-        private void btnDashboard_Click(object sender, EventArgs e) => BtnDashboardClick?.Invoke(this, e);
-        private void btnUsuarios_Click(object sender, EventArgs e) => BtnUsuariosClick?.Invoke(this, e);
-        private void btnReportes_Click(object sender, EventArgs e) => BtnReportesClick?.Invoke(this, e);
-        private void btnConfiguracion_Click(object sender, EventArgs e) => BtnConfiguracionClick?.Invoke(this, e);
-        private void btnCerrarSesion_Click(object sender, EventArgs e) => BtnCerrarSesionClick?.Invoke(this, e);
-
-        // Propiedades públicas para mostrar el usuario logueado
-        public string Username
-        {
-            get => lblUsername.Text;
-            set => lblUsername.Text = value;
-        }
-
-        public string RolUsuario
-        {
-            get => lblRolUsuario.Text;
-            set => lblRolUsuario.Text = value;
-        }
     }
 }

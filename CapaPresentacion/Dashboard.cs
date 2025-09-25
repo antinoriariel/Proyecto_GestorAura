@@ -60,7 +60,7 @@ namespace CapaPresentacion
         // ============================================================
         private void CargarSidebar(string rol, string nombreUsuario)
         {
-            UserControl sidebar = null;
+            SidebarBase sidebar = null;
 
             switch (rol.ToLower())
             {
@@ -70,6 +70,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Administrador"
                     };
+                    adminSidebar.SetUserPanelImage(rol); // 👈 asignar gif dinámico
                     ConfigurarEventosAdmin(adminSidebar);
                     sidebar = adminSidebar;
                     break;
@@ -80,6 +81,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Médico"
                     };
+                    medicoSidebar.SetUserPanelImage(rol);
                     ConfigurarEventosMedico(medicoSidebar);
                     sidebar = medicoSidebar;
                     break;
@@ -90,6 +92,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Secretaria"
                     };
+                    secretariaSidebar.SetUserPanelImage(rol);
                     ConfigurarEventosSecretaria(secretariaSidebar);
                     sidebar = secretariaSidebar;
                     break;
@@ -158,11 +161,6 @@ namespace CapaPresentacion
             // Mostrar el formulario y traerlo al frente
             form.Show();
             form.BringToFront();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
