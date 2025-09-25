@@ -12,7 +12,7 @@ namespace CapaPresentacion
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new Login()); // Login es el formulario de inicio
+            Application.Run(new /*Dashboard("administrador", "Antinori, Ariel")*/Login()); // Login es el formulario de inicio
         }
     }
 }

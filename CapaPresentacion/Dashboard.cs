@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using CapaPresentacion.Controles;
 using CapaPresentacion.Formularios;
@@ -8,7 +9,7 @@ namespace CapaPresentacion
     /// <summary>
     /// Formulario principal del sistema.
     /// Es un contenedor MDI que carga dinámicamente el menú lateral (sidebar)
-    /// en función del rol del usuario que inició sesión.
+    /// en función del rol y nombre del usuario que inició sesión.
     /// 
     /// Roles posibles:
     /// - administrador → AdminSidebar
@@ -17,53 +18,81 @@ namespace CapaPresentacion
     /// </summary>
     public partial class Dashboard : Form
     {
-        // Campo privado para almacenar el rol actual del usuario
+        // Campos privados para almacenar info del usuario
         private readonly string _rolUsuario;
+        private readonly string _nombreUsuario;
 
         /// <summary>
         /// Constructor principal.
-        /// Recibe el rol del usuario logueado y carga el sidebar correspondiente.
+        /// Recibe el rol y nombre del usuario logueado y carga el sidebar correspondiente.
         /// </summary>
         /// <param name="rolUsuario">Rol del usuario ("administrador", "medico", "secretaria").</param>
-        public Dashboard(string rolUsuario)
+        /// <param name="nombreUsuario">Nombre completo del usuario logueado.</param>
+        public Dashboard(string rolUsuario, string nombreUsuario)
         {
             InitializeComponent();
 
-            // Guardamos el rol recibido
+            // Guardamos los datos recibidos
             _rolUsuario = rolUsuario;
+            _nombreUsuario = nombreUsuario;
 
             // Este formulario actúa como contenedor MDI
             this.IsMdiContainer = true;
 
+            // 🔹 Cambiar color del fondo del MDI
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is MdiClient client)
+                {
+                    client.BackColor = Color.White; // Verde agua
+                }
+            }
+
             // Cargar el menú lateral según el rol del usuario
-            CargarSidebar(_rolUsuario);
+            CargarSidebar(_rolUsuario, _nombreUsuario);
         }
 
         // ============================================================
         // MÉTODO: CargarSidebar
         // Se encarga de crear e insertar en el panel lateral el UserControl
         // correspondiente al rol actual (AdminSidebar, MedicoSidebar, SecretariaSidebar).
+        // También setea el nombre y rol en el sidebar.
         // ============================================================
-        private void CargarSidebar(string rol)
+        private void CargarSidebar(string rol, string nombreUsuario)
         {
             UserControl sidebar = null;
 
             switch (rol.ToLower())
             {
                 case "administrador":
-                    sidebar = new AdminSidebar();
-                    ConfigurarEventosAdmin((AdminSidebar)sidebar);
+                    var adminSidebar = new AdminSidebar
+                    {
+                        Username = nombreUsuario,
+                        RolUsuario = "Administrador"
+                    };
+                    ConfigurarEventosAdmin(adminSidebar);
+                    sidebar = adminSidebar;
                     break;
 
-                case "medico":
-                    sidebar = new MedicoSidebar();
-                    ConfigurarEventosMedico((MedicoSidebar)sidebar);
+                /*case "medico":
+                    var medicoSidebar = new MedicoSidebar
+                    {
+                        Username = nombreUsuario,
+                        RolUsuario = "Médico"
+                    };
+                    ConfigurarEventosMedico(medicoSidebar);
+                    sidebar = medicoSidebar;
                     break;
 
                 case "secretaria":
-                    sidebar = new SecretariaSidebar();
-                    ConfigurarEventosSecretaria((SecretariaSidebar)sidebar);
-                    break;
+                    var secretariaSidebar = new SecretariaSidebar
+                    {
+                        Username = nombreUsuario,
+                        RolUsuario = "Secretaria"
+                    };
+                    ConfigurarEventosSecretaria(secretariaSidebar);
+                    sidebar = secretariaSidebar;
+                    break;*/
 
                 default:
                     MessageBox.Show("Rol no reconocido. No se cargará el menú lateral.",
@@ -83,21 +112,17 @@ namespace CapaPresentacion
         // según el rol del usuario.
         // ============================================================
 
-        /// <summary>
-        /// Conecta los eventos del AdminSidebar con los formularios del administrador.
-        /// </summary>
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
+            // Ejemplo de conexión de eventos a formularios
             //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardAdmin());
             //sidebar.BtnUsuariosClick += (s, e) => MostrarForm(new FormUsuarios());
             //sidebar.BtnReportesClick += (s, e) => MostrarForm(new FormReportes());
             //sidebar.BtnConfiguracionClick += (s, e) => MostrarForm(new FormConfiguracion());
+
             sidebar.BtnCerrarSesionClick += (s, e) => Application.Exit();
         }
 
-        /// <summary>
-        /// Conecta los eventos del MedicoSidebar con los formularios del médico.
-        /// </summary>
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
             //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardMedico());
@@ -107,9 +132,6 @@ namespace CapaPresentacion
             sidebar.BtnCerrarSesionClick += (s, e) => Application.Exit();
         }
 
-        /// <summary>
-        /// Conecta los eventos del SecretariaSidebar con los formularios de la secretaria.
-        /// </summary>
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
             //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardSecretaria());
