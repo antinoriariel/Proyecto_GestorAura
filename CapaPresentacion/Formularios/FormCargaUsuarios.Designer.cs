@@ -109,7 +109,7 @@
             // 
             // picHeader
             // 
-            picHeader.Image = Properties.Resources.ajustesIcon; // 👈 icono a definir en Resources
+            picHeader.Image = Properties.Resources.userAddIcon; // 👈 asegúrate de tener este recurso
             picHeader.Location = new Point(14, 9);
             picHeader.Name = "picHeader";
             picHeader.Size = new Size(35, 30);
@@ -135,7 +135,7 @@
             grpDatos.Location = new Point(21, 60);
             grpDatos.Name = "grpDatos";
             grpDatos.Padding = new Padding(14, 12, 14, 12);
-            grpDatos.Size = new Size(676, 320);
+            grpDatos.Size = new Size(676, 400); // 👈 altura ajustada
             grpDatos.TabIndex = 1;
             grpDatos.TabStop = false;
             grpDatos.Text = "Datos del usuario";
@@ -145,6 +145,11 @@
             grid.ColumnCount = 2;
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140F));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            grid.RowCount = 10;
+            grid.RowStyles.Clear();
+            for (int i = 0; i < 9; i++)
+                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
             grid.Controls.Add(lblUsername, 0, 0);
             grid.Controls.Add(txtUsername, 1, 0);
@@ -174,64 +179,57 @@
             grid.Controls.Add(cmbRol, 1, 8);
 
             grid.Dock = DockStyle.Fill;
-            grid.RowCount = 9;
-            
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-
             grid.Location = new Point(14, 28);
             grid.Name = "grid";
-            grid.Size = new Size(648, 280);
+            grid.Size = new Size(648, 360);
             grid.TabIndex = 0;
             // 
-            // Labels y inputs
+            // Labels & Inputs
             // 
             lblUsername.Anchor = AnchorStyles.Left;
             lblUsername.Text = "Usuario";
-            txtUsername.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtUsername.Dock = DockStyle.Fill;
 
             lblPassword.Anchor = AnchorStyles.Left;
             lblPassword.Text = "Contraseña";
-            txtPassword.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtPassword.Dock = DockStyle.Fill;
             txtPassword.PasswordChar = '*';
 
             lblEmail.Anchor = AnchorStyles.Left;
             lblEmail.Text = "Email";
-            txtEmail.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtEmail.Dock = DockStyle.Fill;
 
             lblNombre.Anchor = AnchorStyles.Left;
             lblNombre.Text = "Nombre";
-            txtNombre.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtNombre.Dock = DockStyle.Fill;
 
             lblApellido.Anchor = AnchorStyles.Left;
             lblApellido.Text = "Apellido";
-            txtApellido.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtApellido.Dock = DockStyle.Fill;
 
             lblDni.Anchor = AnchorStyles.Left;
             lblDni.Text = "DNI";
-            txtDni.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtDni.Dock = DockStyle.Fill;
 
             lblFechaNacimiento.Anchor = AnchorStyles.Left;
             lblFechaNacimiento.Text = "Fecha de Nacimiento";
-            dtpFechaNacimiento.Anchor = AnchorStyles.Left;
+            dtpFechaNacimiento.Dock = DockStyle.Fill;
             dtpFechaNacimiento.Format = DateTimePickerFormat.Short;
 
             lblTelefono.Anchor = AnchorStyles.Left;
             lblTelefono.Text = "Teléfono";
-            txtTelefono.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtTelefono.Dock = DockStyle.Fill;
 
             lblRol.Anchor = AnchorStyles.Left;
             lblRol.Text = "Rol";
-            cmbRol.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            cmbRol.Dock = DockStyle.Fill;
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRol.IntegralHeight = false;
+            cmbRol.DrawMode = DrawMode.OwnerDrawFixed;
+            cmbRol.ItemHeight = 28;
+            cmbRol.Font = new Font("Segoe UI", 10F);
             cmbRol.Items.AddRange(new object[] { "medico", "secretaria", "administrador" });
+            cmbRol.DrawItem += cmbRol_DrawItem;
             // 
             // footerPanel
             // 
@@ -239,7 +237,7 @@
             footerPanel.Controls.Add(btnGuardar);
             footerPanel.Controls.Add(btnCancelar);
             footerPanel.Dock = DockStyle.Bottom;
-            footerPanel.Location = new Point(21, 380);
+            footerPanel.Location = new Point(21, 460);
             footerPanel.Name = "footerPanel";
             footerPanel.Padding = new Padding(0, 6, 0, 0);
             footerPanel.Size = new Size(676, 48);
@@ -268,7 +266,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(241, 244, 246);
-            ClientSize = new Size(718, 440);
+            ClientSize = new Size(718, 520);
             ControlBox = false;
             Controls.Add(footerPanel);
             Controls.Add(grpDatos);
