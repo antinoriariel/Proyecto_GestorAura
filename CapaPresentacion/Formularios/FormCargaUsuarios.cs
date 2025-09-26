@@ -13,15 +13,18 @@ namespace CapaPresentacion
         {
             InitializeComponent();
 
-            // Eventos de botones
+            // 🔒 Evitar doble suscripción al click de Guardar
+            btnGuardar.Click -= btnGuardar_Click;
             btnGuardar.Click += btnGuardar_Click;
-            btnCancelar.Click += (s, e) => this.Close();
 
             // Escape cierra formulario
             this.KeyDown += (s, e) =>
             {
                 if (e.KeyCode == Keys.Escape) this.Close();
             };
+
+            // 🗓️ Restringir fecha para que el usuario tenga ≥ 18 años
+            dtpFechaNacimiento.MaxDate = DateTime.Today.AddYears(-18);
         }
 
         private void btnGuardar_Click(object? sender, EventArgs e)
@@ -30,16 +33,18 @@ namespace CapaPresentacion
             {
                 // === Validaciones de frontend ===
 
-                // Username
-                if (string.IsNullOrWhiteSpace(txtUsername.Text) || txtUsername.Text.Length > 30)
+                // Username (min 5, max 30)
+                string user = txtUsername.Text?.Trim() ?? string.Empty;
+                if (user.Length < 5 || user.Length > 30)
                 {
-                    MessageBox.Show("⚠️ El usuario es obligatorio y no debe superar 30 caracteres.",
+                    MessageBox.Show("⚠️ El usuario es obligatorio, mínimo 5 y máximo 30 caracteres.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Password
-                if (string.IsNullOrWhiteSpace(txtPassword.Text) || txtPassword.Text.Length < 6)
+                // Password (min 6)
+                string pass = txtPassword.Text ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(pass) || pass.Length < 6)
                 {
                     MessageBox.Show("⚠️ La contraseña es obligatoria y debe tener al menos 6 caracteres.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -47,60 +52,70 @@ namespace CapaPresentacion
                 }
 
                 // Email
-                if (string.IsNullOrWhiteSpace(txtEmail.Text) || txtEmail.Text.Length > 50 ||
-                    !Regex.IsMatch(txtEmail.Text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                string email = txtEmail.Text?.Trim() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(email) || email.Length > 50 ||
+                    !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
                     MessageBox.Show("⚠️ El email es obligatorio, válido y no debe superar 50 caracteres.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Nombre
-                if (string.IsNullOrWhiteSpace(txtNombre.Text) || txtNombre.Text.Length > 50)
+                // Nombre (solo letras, min 3, max 50)
+                string nombre = txtNombre.Text?.Trim() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(nombre) || nombre.Length < 3 || nombre.Length > 50 ||
+                    !Regex.IsMatch(nombre, @"^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$"))
                 {
-                    MessageBox.Show("⚠️ El nombre es obligatorio y no debe superar 50 caracteres.",
+                    MessageBox.Show("⚠️ El nombre es obligatorio, debe tener entre 3 y 50 caracteres y no puede contener números.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Apellido
-                if (string.IsNullOrWhiteSpace(txtApellido.Text) || txtApellido.Text.Length > 50)
+                // Apellido (solo letras, min 3, max 50)
+                string apellido = txtApellido.Text?.Trim() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(apellido) || apellido.Length < 3 || apellido.Length > 50 ||
+                    !Regex.IsMatch(apellido, @"^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$"))
                 {
-                    MessageBox.Show("⚠️ El apellido es obligatorio y no debe superar 50 caracteres.",
+                    MessageBox.Show("⚠️ El apellido es obligatorio, debe tener entre 3 y 50 caracteres y no puede contener números.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // DNI
-                if (!Regex.IsMatch(txtDni.Text.Trim(), @"^\d{8}$"))
+                // DNI (exactamente 8 dígitos)
+                string dniTxt = txtDni.Text?.Trim() ?? string.Empty;
+                if (!Regex.IsMatch(dniTxt, @"^\d{8}$"))
                 {
                     MessageBox.Show("⚠️ El DNI debe tener exactamente 8 dígitos numéricos.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Fecha de nacimiento
-                if (dtpFechaNacimiento.Value.Date > DateTime.Today)
+                // Fecha de nacimiento (≥ 18 años)
+                DateTime fnac = dtpFechaNacimiento.Value.Date;
+                DateTime limite18 = DateTime.Today.AddYears(-18);
+                if (fnac > limite18)
                 {
-                    MessageBox.Show("⚠️ La fecha de nacimiento no puede ser futura.",
+                    MessageBox.Show("⚠️ El usuario debe ser mayor de 18 años.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Teléfono (opcional, solo si se completa)
-                if (!string.IsNullOrWhiteSpace(txtTelefono.Text))
+                // Teléfono (opcional, formato válido si se completa)
+                string telefono = txtTelefono.Text?.Trim() ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(telefono))
                 {
-                    if (!Regex.IsMatch(txtTelefono.Text, @"^[0-9+()\-\s]{7,20}$"))
+                    if (!Regex.IsMatch(telefono, @"^[0-9+()\-\s]{7,20}$"))
                     {
-                        MessageBox.Show("⚠️ El teléfono solo puede contener números, +, (), - y debe tener entre 7 y 20 caracteres.",
+                        MessageBox.Show("⚠️ El teléfono solo puede contener números, +, (), - y espacios; y tener entre 7 y 20 caracteres.",
                             "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
                 }
 
                 // Rol
-                if (cmbRol.SelectedIndex == -1 ||
-                    !(cmbRol.Text == "medico" || cmbRol.Text == "secretaria" || cmbRol.Text == "administrador"))
+                string rol = cmbRol.SelectedItem?.ToString() ?? string.Empty;
+                if (string.IsNullOrEmpty(rol) ||
+                    !(rol == "medico" || rol == "secretaria" || rol == "administrador"))
                 {
                     MessageBox.Show("⚠️ Debe seleccionar un rol válido (medico, secretaria o administrador).",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -109,15 +124,15 @@ namespace CapaPresentacion
 
                 // === Si pasa todas las validaciones ===
                 carga.CargarUsuario(
-                    txtUsername.Text.Trim(),
-                    txtPassword.Text,
-                    txtEmail.Text.Trim(),
-                    txtNombre.Text.Trim(),
-                    txtApellido.Text.Trim(),
-                    decimal.Parse(txtDni.Text.Trim()),
-                    dtpFechaNacimiento.Value,
-                    txtTelefono.Text.Trim(),
-                    cmbRol.SelectedItem?.ToString() ?? "medico"
+                    user,
+                    pass,
+                    email,
+                    nombre,
+                    apellido,
+                    decimal.Parse(dniTxt),
+                    fnac,
+                    telefono,
+                    rol
                 );
 
                 MessageBox.Show("✅ Usuario cargado con éxito",
@@ -142,7 +157,11 @@ namespace CapaPresentacion
             txtDni.Clear();
             txtTelefono.Clear();
             cmbRol.SelectedIndex = -1;
-            dtpFechaNacimiento.Value = DateTime.Today;
+
+            // Resetear fecha por defecto al límite de 18 años
+            var limite18 = DateTime.Today.AddYears(-18);
+            dtpFechaNacimiento.MaxDate = limite18;
+            dtpFechaNacimiento.Value = limite18;
         }
 
         // 🎨 Handler para estilizar el ComboBox Rol
