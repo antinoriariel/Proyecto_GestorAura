@@ -169,6 +169,24 @@ namespace CapaPresentacion
 
             // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+
+            // 🔹 Recetas → abrir en navegador externo
+            sidebar.BtnRecetasClick += (s, e) =>
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "https://rcta.me/",
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No se pudo abrir la página de recetas: " + ex.Message,
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
         }
 
         // ========== SECRETARIA ==========
