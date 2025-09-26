@@ -15,38 +15,15 @@ namespace CapaPresentacion.Formularios
         {
             InitializeComponent();
 
-            // Anti-flicker
+            // Optimización visual
             this.DoubleBuffered = true;
             typeof(DataGridView)
               .GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
               ?.SetValue(dgvTurnos, true, null);
 
-            // Orden de docking seguro
-            Controls.Clear();
-            Controls.Add(grpListado);   // Fill
-            Controls.Add(grpFiltros);   // Top
-            Controls.Add(headerPanel);  // Top primero
-            Controls.Add(footerPanel);  // Bottom
-
-            Controls.SetChildIndex(headerPanel, 0);
-            Controls.SetChildIndex(grpFiltros, 1);
-            Controls.SetChildIndex(grpListado, 2);
-            Controls.SetChildIndex(footerPanel, 3);
-
-            CargarCombos();
             ConfigurarEventos();
             ConfigurarBinding();
-            CargarDatosIniciales(); // demo
-        }
-
-        private void CargarCombos()
-        {
-            cboEstado.Items.Clear();
-            cboEstado.Items.AddRange(new object[] { "Todos", "Pendiente", "En curso", "Completado", "Cancelado" });
-            cboEstado.SelectedIndex = 0;
-
-            dtpFecha.MinDate = DateTime.Today.AddYears(-1);
-            dtpFecha.Value = DateTime.Today;
+            CargarDatosIniciales();
         }
 
         private void ConfigurarEventos()
@@ -67,7 +44,6 @@ namespace CapaPresentacion.Formularios
             txtBuscar.TextChanged += (s, e) => AplicarFiltros();
             chkSoloPendientes.CheckedChanged += (s, e) => AplicarFiltros();
 
-            dgvTurnos.CellContentClick += DgvTurnos_CellContentClick;
             dgvTurnos.CellFormatting += DgvTurnos_CellFormatting;
             dgvTurnos.DoubleClick += (s, e) => AbrirTurnoSeleccionado();
 
@@ -77,7 +53,7 @@ namespace CapaPresentacion.Formularios
         private void ConfigurarBinding()
         {
             _bs.DataSource = _turnos;
-            dgvTurnos.AutoGenerateColumns = false;
+            dgvTurnos.AutoGenerateColumns = true;
             dgvTurnos.DataSource = _bs;
         }
 
@@ -105,66 +81,35 @@ namespace CapaPresentacion.Formularios
 
         private void AplicarFiltros()
         {
-            SuspendLayout();
-            dgvTurnos.SuspendLayout();
+            var fechaFiltro = dtpFecha.Value.Date;
+            var estado = (cboEstado.SelectedItem?.ToString() ?? "Todos");
+            var q = (txtBuscar.Text ?? "").Trim().ToLowerInvariant();
+            var soloPend = chkSoloPendientes.Checked;
 
-            try
-            {
-                var fechaFiltro = dtpFecha.Value.Date;
-                var estado = (cboEstado.SelectedItem?.ToString() ?? "Todos");
-                var q = (txtBuscar.Text ?? "").Trim().ToLowerInvariant();
-                var soloPend = chkSoloPendientes.Checked;
+            IEnumerable<TurnoVM> query = _turnos;
+            query = query.Where(t => t.FechaHora.Date == fechaFiltro);
 
-                IEnumerable<TurnoVM> query = _turnos;
-                query = query.Where(t => t.FechaHora.Date == fechaFiltro);
+            if (estado != "Todos")
+                query = query.Where(t => t.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
 
-                if (estado != "Todos")
-                    query = query.Where(t => t.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
+            if (soloPend)
+                query = query.Where(t => t.Estado.Equals("Pendiente", StringComparison.OrdinalIgnoreCase));
 
-                if (soloPend)
-                    query = query.Where(t => t.Estado.Equals("Pendiente", StringComparison.OrdinalIgnoreCase));
+            if (q.Length > 0)
+                query = query.Where(t =>
+                    (t.Paciente?.ToLowerInvariant().Contains(q) ?? false) ||
+                    (t.Motivo?.ToLowerInvariant().Contains(q) ?? false));
 
-                if (q.Length > 0)
-                    query = query.Where(t =>
-                        (t.Paciente?.ToLowerInvariant().Contains(q) ?? false) ||
-                        (t.Motivo?.ToLowerInvariant().Contains(q) ?? false));
-
-                _bs.DataSource = query.ToList();
-                _bs.ResetBindings(false);
-
-                // Ocultar columnas internas si quedaron
-                if (dgvTurnos.Columns.Contains("TurnoId"))
-                    dgvTurnos.Columns["TurnoId"].Visible = false;
-                if (dgvTurnos.Columns.Contains("FechaHora"))
-                    dgvTurnos.Columns["FechaHora"].Visible = false;
-
-                // Tamaños mínimos
-                if (dgvTurnos.Columns.Contains("Fecha"))
-                {
-                    dgvTurnos.Columns["Fecha"].MinimumWidth = 90;
-                    dgvTurnos.Columns["Fecha"].FillWeight = 70;
-                }
-                if (dgvTurnos.Columns.Contains("Hora"))
-                {
-                    dgvTurnos.Columns["Hora"].MinimumWidth = 70;
-                    dgvTurnos.Columns["Hora"].FillWeight = 55;
-                }
-            }
-            finally
-            {
-                dgvTurnos.ResumeLayout();
-                ResumeLayout();
-            }
+            _bs.DataSource = query.ToList();
+            _bs.ResetBindings(false);
         }
 
         private void DgvTurnos_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvTurnos.Columns[e.ColumnIndex].DataPropertyName == "Estado")
+            if (dgvTurnos.Columns[e.ColumnIndex].HeaderText == "Estado")
             {
                 var estado = e.Value?.ToString() ?? "";
                 var row = dgvTurnos.Rows[e.RowIndex];
-
-                row.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 
                 switch (estado)
                 {
@@ -185,43 +130,11 @@ namespace CapaPresentacion.Formularios
             }
         }
 
-        private void DgvTurnos_CellContentClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-            var col = dgvTurnos.Columns[e.ColumnIndex];
-            var turno = dgvTurnos.Rows[e.RowIndex].DataBoundItem as TurnoVM;
-            if (turno == null) return;
-
-            if (col is DataGridViewButtonColumn)
-            {
-                if (col.HeaderText == "Atender")
-                    AbrirTurno(turno);
-                else if (col.HeaderText == "Cancelar")
-                    CancelarTurno(turno);
-            }
-        }
-
         private void AbrirTurnoSeleccionado()
         {
             if (_bs.Current is TurnoVM t)
-                AbrirTurno(t);
-        }
-
-        private void AbrirTurno(TurnoVM t)
-        {
-            MessageBox.Show($"Abrir turno de {t.Paciente} ({t.Fecha} {t.Hora})", "Atender",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void CancelarTurno(TurnoVM t)
-        {
-            var r = MessageBox.Show($"¿Cancelar el turno de {t.Paciente} ({t.Fecha} {t.Hora})?",
-                "Confirmar cancelación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (r == DialogResult.Yes)
-            {
-                t.Estado = "Cancelado";
-                _bs.ResetBindings(false);
-            }
+                MessageBox.Show($"Abrir turno de {t.Paciente} ({t.Fecha} {t.Hora})",
+                    "Atender", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
