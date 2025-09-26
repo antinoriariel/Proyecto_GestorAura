@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using CapaNegocio;
 
@@ -27,19 +28,86 @@ namespace CapaPresentacion
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(txtUsername.Text) ||
-                    string.IsNullOrWhiteSpace(txtPassword.Text) ||
-                    string.IsNullOrWhiteSpace(txtEmail.Text) ||
-                    string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                    string.IsNullOrWhiteSpace(txtApellido.Text) ||
-                    string.IsNullOrWhiteSpace(txtDni.Text) ||
-                    string.IsNullOrWhiteSpace(cmbRol.Text))
+                // === Validaciones de frontend ===
+
+                // Username
+                if (string.IsNullOrWhiteSpace(txtUsername.Text) || txtUsername.Text.Length > 30)
                 {
-                    MessageBox.Show("⚠️ Todos los campos son obligatorios",
+                    MessageBox.Show("⚠️ El usuario es obligatorio y no debe superar 30 caracteres.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
+                // Password
+                if (string.IsNullOrWhiteSpace(txtPassword.Text) || txtPassword.Text.Length < 6)
+                {
+                    MessageBox.Show("⚠️ La contraseña es obligatoria y debe tener al menos 6 caracteres.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Email
+                if (string.IsNullOrWhiteSpace(txtEmail.Text) || txtEmail.Text.Length > 50 ||
+                    !Regex.IsMatch(txtEmail.Text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    MessageBox.Show("⚠️ El email es obligatorio, válido y no debe superar 50 caracteres.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Nombre
+                if (string.IsNullOrWhiteSpace(txtNombre.Text) || txtNombre.Text.Length > 50)
+                {
+                    MessageBox.Show("⚠️ El nombre es obligatorio y no debe superar 50 caracteres.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Apellido
+                if (string.IsNullOrWhiteSpace(txtApellido.Text) || txtApellido.Text.Length > 50)
+                {
+                    MessageBox.Show("⚠️ El apellido es obligatorio y no debe superar 50 caracteres.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // DNI
+                if (!Regex.IsMatch(txtDni.Text.Trim(), @"^\d{8}$"))
+                {
+                    MessageBox.Show("⚠️ El DNI debe tener exactamente 8 dígitos numéricos.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Fecha de nacimiento
+                if (dtpFechaNacimiento.Value.Date > DateTime.Today)
+                {
+                    MessageBox.Show("⚠️ La fecha de nacimiento no puede ser futura.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Teléfono (opcional, solo si se completa)
+                if (!string.IsNullOrWhiteSpace(txtTelefono.Text))
+                {
+                    if (!Regex.IsMatch(txtTelefono.Text, @"^[0-9+()\-\s]{7,20}$"))
+                    {
+                        MessageBox.Show("⚠️ El teléfono solo puede contener números, +, (), - y debe tener entre 7 y 20 caracteres.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+
+                // Rol
+                if (cmbRol.SelectedIndex == -1 ||
+                    !(cmbRol.Text == "medico" || cmbRol.Text == "secretaria" || cmbRol.Text == "administrador"))
+                {
+                    MessageBox.Show("⚠️ Debe seleccionar un rol válido (medico, secretaria o administrador).",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // === Si pasa todas las validaciones ===
                 carga.CargarUsuario(
                     txtUsername.Text.Trim(),
                     txtPassword.Text,
