@@ -40,4 +40,8 @@
     <Folder Include="img\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HIC.System.Windows.Forms.DataVisualization" Version="1.0.1" />
+  </ItemGroup>
+
 </Project>

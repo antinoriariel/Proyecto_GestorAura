@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Diagnostics; // 👈 agregado
 using CapaPresentacion.Controles;
 using CapaPresentacion.Formularios;
 
@@ -41,8 +42,29 @@ namespace CapaPresentacion
             navbarSuperior1.BtnNotificacionesClick += (s, e) =>
                 MessageBox.Show("🔔 Notificaciones pendientes", "Info");
 
+            // 👉 Ahora abre el navegador en lugar de MessageBox
             navbarSuperior1.BtnAyudaClick += (s, e) =>
-                MessageBox.Show("❓ Sección de ayuda", "Info");
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "https://github.com/antinoriariel/Proyecto_GestorAura",
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No se pudo abrir la página de ayuda: " + ex.Message,
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
+            // 👉 Si el usuario es administrador, cargar InicioAdmin automáticamente
+            if (_rolUsuario.Equals("administrador", StringComparison.OrdinalIgnoreCase))
+            {
+                MostrarFormUnico<InicioAdmin>();
+            }
         }
 
         // ============================================================
