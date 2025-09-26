@@ -3,234 +3,293 @@
     partial class FormCargaUsuarios
     {
         private System.ComponentModel.IContainer components = null;
+
+        private Panel headerPanel;
+        private PictureBox picHeader;
+        private Label lblHeader;
+
+        private GroupBox grpDatos;
+        private TableLayoutPanel grid;
+
         private Label lblUsername;
-        private Label lblPassword;
-        private Label lblEmail;
-        private Label lblNombre;
-        private Label lblApellido;
-        private Label lblDni;
-        private Label lblFechaNacimiento;
-        private Label lblTelefono;
-        private Label lblRol;
-
         private TextBox txtUsername;
-        private TextBox txtPassword;
-        private TextBox txtEmail;
-        private TextBox txtNombre;
-        private TextBox txtApellido;
-        private TextBox txtDni;
-        private TextBox txtTelefono;
-        private DateTimePicker dtpFechaNacimiento;
-        private ComboBox cmbRol;
-        private Button btnGuardar;
 
+        private Label lblPassword;
+        private TextBox txtPassword;
+
+        private Label lblEmail;
+        private TextBox txtEmail;
+
+        private Label lblNombre;
+        private TextBox txtNombre;
+
+        private Label lblApellido;
+        private TextBox txtApellido;
+
+        private Label lblDni;
+        private TextBox txtDni;
+
+        private Label lblFechaNacimiento;
+        private DateTimePicker dtpFechaNacimiento;
+
+        private Label lblTelefono;
+        private TextBox txtTelefono;
+
+        private Label lblRol;
+        private ComboBox cmbRol;
+
+        private Panel footerPanel;
+        private Button btnGuardar;
+        private Button btnCancelar;
+
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         private void InitializeComponent()
         {
+            headerPanel = new Panel();
+            picHeader = new PictureBox();
+            lblHeader = new Label();
+            grpDatos = new GroupBox();
+            grid = new TableLayoutPanel();
+
             lblUsername = new Label();
-            lblPassword = new Label();
-            lblEmail = new Label();
-            lblNombre = new Label();
-            lblApellido = new Label();
-            lblDni = new Label();
-            lblFechaNacimiento = new Label();
-            lblTelefono = new Label();
-            lblRol = new Label();
             txtUsername = new TextBox();
+
+            lblPassword = new Label();
             txtPassword = new TextBox();
+
+            lblEmail = new Label();
             txtEmail = new TextBox();
+
+            lblNombre = new Label();
             txtNombre = new TextBox();
+
+            lblApellido = new Label();
             txtApellido = new TextBox();
+
+            lblDni = new Label();
             txtDni = new TextBox();
-            txtTelefono = new TextBox();
+
+            lblFechaNacimiento = new Label();
             dtpFechaNacimiento = new DateTimePicker();
+
+            lblTelefono = new Label();
+            txtTelefono = new TextBox();
+
+            lblRol = new Label();
             cmbRol = new ComboBox();
+
+            footerPanel = new Panel();
             btnGuardar = new Button();
+            btnCancelar = new Button();
+
+            headerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picHeader).BeginInit();
+            grpDatos.SuspendLayout();
+            grid.SuspendLayout();
+            footerPanel.SuspendLayout();
             SuspendLayout();
             // 
-            // lblUsername
+            // headerPanel
             // 
-            lblUsername.Location = new Point(30, 30);
-            lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(100, 23);
-            lblUsername.TabIndex = 0;
-            lblUsername.Text = "Usuario:";
+            headerPanel.BackColor = Color.FromArgb(41, 57, 71);
+            headerPanel.Controls.Add(picHeader);
+            headerPanel.Controls.Add(lblHeader);
+            headerPanel.Dock = DockStyle.Top;
+            headerPanel.Location = new Point(21, 12);
+            headerPanel.Name = "headerPanel";
+            headerPanel.Size = new Size(676, 48);
+            headerPanel.TabIndex = 0;
             // 
-            // lblPassword
+            // picHeader
             // 
-            lblPassword.Location = new Point(30, 70);
-            lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(100, 23);
-            lblPassword.TabIndex = 2;
-            lblPassword.Text = "Contraseña:";
+            picHeader.Image = Properties.Resources.ajustesIcon; // 👈 icono a definir en Resources
+            picHeader.Location = new Point(14, 9);
+            picHeader.Name = "picHeader";
+            picHeader.Size = new Size(35, 30);
+            picHeader.SizeMode = PictureBoxSizeMode.Zoom;
+            picHeader.TabStop = false;
             // 
-            // lblEmail
+            // lblHeader
             // 
-            lblEmail.Location = new Point(30, 110);
-            lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(100, 23);
-            lblEmail.TabIndex = 4;
-            lblEmail.Text = "Email:";
+            lblHeader.AutoSize = true;
+            lblHeader.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            lblHeader.ForeColor = Color.White;
+            lblHeader.Location = new Point(56, 14);
+            lblHeader.Name = "lblHeader";
+            lblHeader.Size = new Size(230, 30);
+            lblHeader.TabIndex = 1;
+            lblHeader.Text = "Carga de usuarios";
             // 
-            // lblNombre
+            // grpDatos
             // 
-            lblNombre.Location = new Point(30, 150);
-            lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(100, 23);
-            lblNombre.TabIndex = 6;
-            lblNombre.Text = "Nombre:";
+            grpDatos.BackColor = Color.White;
+            grpDatos.Controls.Add(grid);
+            grpDatos.Dock = DockStyle.Top;
+            grpDatos.Location = new Point(21, 60);
+            grpDatos.Name = "grpDatos";
+            grpDatos.Padding = new Padding(14, 12, 14, 12);
+            grpDatos.Size = new Size(676, 320);
+            grpDatos.TabIndex = 1;
+            grpDatos.TabStop = false;
+            grpDatos.Text = "Datos del usuario";
             // 
-            // lblApellido
+            // grid
             // 
-            lblApellido.Location = new Point(30, 190);
-            lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(100, 23);
-            lblApellido.TabIndex = 8;
-            lblApellido.Text = "Apellido:";
+            grid.ColumnCount = 2;
+            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140F));
+            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+
+            grid.Controls.Add(lblUsername, 0, 0);
+            grid.Controls.Add(txtUsername, 1, 0);
+
+            grid.Controls.Add(lblPassword, 0, 1);
+            grid.Controls.Add(txtPassword, 1, 1);
+
+            grid.Controls.Add(lblEmail, 0, 2);
+            grid.Controls.Add(txtEmail, 1, 2);
+
+            grid.Controls.Add(lblNombre, 0, 3);
+            grid.Controls.Add(txtNombre, 1, 3);
+
+            grid.Controls.Add(lblApellido, 0, 4);
+            grid.Controls.Add(txtApellido, 1, 4);
+
+            grid.Controls.Add(lblDni, 0, 5);
+            grid.Controls.Add(txtDni, 1, 5);
+
+            grid.Controls.Add(lblFechaNacimiento, 0, 6);
+            grid.Controls.Add(dtpFechaNacimiento, 1, 6);
+
+            grid.Controls.Add(lblTelefono, 0, 7);
+            grid.Controls.Add(txtTelefono, 1, 7);
+
+            grid.Controls.Add(lblRol, 0, 8);
+            grid.Controls.Add(cmbRol, 1, 8);
+
+            grid.Dock = DockStyle.Fill;
+            grid.RowCount = 9;
+            
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+
+            grid.Location = new Point(14, 28);
+            grid.Name = "grid";
+            grid.Size = new Size(648, 280);
+            grid.TabIndex = 0;
             // 
-            // lblDni
+            // Labels y inputs
             // 
-            lblDni.Location = new Point(30, 230);
-            lblDni.Name = "lblDni";
-            lblDni.Size = new Size(100, 23);
-            lblDni.TabIndex = 10;
-            lblDni.Text = "DNI:";
-            // 
-            // lblFechaNacimiento
-            // 
-            lblFechaNacimiento.Location = new Point(30, 270);
-            lblFechaNacimiento.Name = "lblFechaNacimiento";
-            lblFechaNacimiento.Size = new Size(100, 23);
-            lblFechaNacimiento.TabIndex = 12;
-            lblFechaNacimiento.Text = "Fecha Nac.:";
-            // 
-            // lblTelefono
-            // 
-            lblTelefono.Location = new Point(30, 310);
-            lblTelefono.Name = "lblTelefono";
-            lblTelefono.Size = new Size(100, 23);
-            lblTelefono.TabIndex = 14;
-            lblTelefono.Text = "Teléfono:";
-            // 
-            // lblRol
-            // 
-            lblRol.Location = new Point(30, 350);
-            lblRol.Name = "lblRol";
-            lblRol.Size = new Size(100, 23);
-            lblRol.TabIndex = 16;
-            lblRol.Text = "Rol:";
-            // 
-            // txtUsername
-            // 
-            txtUsername.Location = new Point(150, 30);
-            txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(200, 23);
-            txtUsername.TabIndex = 1;
-            // 
-            // txtPassword
-            // 
-            txtPassword.Location = new Point(150, 70);
-            txtPassword.Name = "txtPassword";
+            lblUsername.Anchor = AnchorStyles.Left;
+            lblUsername.Text = "Usuario";
+            txtUsername.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+
+            lblPassword.Anchor = AnchorStyles.Left;
+            lblPassword.Text = "Contraseña";
+            txtPassword.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(200, 23);
-            txtPassword.TabIndex = 3;
-            // 
-            // txtEmail
-            // 
-            txtEmail.Location = new Point(150, 110);
-            txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(200, 23);
-            txtEmail.TabIndex = 5;
-            // 
-            // txtNombre
-            // 
-            txtNombre.Location = new Point(150, 150);
-            txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(200, 23);
-            txtNombre.TabIndex = 7;
-            // 
-            // txtApellido
-            // 
-            txtApellido.Location = new Point(150, 190);
-            txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(200, 23);
-            txtApellido.TabIndex = 9;
-            // 
-            // txtDni
-            // 
-            txtDni.Location = new Point(150, 230);
-            txtDni.Name = "txtDni";
-            txtDni.Size = new Size(200, 23);
-            txtDni.TabIndex = 11;
-            // 
-            // txtTelefono
-            // 
-            txtTelefono.Location = new Point(150, 310);
-            txtTelefono.Name = "txtTelefono";
-            txtTelefono.Size = new Size(200, 23);
-            txtTelefono.TabIndex = 15;
-            // 
-            // dtpFechaNacimiento
-            // 
-            dtpFechaNacimiento.Location = new Point(150, 270);
-            dtpFechaNacimiento.Name = "dtpFechaNacimiento";
-            dtpFechaNacimiento.Size = new Size(200, 23);
-            dtpFechaNacimiento.TabIndex = 13;
-            // 
-            // cmbRol
-            // 
+
+            lblEmail.Anchor = AnchorStyles.Left;
+            lblEmail.Text = "Email";
+            txtEmail.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+
+            lblNombre.Anchor = AnchorStyles.Left;
+            lblNombre.Text = "Nombre";
+            txtNombre.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+
+            lblApellido.Anchor = AnchorStyles.Left;
+            lblApellido.Text = "Apellido";
+            txtApellido.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+
+            lblDni.Anchor = AnchorStyles.Left;
+            lblDni.Text = "DNI";
+            txtDni.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+
+            lblFechaNacimiento.Anchor = AnchorStyles.Left;
+            lblFechaNacimiento.Text = "Fecha de Nacimiento";
+            dtpFechaNacimiento.Anchor = AnchorStyles.Left;
+            dtpFechaNacimiento.Format = DateTimePickerFormat.Short;
+
+            lblTelefono.Anchor = AnchorStyles.Left;
+            lblTelefono.Text = "Teléfono";
+            txtTelefono.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+
+            lblRol.Anchor = AnchorStyles.Left;
+            lblRol.Text = "Rol";
+            cmbRol.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbRol.Items.AddRange(new object[] { "medico", "secretaria", "administrador" });
-            cmbRol.Location = new Point(150, 350);
-            cmbRol.Name = "cmbRol";
-            cmbRol.Size = new Size(200, 23);
-            cmbRol.TabIndex = 17;
+            // 
+            // footerPanel
+            // 
+            footerPanel.BackColor = Color.Transparent;
+            footerPanel.Controls.Add(btnGuardar);
+            footerPanel.Controls.Add(btnCancelar);
+            footerPanel.Dock = DockStyle.Bottom;
+            footerPanel.Location = new Point(21, 380);
+            footerPanel.Name = "footerPanel";
+            footerPanel.Padding = new Padding(0, 6, 0, 0);
+            footerPanel.Size = new Size(676, 48);
+            footerPanel.TabIndex = 2;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(150, 400);
-            btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(75, 23);
-            btnGuardar.TabIndex = 18;
+            btnGuardar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnGuardar.AutoSize = true;
             btnGuardar.Text = "Guardar";
+            btnGuardar.Location = new Point(480, 10);
             btnGuardar.Click += btnGuardar_Click;
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCancelar.AutoSize = true;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.Location = new Point(570, 10);
+            btnCancelar.Click += (s, e) => this.Close();
             // 
             // FormCargaUsuarios
             // 
-            ClientSize = new Size(400, 480);
-            Controls.Add(lblUsername);
-            Controls.Add(txtUsername);
-            Controls.Add(lblPassword);
-            Controls.Add(txtPassword);
-            Controls.Add(lblEmail);
-            Controls.Add(txtEmail);
-            Controls.Add(lblNombre);
-            Controls.Add(txtNombre);
-            Controls.Add(lblApellido);
-            Controls.Add(txtApellido);
-            Controls.Add(lblDni);
-            Controls.Add(txtDni);
-            Controls.Add(lblFechaNacimiento);
-            Controls.Add(dtpFechaNacimiento);
-            Controls.Add(lblTelefono);
-            Controls.Add(txtTelefono);
-            Controls.Add(lblRol);
-            Controls.Add(cmbRol);
-            Controls.Add(btnGuardar);
+            AcceptButton = btnGuardar;
+            CancelButton = btnCancelar;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(241, 244, 246);
+            ClientSize = new Size(718, 440);
+            ControlBox = false;
+            Controls.Add(footerPanel);
+            Controls.Add(grpDatos);
+            Controls.Add(headerPanel);
             FormBorderStyle = FormBorderStyle.None;
+            KeyPreview = true;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FormCargaUsuarios";
+            Padding = new Padding(21, 12, 21, 12);
             StartPosition = FormStartPosition.CenterParent;
             Text = "Carga de Usuarios";
+            headerPanel.ResumeLayout(false);
+            headerPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picHeader).EndInit();
+            grpDatos.ResumeLayout(false);
+            grid.ResumeLayout(false);
+            grid.PerformLayout();
+            footerPanel.ResumeLayout(false);
+            footerPanel.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
     }
 }
