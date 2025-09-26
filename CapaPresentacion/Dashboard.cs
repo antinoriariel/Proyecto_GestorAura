@@ -146,6 +146,9 @@ namespace CapaPresentacion
             // 🔹 Usuarios
             sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>();
 
+            // 🔹 Médicos
+            sidebar.BtnMedicosClick += (s, e) => MostrarFormUnico<FormMedicos>();
+
             // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
         }
@@ -159,7 +162,7 @@ namespace CapaPresentacion
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
 
             // 🔹 Turnos
-            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnos>();
+            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
 
             // 🔹 Historias clínicas
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
@@ -177,7 +180,7 @@ namespace CapaPresentacion
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioSecre>();
 
             // 🔹 Turnos
-            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnos>();
+            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
 
             // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
