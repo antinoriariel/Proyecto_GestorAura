@@ -114,8 +114,10 @@ namespace CapaPresentacion
 
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
-            // Redirigir cerrar sesión a volver al login
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
+
+            // 🔹 Abrir FormCargaUsuarios al hacer clic en "Usuarios"
+            sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>();
         }
 
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
