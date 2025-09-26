@@ -17,7 +17,7 @@ namespace CapaPresentacion.Controles
             btnUsuarios = CrearBotonBase("Usuarios", Properties.Resources.usuarioIcon);
             btnMedicos = CrearBotonBase("Médicos", Properties.Resources.medicoIcon);
             btnPacientes = CrearBotonBase("Pacientes", Properties.Resources.pacienteIcon);
-            btnTurnos = CrearBotonBase("Turnos", Properties.Resources.turnosIcon);
+            //btnTurnos = CrearBotonBase("Turnos", Properties.Resources.turnosIcon);
             btnAuditoria = CrearBotonBase("Auditoría", Properties.Resources.auditIcon);
             btnBackup = CrearBotonBase("Backup", Properties.Resources.backupdbIcon);
             btnConfiguracion = CrearBotonBase("Ajustes", Properties.Resources.ajustesIcon);
@@ -27,7 +27,7 @@ namespace CapaPresentacion.Controles
             btnUsuarios.Click += (s, e) => BtnUsuariosClick?.Invoke(this, e);
             btnMedicos.Click += (s, e) => BtnMedicosClick?.Invoke(this, e);
             btnPacientes.Click += (s, e) => BtnPacientesClick?.Invoke(this, e);
-            btnTurnos.Click += (s, e) => BtnTurnosClick?.Invoke(this, e);
+            //btnTurnos.Click += (s, e) => BtnTurnosClick?.Invoke(this, e);
             btnAuditoria.Click += (s, e) => BtnAuditoriaClick?.Invoke(this, e);
             btnBackup.Click += (s, e) => BtnBackupClick?.Invoke(this, e);
             btnConfiguracion.Click += (s, e) => BtnConfiguracionClick?.Invoke(this, e);
@@ -37,7 +37,7 @@ namespace CapaPresentacion.Controles
             AgregarBoton(btnUsuarios);
             AgregarBoton(btnMedicos);
             AgregarBoton(btnPacientes);
-            AgregarBoton(btnTurnos);
+            //AgregarBoton(btnTurnos);
             AgregarBoton(btnAuditoria);
             AgregarBoton(btnBackup);
             AgregarBoton(btnConfiguracion);
@@ -48,7 +48,7 @@ namespace CapaPresentacion.Controles
         public event EventHandler BtnUsuariosClick;
         public event EventHandler BtnMedicosClick;
         public event EventHandler BtnPacientesClick;
-        public event EventHandler BtnTurnosClick;
+        //public event EventHandler BtnTurnosClick;
         public event EventHandler BtnAuditoriaClick;
         public event EventHandler BtnBackupClick;
         public event EventHandler BtnConfiguracionClick;
