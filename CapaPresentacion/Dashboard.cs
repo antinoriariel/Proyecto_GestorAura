@@ -158,6 +158,11 @@ namespace CapaPresentacion
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+            // En ConfigurarEventosMedico(MedicoSidebar sidebar)
+            sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
+            sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
+            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
+
 
             // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
