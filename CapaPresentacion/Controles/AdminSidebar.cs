@@ -6,7 +6,8 @@ namespace CapaPresentacion.Controles
     public class AdminSidebar : SidebarBase
     {
         private Button btnDashboard, btnUsuarios, btnMedicos, btnPacientes, btnTurnos;
-        private Button btnReportes, btnReportesAvanzados, btnAuditoria, btnBackup, btnConfiguracion;
+        private Button btnAuditoria, btnBackup, btnConfiguracion;
+        private Button btnPrueba;
 
         public AdminSidebar() : base() { }
 
@@ -17,10 +18,8 @@ namespace CapaPresentacion.Controles
             btnMedicos = CrearBotonBase("Médicos", Properties.Resources.medicoIcon);
             btnPacientes = CrearBotonBase("Pacientes", Properties.Resources.pacienteIcon);
             btnTurnos = CrearBotonBase("Turnos", Properties.Resources.turnosIcon);
-            btnReportes = CrearBotonBase("Reportes", Properties.Resources.ajustesIcon);
-            btnReportesAvanzados = CrearBotonBase("Reportes Avanzados", Properties.Resources.ajustesIcon);
-            btnAuditoria = CrearBotonBase("Auditoría", Properties.Resources.ajustesIcon);
-            btnBackup = CrearBotonBase("Backup", Properties.Resources.ajustesIcon);
+            btnAuditoria = CrearBotonBase("Auditoría", Properties.Resources.auditIcon);
+            btnBackup = CrearBotonBase("Backup", Properties.Resources.backupdbIcon);
             btnConfiguracion = CrearBotonBase("Ajustes", Properties.Resources.ajustesIcon);
 
             // Eventos expuestos
@@ -29,8 +28,6 @@ namespace CapaPresentacion.Controles
             btnMedicos.Click += (s, e) => BtnMedicosClick?.Invoke(this, e);
             btnPacientes.Click += (s, e) => BtnPacientesClick?.Invoke(this, e);
             btnTurnos.Click += (s, e) => BtnTurnosClick?.Invoke(this, e);
-            btnReportes.Click += (s, e) => BtnReportesClick?.Invoke(this, e);
-            btnReportesAvanzados.Click += (s, e) => BtnReportesAvanzadosClick?.Invoke(this, e);
             btnAuditoria.Click += (s, e) => BtnAuditoriaClick?.Invoke(this, e);
             btnBackup.Click += (s, e) => BtnBackupClick?.Invoke(this, e);
             btnConfiguracion.Click += (s, e) => BtnConfiguracionClick?.Invoke(this, e);
@@ -41,8 +38,6 @@ namespace CapaPresentacion.Controles
             AgregarBoton(btnMedicos);
             AgregarBoton(btnPacientes);
             AgregarBoton(btnTurnos);
-            AgregarBoton(btnReportes);
-            AgregarBoton(btnReportesAvanzados);
             AgregarBoton(btnAuditoria);
             AgregarBoton(btnBackup);
             AgregarBoton(btnConfiguracion);
@@ -54,8 +49,6 @@ namespace CapaPresentacion.Controles
         public event EventHandler BtnMedicosClick;
         public event EventHandler BtnPacientesClick;
         public event EventHandler BtnTurnosClick;
-        public event EventHandler BtnReportesClick;
-        public event EventHandler BtnReportesAvanzadosClick;
         public event EventHandler BtnAuditoriaClick;
         public event EventHandler BtnBackupClick;
         public event EventHandler BtnConfiguracionClick;
