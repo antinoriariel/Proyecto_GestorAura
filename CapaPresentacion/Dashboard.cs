@@ -159,16 +159,34 @@ namespace CapaPresentacion
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
 
-            // 🔹 Nuevos formularios médicos
-            sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
-            sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
-            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
+            // 🔹 Pacientes → Internados
+            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+
+            // 🔹 Recetas → abrir en navegador externo
+            sidebar.BtnRecetasClick += (s, e) =>
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "https://rcta.me/",
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No se pudo abrir la página de recetas: " + ex.Message,
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
         }
 
         // ========== SECRETARIA ==========
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
+
+            // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioSecre>();
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
