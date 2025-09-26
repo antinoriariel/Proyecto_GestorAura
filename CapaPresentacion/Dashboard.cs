@@ -78,7 +78,6 @@ namespace CapaPresentacion
                 StartPosition = FormStartPosition.CenterScreen
             };
 
-            // Cuando el login se cierre, cerramos también el dashboard
             login.FormClosed += (s, args) => this.Close();
 
             this.Hide();
@@ -139,65 +138,39 @@ namespace CapaPresentacion
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
-
-            // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioAdmin>();
-
-            // 🔹 Usuarios
             sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>();
-
-            // 🔹 Médicos
             sidebar.BtnMedicosClick += (s, e) => MostrarFormUnico<FormMedicos>();
-
-            // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
-
-            // 🔹 Auditoría
             sidebar.BtnAuditoriaClick += (s, e) =>
-                MessageBox.Show("ℹ️ Requiere conexión e integración con la base de datos, posponiendo",
-                                "Auditoría", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // 🔹 Backup
+                MessageBox.Show("ℹ️ Requiere integración DB", "Auditoría");
             sidebar.BtnBackupClick += (s, e) =>
-                MessageBox.Show("ℹ️ Requiere conexión e integración con la base de datos, posponiendo",
-                                "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // 🔹 Ajustes
+                MessageBox.Show("ℹ️ Requiere integración DB", "Backup");
             sidebar.BtnConfiguracionClick += (s, e) =>
-                MessageBox.Show("ℹ️ Requiere conexión e integración con la base de datos, posponiendo",
-                                "Ajustes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("ℹ️ Requiere integración DB", "Ajustes");
         }
 
         // ========== MÉDICO ==========
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
-
-            // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
-
-            // 🔹 Turnos
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
-
-            // 🔹 Historias clínicas
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
-
-            // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+
+            // 🔹 Nuevos formularios médicos
+            sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
+            sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
+            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
         }
 
         // ========== SECRETARIA ==========
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
-
-            // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioSecre>();
-
-            // 🔹 Turnos
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
-
-            // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
         }
 
