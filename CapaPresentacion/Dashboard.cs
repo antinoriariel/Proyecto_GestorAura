@@ -59,7 +59,7 @@ namespace CapaPresentacion
                 }
             };
 
-            // 👉 Si el usuario es administrador, cargar InicioAdmin automáticamente
+            // 👉 Abrir pantalla de inicio según rol
             if (_rolUsuario.Equals("administrador", StringComparison.OrdinalIgnoreCase))
                 MostrarFormUnico<InicioAdmin>();
             else if (_rolUsuario.Equals("medico", StringComparison.OrdinalIgnoreCase))
@@ -145,6 +145,9 @@ namespace CapaPresentacion
 
             // 🔹 Usuarios
             sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>();
+
+            // 🔹 Pacientes → Internados
+            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
         }
 
         // ========== MÉDICO ==========
@@ -155,8 +158,14 @@ namespace CapaPresentacion
             // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
 
-            sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
-            sidebar.BtnHistoriasClick += (s, e) => MostrarForm(new FormHC());
+            // 🔹 Turnos
+            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnos>();
+
+            // 🔹 Historias clínicas
+            sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
+
+            // 🔹 Pacientes → Internados
+            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
         }
 
         // ========== SECRETARIA ==========
@@ -167,7 +176,11 @@ namespace CapaPresentacion
             // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioSecre>();
 
-            sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
+            // 🔹 Turnos
+            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnos>();
+
+            // 🔹 Pacientes → Internados
+            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
         }
 
         // ============================================================
