@@ -105,28 +105,38 @@
             grpDatos.Controls.Add(grid);
             grpDatos.Dock = DockStyle.Top;
             grpDatos.Padding = new Padding(14, 12, 14, 12);
-            grpDatos.Size = new Size(676, 200);
+            grpDatos.AutoSize = true;
+            grpDatos.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             grpDatos.Text = "Información de inicio";
 
             // grid
+            grid.AutoSize = true;
+            grid.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            grid.Margin = new Padding(0);
+            grid.Dock = DockStyle.Top;
             grid.ColumnCount = 2;
-            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 180F)); // más ancho para etiquetas
+            grid.ColumnStyles.Clear();
+            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 180F));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             grid.RowCount = 5;
-            for (int i = 0; i < 5; i++)
-                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            grid.Dock = DockStyle.Fill;
+            grid.RowStyles.Clear();
+            grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
             // lblBienvenida
             lblBienvenida.Dock = DockStyle.Fill;
             lblBienvenida.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblBienvenida.TextAlign = ContentAlignment.MiddleCenter;
+            lblBienvenida.Margin = new Padding(0, 0, 0, 6);
             lblBienvenida.Text = "👋 Bienvenido Administrador";
             grid.Controls.Add(lblBienvenida, 0, 0);
             grid.SetColumnSpan(lblBienvenida, 2);
 
             // Usuario
-            grid.Controls.Add(new Label()
+            grid.Controls.Add(new Label
             {
                 Text = "Usuario:",
                 Dock = DockStyle.Fill,
@@ -135,11 +145,12 @@
             }, 0, 1);
             lblUsuario.Dock = DockStyle.Fill;
             lblUsuario.TextAlign = ContentAlignment.MiddleLeft;
+            lblUsuario.AutoSize = true;
             lblUsuario.Text = "admin";
             grid.Controls.Add(lblUsuario, 1, 1);
 
             // Rol
-            grid.Controls.Add(new Label()
+            grid.Controls.Add(new Label
             {
                 Text = "Rol:",
                 Dock = DockStyle.Fill,
@@ -148,11 +159,12 @@
             }, 0, 2);
             lblRol.Dock = DockStyle.Fill;
             lblRol.TextAlign = ContentAlignment.MiddleLeft;
+            lblRol.AutoSize = true;
             lblRol.Text = "administrador";
             grid.Controls.Add(lblRol, 1, 2);
 
             // Email
-            grid.Controls.Add(new Label()
+            grid.Controls.Add(new Label
             {
                 Text = "Email:",
                 Dock = DockStyle.Fill,
@@ -161,11 +173,12 @@
             }, 0, 3);
             lblEmail.Dock = DockStyle.Fill;
             lblEmail.TextAlign = ContentAlignment.MiddleLeft;
+            lblEmail.AutoSize = true;
             lblEmail.Text = "admin@gestoraura.com";
             grid.Controls.Add(lblEmail, 1, 3);
 
             // Último acceso
-            grid.Controls.Add(new Label()
+            grid.Controls.Add(new Label
             {
                 Text = "Último acceso:",
                 Dock = DockStyle.Fill,
@@ -174,6 +187,7 @@
             }, 0, 4);
             lblUltimoAcceso.Dock = DockStyle.Fill;
             lblUltimoAcceso.TextAlign = ContentAlignment.MiddleLeft;
+            lblUltimoAcceso.AutoSize = true;
             lblUltimoAcceso.Text = "26/09/2025 08:00 hs";
             grid.Controls.Add(lblUltimoAcceso, 1, 4);
 
@@ -187,20 +201,17 @@
             grpExtras.Size = new Size(676, 100);
             grpExtras.Text = "Información extra";
 
-            // lblFraseMotivacional
             lblFraseMotivacional.AutoSize = true;
             lblFraseMotivacional.Font = new Font("Segoe UI", 11F, FontStyle.Italic);
             lblFraseMotivacional.ForeColor = Color.DarkSlateGray;
             lblFraseMotivacional.Location = new Point(20, 30);
             lblFraseMotivacional.Text = "✨ \"La salud es la mayor riqueza\"";
 
-            // lblVersion
             lblVersion.AutoSize = true;
             lblVersion.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblVersion.Location = new Point(20, 65);
             lblVersion.Text = "GestorAura v1.0";
 
-            // lblEstadoServidor
             lblEstadoServidor.AutoSize = true;
             lblEstadoServidor.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
             lblEstadoServidor.ForeColor = Color.Green;
@@ -216,7 +227,6 @@
             grpGrafico.Size = new Size(676, 220);
             grpGrafico.Text = "Pacientes nuevos en el último mes";
 
-            // chartPacientes
             chartPacientes.Dock = DockStyle.Fill;
             var chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("MainArea");
             chartPacientes.ChartAreas.Add(chartArea);
@@ -237,7 +247,6 @@
             grpUsuariosPrevios.Padding = new Padding(14, 12, 14, 12);
             grpUsuariosPrevios.Text = "Usuarios conectados recientemente";
 
-            // dgvUsuariosPrevios
             dgvUsuariosPrevios.AllowUserToAddRows = false;
             dgvUsuariosPrevios.AllowUserToDeleteRows = false;
             dgvUsuariosPrevios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -261,7 +270,6 @@
             footerPanel.Dock = DockStyle.Bottom;
             footerPanel.Size = new Size(676, 48);
 
-            // btnCerrar
             btnCerrar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCerrar.AutoSize = true;
             btnCerrar.Text = "Recargar estado";
@@ -292,6 +300,7 @@
             headerPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picHeader).EndInit();
             grpDatos.ResumeLayout(false);
+            grpDatos.PerformLayout();
             grid.ResumeLayout(false);
             grid.PerformLayout();
             grpExtras.ResumeLayout(false);
