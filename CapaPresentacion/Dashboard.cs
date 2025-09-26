@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Diagnostics; // 👈 agregado
+using System.Diagnostics; // 👈 necesario para abrir URLs
 using CapaPresentacion.Controles;
 using CapaPresentacion.Formularios;
 
@@ -78,6 +78,7 @@ namespace CapaPresentacion
                 StartPosition = FormStartPosition.CenterScreen
             };
 
+            // Cuando el login se cierre, cerramos también el dashboard
             login.FormClosed += (s, args) => this.Close();
 
             this.Hide();
@@ -138,10 +139,20 @@ namespace CapaPresentacion
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
+
+            // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioAdmin>();
+
+            // 🔹 Usuarios
             sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>();
+
+            // 🔹 Médicos
             sidebar.BtnMedicosClick += (s, e) => MostrarFormUnico<FormMedicos>();
+
+            // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+
+            // Placeholders informativos
             sidebar.BtnAuditoriaClick += (s, e) =>
                 MessageBox.Show("ℹ️ Requiere integración DB", "Auditoría");
             sidebar.BtnBackupClick += (s, e) =>
@@ -154,20 +165,22 @@ namespace CapaPresentacion
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
+
+            // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
+
+            // 🔹 Turnos
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
+
+            // 🔹 Historias clínicas
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
+
+            // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
-            // En ConfigurarEventosMedico(MedicoSidebar sidebar)
-            sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
-            sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
-            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
 
-
-            // 🔹 Nuevos: abrir formularios propios
+            // 🔹 Solicitudes y Resultados (nuevos)
             sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
             sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
-            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
 
             // 🔹 Interconsultas → placeholder
             sidebar.BtnInterconsultasClick += (s, e) =>
@@ -190,15 +203,31 @@ namespace CapaPresentacion
                                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
+
+            // 👇 Mensajes NO se agrega por pedido tuyo
+            // sidebar.BtnMensajesClick += ...
         }
 
         // ========== SECRETARIA ==========
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
+
+            // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioSecre>();
+
+            // 🔹 Turnos
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
+
+            // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+
+            // 🔹 Agenda y Notas (nuevos)
+            sidebar.BtnAgendaSemanalClick += (s, e) => MostrarFormUnico<FormAgenda>();
+            sidebar.BtnNotasClick += (s, e) => MostrarFormUnico<FormNotas>();
+
+            // 👇 Mensajes NO se agrega por ahora
+            // sidebar.BtnMensajesClick += ...
         }
 
         // ============================================================
