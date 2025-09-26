@@ -164,8 +164,14 @@ namespace CapaPresentacion
             sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
 
 
-            // 🔹 Pacientes → Internados
-            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+            // 🔹 Nuevos: abrir formularios propios
+            sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
+            sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
+            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
+
+            // 🔹 Interconsultas → placeholder
+            sidebar.BtnInterconsultasClick += (s, e) =>
+                MessageBox.Show("🩺 Módulo de interconsultas en desarrollo.", "Info");
 
             // 🔹 Recetas → abrir en navegador externo
             sidebar.BtnRecetasClick += (s, e) =>
@@ -190,8 +196,6 @@ namespace CapaPresentacion
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
-
-            // 🔹 Inicio
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioSecre>();
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
