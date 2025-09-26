@@ -33,12 +33,7 @@ namespace CapaPresentacion
             CargarSidebar(_rolUsuario, _nombreUsuario);
 
             // 🔹 Eventos navbar superior
-            navbarSuperior1.BtnCambiarUserClick += (s, e) =>
-            {
-                var login = new Login();
-                login.Show();
-                this.Close(); // cierra el Dashboard actual
-            };
+            navbarSuperior1.BtnCambiarUserClick += (s, e) => VolverALogin();
 
             navbarSuperior1.BtnDarkModeClick += (s, e) =>
                 MessageBox.Show("🌙 Cambiar a modo oscuro", "Info");
@@ -48,6 +43,23 @@ namespace CapaPresentacion
 
             navbarSuperior1.BtnAyudaClick += (s, e) =>
                 MessageBox.Show("❓ Sección de ayuda", "Info");
+        }
+
+        // ============================================================
+        // Método auxiliar: volver al login sin cerrar la app
+        // ============================================================
+        private void VolverALogin()
+        {
+            var login = new Login
+            {
+                StartPosition = FormStartPosition.CenterScreen
+            };
+
+            // Cuando el login se cierre, cerramos también el dashboard
+            login.FormClosed += (s, args) => this.Close();
+
+            this.Hide();   // Ocultamos el dashboard
+            login.Show();  // Mostramos el login
         }
 
         private void CargarSidebar(string rol, string nombreUsuario)
@@ -102,20 +114,21 @@ namespace CapaPresentacion
 
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
-            sidebar.BtnCerrarSesionClick += (s, e) => this.Close();
+            // Redirigir cerrar sesión a volver al login
+            sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
         }
 
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
             sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
             sidebar.BtnHistoriasClick += (s, e) => MostrarForm(new FormHC());
-            sidebar.BtnCerrarSesionClick += (s, e) => this.Close();
+            sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
         }
 
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
             sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
-            sidebar.BtnCerrarSesionClick += (s, e) => this.Close();
+            sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
         }
 
         private void MostrarForm(Form form)
