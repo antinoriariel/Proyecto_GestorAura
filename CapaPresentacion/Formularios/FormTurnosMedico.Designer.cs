@@ -39,7 +39,6 @@ namespace CapaPresentacion.Formularios
         }
 
         #region Windows Form Designer generated code
-
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
@@ -78,7 +77,7 @@ namespace CapaPresentacion.Formularios
             headerPanel.Controls.Add(picHeader);
             headerPanel.Controls.Add(lblHeader);
 
-            picHeader.Image = Properties.Resources.medicoTurno; // usa el mismo recurso que tus otros forms
+            picHeader.Image = Properties.Resources.medicoTurno;
             picHeader.SizeMode = PictureBoxSizeMode.Zoom;
             picHeader.Location = new Point(14, 10);
             picHeader.Size = new Size(34, 32);
@@ -98,12 +97,12 @@ namespace CapaPresentacion.Formularios
             gridFiltros.Dock = DockStyle.Fill;
             gridFiltros.ColumnCount = 6;
             gridFiltros.RowCount = 2;
-            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90F)); // etiqueta fecha
-            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 210F)); // control fecha
-            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F)); // etiqueta estado
-            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 180F)); // control estado
-            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F)); // etiqueta buscar
-            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // control buscar
+            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90F));
+            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 210F));
+            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 180F));
+            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+            gridFiltros.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             gridFiltros.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
             gridFiltros.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
 
@@ -146,9 +145,7 @@ namespace CapaPresentacion.Formularios
             btnActualizar.Text = "Actualizar";
             btnActualizar.AutoSize = true;
 
-            pnlBotoneraFiltros.Controls.Add(btnHoy);
-            pnlBotoneraFiltros.Controls.Add(btnLimpiar);
-            pnlBotoneraFiltros.Controls.Add(btnActualizar);
+            pnlBotoneraFiltros.Controls.AddRange(new Control[] { btnHoy, btnLimpiar, btnActualizar });
 
             // Fila 0
             gridFiltros.Controls.Add(lblFecha, 0, 0);
@@ -159,7 +156,6 @@ namespace CapaPresentacion.Formularios
             gridFiltros.Controls.Add(txtBuscar, 5, 0);
             // Fila 1
             gridFiltros.Controls.Add(chkSoloPendientes, 1, 1);
-            gridFiltros.SetColumnSpan(chkSoloPendientes, 1);
             gridFiltros.Controls.Add(pnlBotoneraFiltros, 5, 1);
 
             grpFiltros.Controls.Add(gridFiltros);
@@ -186,30 +182,15 @@ namespace CapaPresentacion.Formularios
             dgvTurnos.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvTurnos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
 
-            // Columns
-            var colFecha = new DataGridViewTextBoxColumn { HeaderText = "Fecha", DataPropertyName = "Fecha", FillWeight = 80 };
-            var colHora = new DataGridViewTextBoxColumn { HeaderText = "Hora", DataPropertyName = "Hora", FillWeight = 55 };
-            var colPaciente = new DataGridViewTextBoxColumn { HeaderText = "Paciente", DataPropertyName = "Paciente", FillWeight = 160 };
-            var colMotivo = new DataGridViewTextBoxColumn { HeaderText = "Motivo", DataPropertyName = "Motivo", FillWeight = 220 };
-            var colEstado = new DataGridViewTextBoxColumn { HeaderText = "Estado", DataPropertyName = "Estado", FillWeight = 80 };
-
-            var colAtender = new DataGridViewButtonColumn { HeaderText = "Atender", Text = "Abrir", UseColumnTextForButtonValue = true, FillWeight = 70 };
-            var colCancelar = new DataGridViewButtonColumn { HeaderText = "Cancelar", Text = "Anular", UseColumnTextForButtonValue = true, FillWeight = 70 };
-
-            dgvTurnos.Columns.AddRange(new DataGridViewColumn[] {
-                colFecha, colHora, colPaciente, colMotivo, colEstado, colAtender, colCancelar
-            });
-
             grpListado.Controls.Add(dgvTurnos);
 
             // ===== Footer =====
             footerPanel.Dock = DockStyle.Bottom;
             footerPanel.Height = 36;
-            footerPanel.BackColor = Color.Transparent;
             footerPanel.Padding = new Padding(14, 6, 14, 6);
 
             lblHint.AutoSize = true;
-            lblHint.Text = "Doble clic para ver/editar el turno. Use los botones para acciones rápidas.";
+            lblHint.Text = "Doble clic para abrir turno. Botones para acciones rápidas.";
             footerPanel.Controls.Add(lblHint);
 
             // ===== Form =====
@@ -230,7 +211,6 @@ namespace CapaPresentacion.Formularios
 
             ResumeLayout(false);
         }
-
         #endregion
     }
 }

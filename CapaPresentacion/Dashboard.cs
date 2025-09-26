@@ -151,6 +151,21 @@ namespace CapaPresentacion
 
             // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+
+            // 🔹 Auditoría
+            sidebar.BtnAuditoriaClick += (s, e) =>
+                MessageBox.Show("ℹ️ Requiere conexión e integración con la base de datos, posponiendo",
+                                "Auditoría", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // 🔹 Backup
+            sidebar.BtnBackupClick += (s, e) =>
+                MessageBox.Show("ℹ️ Requiere conexión e integración con la base de datos, posponiendo",
+                                "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // 🔹 Ajustes
+            sidebar.BtnConfiguracionClick += (s, e) =>
+                MessageBox.Show("ℹ️ Requiere conexión e integración con la base de datos, posponiendo",
+                                "Ajustes", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // ========== MÉDICO ==========
