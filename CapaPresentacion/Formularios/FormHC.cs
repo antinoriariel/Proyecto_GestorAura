@@ -133,7 +133,6 @@ namespace CapaPresentacion.Formularios
 
         private bool ValidateFechaHora()
         {
-            // Permitimos registrar consultas pasadas; no permitimos futuro más de 5 minutos
             var now = DateTime.Now.AddMinutes(5);
             if (dtpFechaHora.Value > now)
             {
@@ -146,7 +145,6 @@ namespace CapaPresentacion.Formularios
 
         private bool ValidateLargos()
         {
-            // Chequeos de longitudes máximas (opcionales si no querés limitar tanto)
             if (!CheckMax(txtImpresionDiag, _txMaxCorta, "Impresión diagnóstica")) return false;
             if (!CheckMax(txtDiagnostico, _txMaxCorta, "Diagnóstico")) return false;
             if (!CheckMax(txtIndicaciones, _txMaxLarga, "Indicaciones")) return false;
@@ -171,10 +169,6 @@ namespace CapaPresentacion.Formularios
             return true;
         }
 
-        /// <summary>
-        /// Si el estado sugiere cierre/alta/completado, exigimos Diagnóstico mínimo.
-        /// Ajustá los textos según los estados que uses en tu combo.
-        /// </summary>
         private bool ValidateDiagnosticoCondicional()
         {
             var estado = (cboEstado.SelectedItem?.ToString() ?? "").ToLowerInvariant();
@@ -205,7 +199,6 @@ namespace CapaPresentacion.Formularios
         {
             if (!ValidateForm())
             {
-                // foco al primero con error
                 var firstWithError = new Control[]
                 {
                     cboPaciente, cboEstado, txtMotivoConsulta, dtpFechaHora,
@@ -220,34 +213,14 @@ namespace CapaPresentacion.Formularios
                 return;
             }
 
-            // Recolectar datos
-            var pacienteId = (cboPaciente.SelectedValue ?? cboPaciente.SelectedIndex)?.ToString();
-            var estado = (cboEstado.SelectedValue ?? cboEstado.Text)?.ToString();
-            var motivo = txtMotivoConsulta.Text.Trim();
-            var fechaHora = dtpFechaHora.Value;
-            var impDiag = (txtImpresionDiag.Text ?? "").Trim();
-            var diagnostico = (txtDiagnostico.Text ?? "").Trim();
-            var indicaciones = (txtIndicaciones.Text ?? "").Trim();
-            var antecedentes = (txtAntecedentes.Text ?? "").Trim();
-            var evolucion = (txtEvolucion.Text ?? "").Trim();
-            var impGral = (txtImpresionGral.Text ?? "").Trim();
-            var examenes = (txtExamenes.Text ?? "").Trim();
-            var tipoCons = (txtTipoConsulta.Text ?? "").Trim();
-
-            // TODO: Guardar en DB (servicio/repositorio). Ejemplo:
-            // await _hcService.CrearOActualizar(new HCdto { ... });
-
+            // TODO: Guardar en DB
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        // ===================== Eventos del Form =====================
-
         private void FormHC_Load(object? sender, EventArgs e)
         {
-            // Si necesitás preseleccionar combos/estados, hacelo acá.
-            // Importante: NO setear MaxDate/MinDate agresivamente para evitar ArgumentOutOfRange.
-            // Si lo hacés, hacelo siempre antes de asignar Value, y corrigiendo Value si queda fuera.
+            // Configuración adicional si es necesario
         }
     }
 }

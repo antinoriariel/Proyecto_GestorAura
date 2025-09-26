@@ -178,15 +178,15 @@ namespace CapaPresentacion
             // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
 
-            // 🔹 Solicitudes y Resultados (nuevos)
+            // 🔹 Solicitudes y Resultados
             sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
             sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
 
-            // 🔹 Interconsultas → placeholder
+            // 🔹 Interconsultas
             sidebar.BtnInterconsultasClick += (s, e) =>
                 MessageBox.Show("🩺 Módulo de interconsultas en desarrollo.", "Info");
 
-            // 🔹 Recetas → abrir en navegador externo
+            // 🔹 Recetas
             sidebar.BtnRecetasClick += (s, e) =>
             {
                 try
@@ -204,8 +204,8 @@ namespace CapaPresentacion
                 }
             };
 
-            // 👇 Mensajes NO se agrega por pedido tuyo
-            // sidebar.BtnMensajesClick += ...
+            // 🔹 Mensajes
+            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
         }
 
         // ========== SECRETARIA ==========
@@ -222,12 +222,12 @@ namespace CapaPresentacion
             // 🔹 Pacientes → Internados
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
 
-            // 🔹 Agenda y Notas (nuevos)
+            // 🔹 Agenda y Notas
             sidebar.BtnAgendaSemanalClick += (s, e) => MostrarFormUnico<FormAgenda>();
             sidebar.BtnNotasClick += (s, e) => MostrarFormUnico<FormNotas>();
 
-            // 👇 Mensajes NO se agrega por ahora
-            // sidebar.BtnMensajesClick += ...
+            // 🔹 Mensajes
+            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
         }
 
         // ============================================================
