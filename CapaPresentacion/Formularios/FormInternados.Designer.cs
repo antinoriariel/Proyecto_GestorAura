@@ -9,7 +9,7 @@
         private System.Windows.Forms.Label lblHeader;
 
         private System.Windows.Forms.GroupBox grpCamas;
-        private System.Windows.Forms.DataGridView dgvCamas;
+        private System.Windows.Forms.TableLayoutPanel tblCamas; // 👈 cambiamos DataGridView por TableLayoutPanel
 
         private System.Windows.Forms.Panel footerPanel;
         private System.Windows.Forms.Button btnActualizar;
@@ -30,14 +30,13 @@
             picHeader = new PictureBox();
             lblHeader = new Label();
             grpCamas = new GroupBox();
-            dgvCamas = new DataGridView();
+            tblCamas = new TableLayoutPanel();
             footerPanel = new Panel();
             btnActualizar = new Button();
             btnCerrar = new Button();
             headerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picHeader).BeginInit();
             grpCamas.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvCamas).BeginInit();
             footerPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -54,7 +53,7 @@
             // 
             // picHeader
             // 
-            picHeader.Image = Properties.Resources.hospitalBedIcon; // 👈 asegúrate de agregar este recurso
+            picHeader.Image = Properties.Resources.hospitalBedIcon; // 👈 recurso necesario
             picHeader.Location = new Point(14, 9);
             picHeader.Name = "picHeader";
             picHeader.Size = new Size(35, 30);
@@ -75,7 +74,7 @@
             // grpCamas
             // 
             grpCamas.BackColor = Color.White;
-            grpCamas.Controls.Add(dgvCamas);
+            grpCamas.Controls.Add(tblCamas);
             grpCamas.Dock = DockStyle.Fill;
             grpCamas.Location = new Point(21, 62);
             grpCamas.Name = "grpCamas";
@@ -83,24 +82,22 @@
             grpCamas.Size = new Size(760, 360);
             grpCamas.TabIndex = 1;
             grpCamas.TabStop = false;
-            grpCamas.Text = "Listado de camas";
+            grpCamas.Text = "Mapa de camas";
             // 
-            // dgvCamas
+            // tblCamas
             // 
-            dgvCamas.AllowUserToAddRows = false;
-            dgvCamas.AllowUserToDeleteRows = false;
-            dgvCamas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvCamas.BackgroundColor = Color.White;
-            dgvCamas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCamas.Dock = DockStyle.Fill;
-            dgvCamas.Location = new Point(14, 28);
-            dgvCamas.MultiSelect = false;
-            dgvCamas.Name = "dgvCamas";
-            dgvCamas.ReadOnly = true;
-            dgvCamas.RowTemplate.Height = 28;
-            dgvCamas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCamas.Size = new Size(732, 320);
-            dgvCamas.TabIndex = 0;
+            tblCamas.ColumnCount = 4; // 👈 cuadrícula 4 columnas
+            tblCamas.ColumnStyles.Clear();
+            for (int i = 0; i < 4; i++)
+                tblCamas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tblCamas.Dock = DockStyle.Fill;
+            tblCamas.RowCount = 3;
+            tblCamas.RowStyles.Clear();
+            for (int i = 0; i < 3; i++)
+                tblCamas.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3F));
+            tblCamas.BackColor = Color.WhiteSmoke;
+            tblCamas.Name = "tblCamas";
+            tblCamas.TabIndex = 0;
             // 
             // footerPanel
             // 
@@ -133,7 +130,7 @@
             btnCerrar.Size = new Size(75, 27);
             btnCerrar.TabIndex = 1;
             btnCerrar.Text = "Cerrar";
-            //btnCerrar.Click += (s, e) => this.Close();
+            btnCerrar.Click += (s, e) => this.Close();
             // 
             // FormInternados
             // 
@@ -157,7 +154,6 @@
             headerPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picHeader).EndInit();
             grpCamas.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvCamas).EndInit();
             footerPanel.ResumeLayout(false);
             footerPanel.PerformLayout();
             ResumeLayout(false);
