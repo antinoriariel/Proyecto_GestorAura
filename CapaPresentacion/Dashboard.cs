@@ -44,19 +44,25 @@ namespace CapaPresentacion
             {
                 if (ctrl is MdiClient client)
                 {
-                    client.BackColor = ColorTranslator.FromHtml("#D7DADB"); // Este es el color del contenedor del MDI, el gris claro
+                    client.BackColor = ColorTranslator.FromHtml("#D7DADB"); // gris claro
                 }
             }
 
             // Cargar el menú lateral según el rol del usuario
             CargarSidebar(_rolUsuario, _nombreUsuario);
+
+            // 🔹 Configurar eventos de la barra superior
+            navbarSuperior1.BtnCerrarSesionClick += (s, e) => Application.Exit();
+            navbarSuperior1.BtnDarkModeClick += (s, e) =>
+                MessageBox.Show("🌙 Cambiar a modo oscuro", "Info");
+            navbarSuperior1.BtnNotificacionesClick += (s, e) =>
+                MessageBox.Show("🔔 Notificaciones pendientes", "Info");
+            navbarSuperior1.BtnAyudaClick += (s, e) =>
+                MessageBox.Show("❓ Sección de ayuda", "Info");
         }
 
         // ============================================================
         // MÉTODO: CargarSidebar
-        // Se encarga de crear e insertar en el panel lateral el UserControl
-        // correspondiente al rol actual (AdminSidebar, MedicoSidebar, SecretariaSidebar).
-        // También setea el nombre y rol en el sidebar.
         // ============================================================
         private void CargarSidebar(string rol, string nombreUsuario)
         {
@@ -70,7 +76,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Administrador"
                     };
-                    adminSidebar.SetUserPanelImage(Properties.Resources.adminLogo); // ✅ asignar gif dinámico
+                    adminSidebar.SetUserPanelImage(Properties.Resources.adminLogo);
                     ConfigurarEventosAdmin(adminSidebar);
                     sidebar = adminSidebar;
                     break;
@@ -81,7 +87,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Médico"
                     };
-                    medicoSidebar.SetUserPanelImage(Properties.Resources.doctorLogo); // ✅ asignar gif dinámico
+                    medicoSidebar.SetUserPanelImage(Properties.Resources.doctorLogo);
                     ConfigurarEventosMedico(medicoSidebar);
                     sidebar = medicoSidebar;
                     break;
@@ -92,7 +98,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Secretaria"
                     };
-                    secretariaSidebar.SetUserPanelImage(Properties.Resources.secreLogo); // ✅ asignar gif dinámico
+                    secretariaSidebar.SetUserPanelImage(Properties.Resources.secreLogo);
                     ConfigurarEventosSecretaria(secretariaSidebar);
                     sidebar = secretariaSidebar;
                     break;
@@ -111,13 +117,10 @@ namespace CapaPresentacion
 
         // ============================================================
         // MÉTODOS: ConfigurarEventos[Rol]
-        // Cada uno conecta los botones del sidebar a formularios específicos
-        // según el rol del usuario.
         // ============================================================
 
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
-            // Ejemplo de conexión de eventos a formularios
             //sidebar.BtnDashboardClick += (s, e) => MostrarForm(new FormDashboardAdmin());
             //sidebar.BtnUsuariosClick += (s, e) => MostrarForm(new FormUsuarios());
             //sidebar.BtnReportesClick += (s, e) => MostrarForm(new FormReportes());
@@ -144,10 +147,9 @@ namespace CapaPresentacion
         }
 
         // ============================================================
-        // MÉTODO AUXILIAR: MostrarForm
-        // Abre un formulario como hijo MDI dentro del Dashboard.
-        // Se asegura de que ocupe toda el área de trabajo.
+        // MÉTODOS AUXILIARES
         // ============================================================
+
         private void MostrarForm(Form form)
         {
             form.MdiParent = this;
@@ -158,25 +160,22 @@ namespace CapaPresentacion
             form.Text = "";
             form.Dock = DockStyle.Fill;
 
-            // Mostrar el formulario y traerlo al frente
             form.Show();
             form.BringToFront();
         }
 
         private void MostrarFormUnico<T>() where T : Form, new()
         {
-            // Verificar si ya existe una instancia abierta
             foreach (Form form in this.MdiChildren)
             {
                 if (form is T)
                 {
                     form.BringToFront();
                     form.WindowState = FormWindowState.Normal;
-                    return; // 👈 ya existe, no abrir otra
+                    return;
                 }
             }
 
-            // Si no existe, instanciar uno nuevo
             T nuevoForm = new T
             {
                 MdiParent = this,
@@ -187,6 +186,5 @@ namespace CapaPresentacion
             nuevoForm.Show();
             nuevoForm.BringToFront();
         }
-
     }
 }

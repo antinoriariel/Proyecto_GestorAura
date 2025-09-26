@@ -1,11 +1,10 @@
-﻿using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-
-namespace CapaPresentacion
+﻿namespace CapaPresentacion
 {
     partial class Dashboard
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Panel panelMenu;
+        private Controles.NavbarSuperior navbarSuperior1;
 
         protected override void Dispose(bool disposing)
         {
@@ -16,58 +15,43 @@ namespace CapaPresentacion
 
         private void InitializeComponent()
         {
-            panelMenu = new Panel();
-            panelSuperior = new Panel();
-            userNavbar1 = new CapaPresentacion.Controles.UserNavbar();
-            panelSuperior.SuspendLayout();
+            panelMenu = new System.Windows.Forms.Panel();
+            navbarSuperior1 = new CapaPresentacion.Controles.NavbarSuperior();
             SuspendLayout();
             // 
             // panelMenu
             // 
-            panelMenu.BackColor = Color.FromArgb(0, 98, 113);
-            panelMenu.Dock = DockStyle.Left;
-            panelMenu.Location = new Point(0, 0);
-            panelMenu.Margin = new Padding(3, 2, 3, 2);
+            panelMenu.BackColor = System.Drawing.Color.FromArgb(0, 98, 113);
+            panelMenu.Dock = System.Windows.Forms.DockStyle.Left;
+            panelMenu.Location = new System.Drawing.Point(0, 0);
+            panelMenu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(180, 470);
+            panelMenu.Size = new System.Drawing.Size(180, 470);
             panelMenu.TabIndex = 0;
             // 
-            // panelSuperior
+            // navbarSuperior1
             // 
-            panelSuperior.BackColor = Color.FromArgb(55, 71, 79);
-            panelSuperior.Controls.Add(userNavbar1);
-            panelSuperior.Dock = DockStyle.Top;
-            panelSuperior.Location = new Point(180, 0);
-            panelSuperior.Name = "panelSuperior";
-            panelSuperior.Size = new Size(659, 45);
-            panelSuperior.TabIndex = 1;
-            // 
-            // userNavbar1
-            // 
-            userNavbar1.Dock = DockStyle.Fill;
-            userNavbar1.Location = new Point(0, 0);
-            userNavbar1.Name = "userNavbar1";
-            userNavbar1.Size = new Size(659, 45);
-            userNavbar1.TabIndex = 0;
+            navbarSuperior1.Dock = System.Windows.Forms.DockStyle.Top;
+            navbarSuperior1.Location = new System.Drawing.Point(180, 0);
+            navbarSuperior1.Name = "navbarSuperior1";
+            navbarSuperior1.Size = new System.Drawing.Size(659, 45);
+            navbarSuperior1.TabIndex = 1;
             // 
             // Dashboard
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ActiveBorder;
-            ClientSize = new Size(839, 470);
-            Controls.Add(panelSuperior);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.SystemColors.ActiveBorder;
+            ClientSize = new System.Drawing.Size(839, 470);
+            Controls.Add(navbarSuperior1);
             Controls.Add(panelMenu);
-            FormBorderStyle = FormBorderStyle.None;
-            Margin = new Padding(3, 2, 3, 2);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             Name = "Dashboard";
-            StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Gestor Aura";
-            WindowState = FormWindowState.Maximized;
-            panelSuperior.ResumeLayout(false);
+            WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ResumeLayout(false);
         }
-        private Panel panelSuperior;
-        private Controles.UserNavbar userNavbar1;
     }
 }
