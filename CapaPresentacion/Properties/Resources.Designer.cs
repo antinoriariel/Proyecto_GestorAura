@@ -183,6 +183,16 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap medicalNotesIcon {
+            get {
+                object obj = ResourceManager.GetObject("medicalNotesIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap medicoIcon {
             get {
                 object obj = ResourceManager.GetObject("medicoIcon", resourceCulture);

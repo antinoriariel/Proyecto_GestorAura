@@ -4,6 +4,56 @@ namespace CapaPresentacion.Formularios
     {
         private System.ComponentModel.IContainer components = null;
 
+        // Header
+        private System.Windows.Forms.Panel headerPanel;
+        private System.Windows.Forms.PictureBox picHeader;
+        private System.Windows.Forms.Label lblHeader;
+
+        // Contenido
+        private System.Windows.Forms.GroupBox grpDatos;
+        private System.Windows.Forms.TableLayoutPanel grid;
+
+        private System.Windows.Forms.Label lblPaciente;
+        private System.Windows.Forms.ComboBox cboPaciente;
+
+        private System.Windows.Forms.Label lblEstado;
+        private System.Windows.Forms.ComboBox cboEstado;
+
+        private System.Windows.Forms.Label lblMotivoConsulta;
+        private System.Windows.Forms.TextBox txtMotivoConsulta;
+
+        private System.Windows.Forms.Label lblFechaHora;
+        private System.Windows.Forms.DateTimePicker dtpFechaHora;
+
+        private System.Windows.Forms.Label lblImpDiag;
+        private System.Windows.Forms.TextBox txtImpresionDiag;
+
+        private System.Windows.Forms.Label lblDiagnostico;
+        private System.Windows.Forms.TextBox txtDiagnostico;
+
+        private System.Windows.Forms.Label lblIndicaciones;
+        private System.Windows.Forms.TextBox txtIndicaciones;
+
+        private System.Windows.Forms.Label lblAntecedentes;
+        private System.Windows.Forms.TextBox txtAntecedentes;
+
+        private System.Windows.Forms.Label lblEvolucion;
+        private System.Windows.Forms.TextBox txtEvolucion;
+
+        private System.Windows.Forms.Label lblImpGral;
+        private System.Windows.Forms.TextBox txtImpresionGral;
+
+        private System.Windows.Forms.Label lblExamenes;
+        private System.Windows.Forms.TextBox txtExamenes;
+
+        private System.Windows.Forms.Label lblTipoConsulta;
+        private System.Windows.Forms.TextBox txtTipoConsulta;
+
+        // Footer
+        private System.Windows.Forms.Panel footerPanel;
+        private System.Windows.Forms.Button bGuardar;
+        private System.Windows.Forms.Button bCancelar;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -13,324 +63,258 @@ namespace CapaPresentacion.Formularios
 
         private void InitializeComponent()
         {
-            cboPaciente = new ComboBox();
-            lblPaciente = new Label();
-            lblAntecedentes = new Label();
-            lblDiagnostico = new Label();
-            textBox1 = new TextBox();
-            txtDiagnostico = new TextBox();
-            txtImpresionDiag = new TextBox();
-            txtEvolución = new TextBox();
-            label3 = new Label();
-            lblEvolucion = new Label();
-            lblIndicaciones = new Label();
-            lblImpresionGral = new Label();
-            lblExamenes = new Label();
-            lblTipoConsulta = new Label();
-            txtIndicaciones = new TextBox();
-            txtImpresionGral = new TextBox();
-            txtExamenes = new TextBox();
-            txtTipoConsulta = new TextBox();
-            cboEstado = new ComboBox();
-            lblEstado = new Label();
-            dtpFechaHora = new DateTimePicker();
-            label1 = new Label();
-            lblHc = new Label();
-            label2 = new Label();
-            txtMdc = new TextBox();
-            bCancelar = new Button();
-            bGuardar = new Button();
-            SuspendLayout();
-            // 
-            // cboPaciente
-            // 
-            cboPaciente.FormattingEnabled = true;
-            cboPaciente.Location = new Point(218, 81);
-            cboPaciente.Name = "cboPaciente";
-            cboPaciente.Size = new Size(151, 28);
-            cboPaciente.TabIndex = 0;
-            // 
-            // lblPaciente
-            // 
-            lblPaciente.AutoSize = true;
-            lblPaciente.Location = new Point(135, 84);
-            lblPaciente.Name = "lblPaciente";
-            lblPaciente.Size = new Size(64, 20);
-            lblPaciente.TabIndex = 2;
+            components = new System.ComponentModel.Container();
+
+            // ===== Form =====
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(241, 244, 246);
+            this.ClientSize = new System.Drawing.Size(980, 720);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Padding = new System.Windows.Forms.Padding(24, 16, 24, 16);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Historia clínica";
+            this.KeyPreview = true;
+
+            // ===== Header =====
+            headerPanel = new System.Windows.Forms.Panel();
+            headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            headerPanel.Height = 64;
+            headerPanel.BackColor = System.Drawing.Color.FromArgb(41, 57, 71);
+
+            picHeader = new System.Windows.Forms.PictureBox();
+            picHeader.Size = new System.Drawing.Size(40, 40);
+            picHeader.Location = new System.Drawing.Point(16, 12);
+            picHeader.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            // Si no tenés este recurso, comentá la línea siguiente o usá otro:
+            picHeader.Image = Properties.Resources.medicalNotesIcon;
+
+            lblHeader = new System.Windows.Forms.Label();
+            lblHeader.AutoSize = true;
+            lblHeader.Location = new System.Drawing.Point(64, 18);
+            lblHeader.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold);
+            lblHeader.ForeColor = System.Drawing.Color.White;
+            lblHeader.Text = "Historia clínica";
+
+            headerPanel.Controls.Add(picHeader);
+            headerPanel.Controls.Add(lblHeader);
+
+            // ===== GroupBox + Grid =====
+            grpDatos = new System.Windows.Forms.GroupBox();
+            grpDatos.Text = "Datos de la consulta";
+            grpDatos.Dock = System.Windows.Forms.DockStyle.Fill;
+            grpDatos.Padding = new System.Windows.Forms.Padding(16);
+            grpDatos.BackColor = System.Drawing.Color.White;
+
+            grid = new System.Windows.Forms.TableLayoutPanel();
+            grid.ColumnCount = 2;
+            grid.RowCount = 12;
+            grid.Dock = System.Windows.Forms.DockStyle.Fill;
+            grid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F)); // labels
+            grid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            // Alturas: compactas para cabeceras, más altas para multilínea
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F)); // Paciente
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F)); // Estado
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F)); // Motivo
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F)); // FechaHora
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F)); // Imp. Diagnóstico
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F)); // Diagnóstico
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F)); // Indicaciones
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F)); // Antecedentes
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F)); // Evolución
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F)); // Imp. Gral
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F)); // Exámenes
+            grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F)); // Tipo consulta
+
+            // Paciente
+            lblPaciente = new System.Windows.Forms.Label();
             lblPaciente.Text = "Paciente";
-            // 
-            // lblAntecedentes
-            // 
-            lblAntecedentes.AutoSize = true;
-            lblAntecedentes.Location = new Point(106, 422);
-            lblAntecedentes.Name = "lblAntecedentes";
-            lblAntecedentes.Size = new Size(99, 20);
-            lblAntecedentes.TabIndex = 3;
-            lblAntecedentes.Text = "Antecedentes";
-            // 
-            // lblDiagnostico
-            // 
-            lblDiagnostico.AutoSize = true;
-            lblDiagnostico.Location = new Point(109, 329);
-            lblDiagnostico.Name = "lblDiagnostico";
-            lblDiagnostico.Size = new Size(89, 20);
-            lblDiagnostico.TabIndex = 4;
-            lblDiagnostico.Text = "Diagnostico";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(219, 422);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(288, 27);
-            textBox1.TabIndex = 5;
-            // 
-            // txtDiagnostico
-            // 
-            txtDiagnostico.Location = new Point(219, 329);
-            txtDiagnostico.Name = "txtDiagnostico";
-            txtDiagnostico.Size = new Size(288, 27);
-            txtDiagnostico.TabIndex = 6;
-            // 
-            // txtImpresionDiag
-            // 
-            txtImpresionDiag.Location = new Point(219, 283);
-            txtImpresionDiag.Name = "txtImpresionDiag";
-            txtImpresionDiag.Size = new Size(288, 27);
-            txtImpresionDiag.TabIndex = 7;
-            // 
-            // txtEvolución
-            // 
-            txtEvolución.Location = new Point(219, 468);
-            txtEvolución.Name = "txtEvolución";
-            txtEvolución.Size = new Size(288, 27);
-            txtEvolución.TabIndex = 8;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(54, 283);
-            label3.Name = "label3";
-            label3.Size = new Size(159, 20);
-            label3.TabIndex = 9;
-            label3.Text = "Impresion Diagnostico";
-            label3.Click += label3_Click;
-            // 
-            // lblEvolucion
-            // 
-            lblEvolucion.AutoSize = true;
-            lblEvolucion.Location = new Point(126, 471);
-            lblEvolucion.Name = "lblEvolucion";
-            lblEvolucion.Size = new Size(73, 20);
-            lblEvolucion.TabIndex = 10;
-            lblEvolucion.Text = "Evolución";
-            // 
-            // lblIndicaciones
-            // 
-            lblIndicaciones.AutoSize = true;
-            lblIndicaciones.Location = new Point(114, 383);
-            lblIndicaciones.Name = "lblIndicaciones";
-            lblIndicaciones.Size = new Size(91, 20);
-            lblIndicaciones.TabIndex = 11;
-            lblIndicaciones.Text = "Indicaciones";
-            // 
-            // lblImpresionGral
-            // 
-            lblImpresionGral.AutoSize = true;
-            lblImpresionGral.Location = new Point(83, 514);
-            lblImpresionGral.Name = "lblImpresionGral";
-            lblImpresionGral.Size = new Size(130, 20);
-            lblImpresionGral.TabIndex = 12;
-            lblImpresionGral.Text = "Impresion General";
-            // 
-            // lblExamenes
-            // 
-            lblExamenes.AutoSize = true;
-            lblExamenes.Location = new Point(114, 561);
-            lblExamenes.Name = "lblExamenes";
-            lblExamenes.Size = new Size(75, 20);
-            lblExamenes.TabIndex = 13;
-            lblExamenes.Text = "Examenes";
-            // 
-            // lblTipoConsulta
-            // 
-            lblTipoConsulta.AutoSize = true;
-            lblTipoConsulta.Location = new Point(105, 603);
-            lblTipoConsulta.Name = "lblTipoConsulta";
-            lblTipoConsulta.Size = new Size(100, 20);
-            lblTipoConsulta.TabIndex = 14;
-            lblTipoConsulta.Text = "Tipo Consulta";
-            // 
-            // txtIndicaciones
-            // 
-            txtIndicaciones.Location = new Point(219, 376);
-            txtIndicaciones.Name = "txtIndicaciones";
-            txtIndicaciones.Size = new Size(288, 27);
-            txtIndicaciones.TabIndex = 15;
-            // 
-            // txtImpresionGral
-            // 
-            txtImpresionGral.Location = new Point(219, 514);
-            txtImpresionGral.Name = "txtImpresionGral";
-            txtImpresionGral.Size = new Size(288, 27);
-            txtImpresionGral.TabIndex = 16;
-            // 
-            // txtExamenes
-            // 
-            txtExamenes.Location = new Point(219, 561);
-            txtExamenes.Name = "txtExamenes";
-            txtExamenes.Size = new Size(288, 27);
-            txtExamenes.TabIndex = 17;
-            // 
-            // txtTipoConsulta
-            // 
-            txtTipoConsulta.Location = new Point(219, 600);
-            txtTipoConsulta.Name = "txtTipoConsulta";
-            txtTipoConsulta.Size = new Size(288, 27);
-            txtTipoConsulta.TabIndex = 18;
-            // 
-            // cboEstado
-            // 
-            cboEstado.FormattingEnabled = true;
-            cboEstado.Location = new Point(218, 133);
-            cboEstado.Name = "cboEstado";
-            cboEstado.Size = new Size(151, 28);
-            cboEstado.TabIndex = 19;
-            // 
-            // lblEstado
-            // 
-            lblEstado.AutoSize = true;
-            lblEstado.Location = new Point(131, 141);
-            lblEstado.Name = "lblEstado";
-            lblEstado.Size = new Size(54, 20);
-            lblEstado.TabIndex = 20;
+            lblPaciente.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblPaciente.AutoSize = true;
+
+            cboPaciente = new System.Windows.Forms.ComboBox();
+            cboPaciente.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cboPaciente.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            cboPaciente.MaxDropDownItems = 12;
+
+            // Estado
+            lblEstado = new System.Windows.Forms.Label();
             lblEstado.Text = "Estado";
-            // 
-            // dtpFechaHora
-            // 
-            dtpFechaHora.Location = new Point(218, 234);
-            dtpFechaHora.Name = "dtpFechaHora";
-            dtpFechaHora.Size = new Size(289, 27);
-            dtpFechaHora.TabIndex = 21;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(131, 234);
-            label1.Name = "label1";
-            label1.Size = new Size(51, 20);
-            label1.TabIndex = 22;
-            label1.Text = "Fecha ";
-            // 
-            // lblHc
-            // 
-            lblHc.AutoSize = true;
-            lblHc.Location = new Point(271, 20);
-            lblHc.Name = "lblHc";
-            lblHc.Size = new Size(131, 20);
-            lblHc.TabIndex = 23;
-            lblHc.Text = "HISTORIA CLINICA";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(88, 187);
-            label2.Name = "label2";
-            label2.Size = new Size(117, 20);
-            label2.TabIndex = 24;
-            label2.Text = "Motivo Consulta";
-            // 
-            // txtMdc
-            // 
-            txtMdc.Location = new Point(219, 184);
-            txtMdc.Name = "txtMdc";
-            txtMdc.Size = new Size(288, 27);
-            txtMdc.TabIndex = 25;
-            // 
-            // bCancelar
-            // 
-            bCancelar.Location = new Point(359, 668);
-            bCancelar.Name = "bCancelar";
-            bCancelar.Size = new Size(119, 41);
-            bCancelar.TabIndex = 26;
-            bCancelar.Text = "Cancelar";
-            bCancelar.UseVisualStyleBackColor = true;
-            // 
-            // bGuardar
-            // 
-            bGuardar.Location = new Point(158, 668);
-            bGuardar.Name = "bGuardar";
-            bGuardar.Size = new Size(113, 41);
-            bGuardar.TabIndex = 27;
+            lblEstado.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblEstado.AutoSize = true;
+
+            cboEstado = new System.Windows.Forms.ComboBox();
+            cboEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cboEstado.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Motivo
+            lblMotivoConsulta = new System.Windows.Forms.Label();
+            lblMotivoConsulta.Text = "Motivo de consulta";
+            lblMotivoConsulta.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblMotivoConsulta.AutoSize = true;
+
+            txtMotivoConsulta = new System.Windows.Forms.TextBox();
+            txtMotivoConsulta.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            txtMotivoConsulta.PlaceholderText = "Ej.: control, dolor abdominal, seguimiento…";
+
+            // Fecha/hora
+            lblFechaHora = new System.Windows.Forms.Label();
+            lblFechaHora.Text = "Fecha y hora";
+            lblFechaHora.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblFechaHora.AutoSize = true;
+
+            dtpFechaHora = new System.Windows.Forms.DateTimePicker();
+            dtpFechaHora.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            dtpFechaHora.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy - HH:mm";
+            dtpFechaHora.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            dtpFechaHora.ShowUpDown = true;
+
+            // Impresión diagnóstica
+            lblImpDiag = new System.Windows.Forms.Label();
+            lblImpDiag.Text = "Impresión diagnóstica";
+            lblImpDiag.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblImpDiag.AutoSize = true;
+
+            txtImpresionDiag = new System.Windows.Forms.TextBox();
+            txtImpresionDiag.Multiline = true;
+            txtImpresionDiag.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtImpresionDiag.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Diagnóstico
+            lblDiagnostico = new System.Windows.Forms.Label();
+            lblDiagnostico.Text = "Diagnóstico";
+            lblDiagnostico.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblDiagnostico.AutoSize = true;
+
+            txtDiagnostico = new System.Windows.Forms.TextBox();
+            txtDiagnostico.Multiline = true;
+            txtDiagnostico.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtDiagnostico.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Indicaciones
+            lblIndicaciones = new System.Windows.Forms.Label();
+            lblIndicaciones.Text = "Indicaciones";
+            lblIndicaciones.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblIndicaciones.AutoSize = true;
+
+            txtIndicaciones = new System.Windows.Forms.TextBox();
+            txtIndicaciones.Multiline = true;
+            txtIndicaciones.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtIndicaciones.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Antecedentes
+            lblAntecedentes = new System.Windows.Forms.Label();
+            lblAntecedentes.Text = "Antecedentes";
+            lblAntecedentes.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblAntecedentes.AutoSize = true;
+
+            txtAntecedentes = new System.Windows.Forms.TextBox();
+            txtAntecedentes.Multiline = true;
+            txtAntecedentes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtAntecedentes.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Evolución
+            lblEvolucion = new System.Windows.Forms.Label();
+            lblEvolucion.Text = "Evolución";
+            lblEvolucion.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblEvolucion.AutoSize = true;
+
+            txtEvolucion = new System.Windows.Forms.TextBox();
+            txtEvolucion.Multiline = true;
+            txtEvolucion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtEvolucion.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Impresión general
+            lblImpGral = new System.Windows.Forms.Label();
+            lblImpGral.Text = "Impresión general";
+            lblImpGral.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblImpGral.AutoSize = true;
+
+            txtImpresionGral = new System.Windows.Forms.TextBox();
+            txtImpresionGral.Multiline = true;
+            txtImpresionGral.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtImpresionGral.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Exámenes
+            lblExamenes = new System.Windows.Forms.Label();
+            lblExamenes.Text = "Exámenes";
+            lblExamenes.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblExamenes.AutoSize = true;
+
+            txtExamenes = new System.Windows.Forms.TextBox();
+            txtExamenes.Multiline = true;
+            txtExamenes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            txtExamenes.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Tipo de consulta
+            lblTipoConsulta = new System.Windows.Forms.Label();
+            lblTipoConsulta.Text = "Tipo de consulta";
+            lblTipoConsulta.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblTipoConsulta.AutoSize = true;
+
+            txtTipoConsulta = new System.Windows.Forms.TextBox();
+            txtTipoConsulta.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+
+            // Agregar controles al grid
+            grid.Controls.Add(lblPaciente, 0, 0); grid.Controls.Add(cboPaciente, 1, 0);
+            grid.Controls.Add(lblEstado, 0, 1); grid.Controls.Add(cboEstado, 1, 1);
+            grid.Controls.Add(lblMotivoConsulta, 0, 2); grid.Controls.Add(txtMotivoConsulta, 1, 2);
+            grid.Controls.Add(lblFechaHora, 0, 3); grid.Controls.Add(dtpFechaHora, 1, 3);
+            grid.Controls.Add(lblImpDiag, 0, 4); grid.Controls.Add(txtImpresionDiag, 1, 4);
+            grid.Controls.Add(lblDiagnostico, 0, 5); grid.Controls.Add(txtDiagnostico, 1, 5);
+            grid.Controls.Add(lblIndicaciones, 0, 6); grid.Controls.Add(txtIndicaciones, 1, 6);
+            grid.Controls.Add(lblAntecedentes, 0, 7); grid.Controls.Add(txtAntecedentes, 1, 7);
+            grid.Controls.Add(lblEvolucion, 0, 8); grid.Controls.Add(txtEvolucion, 1, 8);
+            grid.Controls.Add(lblImpGral, 0, 9); grid.Controls.Add(txtImpresionGral, 1, 9);
+            grid.Controls.Add(lblExamenes, 0, 10); grid.Controls.Add(txtExamenes, 1, 10);
+            grid.Controls.Add(lblTipoConsulta, 0, 11); grid.Controls.Add(txtTipoConsulta, 1, 11);
+
+            grpDatos.Controls.Add(grid);
+
+            // ===== Footer =====
+            footerPanel = new System.Windows.Forms.Panel();
+            footerPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            footerPanel.Height = 64;
+            footerPanel.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+
+            bGuardar = new System.Windows.Forms.Button();
             bGuardar.Text = "Guardar";
-            bGuardar.UseVisualStyleBackColor = true;
-            // 
-            // FormHC
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(681, 736);
-            ControlBox = false;
-            Controls.Add(bGuardar);
-            Controls.Add(bCancelar);
-            Controls.Add(txtMdc);
-            Controls.Add(label2);
-            Controls.Add(lblHc);
-            Controls.Add(label1);
-            Controls.Add(dtpFechaHora);
-            Controls.Add(lblEstado);
-            Controls.Add(cboEstado);
-            Controls.Add(txtTipoConsulta);
-            Controls.Add(txtExamenes);
-            Controls.Add(txtImpresionGral);
-            Controls.Add(txtIndicaciones);
-            Controls.Add(lblTipoConsulta);
-            Controls.Add(lblExamenes);
-            Controls.Add(lblImpresionGral);
-            Controls.Add(lblIndicaciones);
-            Controls.Add(lblEvolucion);
-            Controls.Add(label3);
-            Controls.Add(txtEvolución);
-            Controls.Add(txtImpresionDiag);
-            Controls.Add(txtDiagnostico);
-            Controls.Add(textBox1);
-            Controls.Add(lblDiagnostico);
-            Controls.Add(lblAntecedentes);
-            Controls.Add(lblPaciente);
-            Controls.Add(cboPaciente);
-            FormBorderStyle = FormBorderStyle.None;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "FormHC";
-            Load += FormHC_Load;
-            ResumeLayout(false);
-            PerformLayout();
+            bGuardar.AutoSize = true;
+            bGuardar.Size = new System.Drawing.Size(120, 36);
+            bGuardar.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+
+            bCancelar = new System.Windows.Forms.Button();
+            bCancelar.Text = "Cancelar";
+            bCancelar.AutoSize = true;
+            bCancelar.Size = new System.Drawing.Size(120, 36);
+            bCancelar.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+
+            // Posicionar a la derecha
+            bCancelar.Location = new System.Drawing.Point(this.ClientSize.Width - 120 - 24, 12);
+            bGuardar.Location = new System.Drawing.Point(this.ClientSize.Width - (120 * 2) - 32, 12);
+
+            footerPanel.Controls.Add(bGuardar);
+            footerPanel.Controls.Add(bCancelar);
+
+            // ===== Agregar al form =====
+            this.Controls.Add(footerPanel);
+            this.Controls.Add(grpDatos);
+            this.Controls.Add(headerPanel);
+
+            // ===== Config global =====
+            this.AcceptButton = bGuardar;
+            this.CancelButton = bCancelar;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
+
+            // Eventos mínimos (podés moverlos al .cs)
+            // bGuardar.Click += (s, e) => this.OnGuardarHC();
+            // bCancelar.Click += (s, e) => this.Close();
+            // this.KeyDown += (s, e) => { if (e.KeyCode == System.Windows.Forms.Keys.Escape) this.Close(); };
+
+            // Si ya usabas FormHC_Load, mantenelo:
+            this.Load += FormHC_Load;
         }
-        private ComboBox cboPaciente;
-        private Label lblPaciente;
-        private Label lblAntecedentes;
-        private Label lblDiagnostico;
-        private TextBox textBox1;
-        private TextBox txtDiagnostico;
-        private TextBox txtImpresionDiag;
-        private TextBox txtEvolución;
-        private Label label3;
-        private Label lblEvolucion;
-        private Label lblIndicaciones;
-        private Label lblImpresionGral;
-        private Label lblExamenes;
-        private Label lblTipoConsulta;
-        private TextBox txtIndicaciones;
-        private TextBox txtImpresionGral;
-        private TextBox txtExamenes;
-        private TextBox txtTipoConsulta;
-        private ComboBox cboEstado;
-        private Label lblEstado;
-        private DateTimePicker dtpFechaHora;
-        private Label label1;
-        private Label lblHc;
-        private Label label2;
-        private TextBox txtMdc;
-        private Button bCancelar;
-        private Button bGuardar;
     }
 }
