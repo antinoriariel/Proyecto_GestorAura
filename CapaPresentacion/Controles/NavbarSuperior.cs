@@ -25,32 +25,16 @@ namespace CapaPresentacion.Controles
             this.Height = 45;
             this.BackColor = Color.FromArgb(55, 71, 79); // gris oscuro
 
-            // --- TableLayout para centrar el título ---
-            var layout = new TableLayoutPanel
+            // Contenedor principal (layout sencillo: Right + Fill)
+            var container = new Panel
             {
-                Dock = DockStyle.Fill,
-                ColumnCount = 3,
-                RowCount = 1
-            };
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F)); // izquierda
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34F)); // centro
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));     // derecha (botones)
-
-            // --- Label Título ---
-            lblTitulo = new Label
-            {
-                Text = "Medic - Gestión hospitalaria",
-                ForeColor = Color.White,
-                Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
-                TextAlign = ContentAlignment.MiddleCenter,
-                AutoSize = false
+                Dock = DockStyle.Fill
             };
 
             // --- Panel de botones (alineados a la derecha) ---
             panelBotones = new FlowLayoutPanel
             {
-                Dock = DockStyle.Right,
+                Dock = DockStyle.Right,                 // <- clave
                 FlowDirection = FlowDirection.RightToLeft,
                 WrapContents = false,
                 Padding = new Padding(0, 7, 10, 0),
@@ -58,7 +42,18 @@ namespace CapaPresentacion.Controles
                 AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
 
-            // --- Botones con íconos ---
+            // --- Label Título centrado ---
+            lblTitulo = new Label
+            {
+                Text = "Medic - Gestión hospitalaria",
+                ForeColor = Color.White,
+                Dock = DockStyle.Fill,                  // <- ocupa el resto
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
+                AutoEllipsis = true                     // recorta con "..." si no entra
+            };
+
+            // --- Botones con íconos (luego cambias los íconos reales) ---
             btnCerrarSesion = CrearBotonConIcono(Properties.Resources.ajustesIcon);
             btnCerrarSesion.Click += (s, e) => BtnCerrarSesionClick?.Invoke(this, e);
 
@@ -71,18 +66,17 @@ namespace CapaPresentacion.Controles
             btnDarkMode = CrearBotonConIcono(Properties.Resources.ajustesIcon);
             btnDarkMode.Click += (s, e) => BtnDarkModeClick?.Invoke(this, e);
 
-            // Agregar botones al panel
+            // Orden: de derecha a izquierda
             panelBotones.Controls.Add(btnCerrarSesion);
             panelBotones.Controls.Add(btnAyuda);
             panelBotones.Controls.Add(btnNotificaciones);
             panelBotones.Controls.Add(btnDarkMode);
 
-            // Agregar al layout
-            layout.Controls.Add(new Panel(), 0, 0); // columna vacía (izquierda)
-            layout.Controls.Add(lblTitulo, 1, 0);   // título centrado
-            layout.Controls.Add(panelBotones, 2, 0); // botones a la derecha
+            // Agregar primero el panel de botones (Right), luego el label (Fill)
+            container.Controls.Add(panelBotones);
+            container.Controls.Add(lblTitulo);
 
-            this.Controls.Add(layout);
+            this.Controls.Add(container);
         }
 
         // ===== Estilo de botones redondeados (como SidebarBase) =====
@@ -97,7 +91,8 @@ namespace CapaPresentacion.Controles
                 Width = 40,
                 Margin = new Padding(5, 0, 0, 0),
                 Image = icono,
-                ImageAlign = ContentAlignment.MiddleCenter
+                ImageAlign = ContentAlignment.MiddleCenter,
+                TabStop = false
             };
 
             btn.FlatAppearance.BorderSize = 0;
