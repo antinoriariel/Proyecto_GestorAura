@@ -115,7 +115,7 @@ namespace CapaPresentacion.Controles
             btnCerrarSesion = CrearBotonBase("Salir", Properties.Resources.salidaIcon);
             btnCerrarSesion.Dock = DockStyle.Fill;   // ocupa toda la fila del pie
             AplicarEstiloBoton(btnCerrarSesion, true);
-            btnCerrarSesion.Click += (s, e) => BtnCerrarSesionClick?.Invoke(this, e);
+            btnCerrarSesion.Click += (s, e) => Application.Exit();
 
             // --- COMPOSICIÓN ---
             mainLayout.Controls.Add(userPanel, 0, 0);
