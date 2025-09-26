@@ -14,25 +14,39 @@ namespace CapaPresentacion.Formularios
         public FormTurnosMedico()
         {
             InitializeComponent();
+
+            // Anti-flicker
+            this.DoubleBuffered = true;
+            typeof(DataGridView)
+              .GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+              ?.SetValue(dgvTurnos, true, null);
+
+            // Orden de docking seguro
+            Controls.Clear();
+            Controls.Add(grpListado);   // Fill
+            Controls.Add(grpFiltros);   // Top
+            Controls.Add(headerPanel);  // Top primero
+            Controls.Add(footerPanel);  // Bottom
+
+            Controls.SetChildIndex(headerPanel, 0);
+            Controls.SetChildIndex(grpFiltros, 1);
+            Controls.SetChildIndex(grpListado, 2);
+            Controls.SetChildIndex(footerPanel, 3);
+
             CargarCombos();
             ConfigurarEventos();
             ConfigurarBinding();
-            CargarDatosIniciales(); // demo – reemplazá por tu servicio/repositorio
+            CargarDatosIniciales(); // demo
         }
-
-        // =================== UI / Binding ===================
 
         private void CargarCombos()
         {
-            // Estados estándar
             cboEstado.Items.Clear();
             cboEstado.Items.AddRange(new object[] { "Todos", "Pendiente", "En curso", "Completado", "Cancelado" });
             cboEstado.SelectedIndex = 0;
 
-            // Fecha por defecto: hoy
-            var hoy = DateTime.Today;
-            if (dtpFecha.MinDate.Date != hoy) dtpFecha.MinDate = hoy.AddYears(-1); // permitir revisar histórico hasta -1 año
-            if (dtpFecha.Value.Date < dtpFecha.MinDate.Date) dtpFecha.Value = DateTime.Today;
+            dtpFecha.MinDate = DateTime.Today.AddYears(-1);
+            dtpFecha.Value = DateTime.Today;
         }
 
         private void ConfigurarEventos()
@@ -56,20 +70,19 @@ namespace CapaPresentacion.Formularios
             dgvTurnos.CellContentClick += DgvTurnos_CellContentClick;
             dgvTurnos.CellFormatting += DgvTurnos_CellFormatting;
             dgvTurnos.DoubleClick += (s, e) => AbrirTurnoSeleccionado();
+
             this.KeyDown += (s, e) => { if (e.KeyCode == Keys.Escape) this.Close(); };
         }
 
         private void ConfigurarBinding()
         {
             _bs.DataSource = _turnos;
+            dgvTurnos.AutoGenerateColumns = false;
             dgvTurnos.DataSource = _bs;
         }
 
-        // =================== Datos (ejemplo) ===================
-
         private void CargarDatosIniciales()
         {
-            // Demo: reemplazá por llamada a tu repositorio filtrando por médico logueado.
             var hoy = DateTime.Today;
             _turnos.Clear();
             foreach (var t in DatosDemo(hoy))
@@ -82,47 +95,67 @@ namespace CapaPresentacion.Formularios
         {
             return new[]
             {
-                new TurnoVM(baseDay.AddHours(9),  "Ana Gómez",       "Control de presión", "Pendiente"),
-                new TurnoVM(baseDay.AddHours(9.5),"Bruno Martínez",  "Dolor abdominal",    "Pendiente"),
-                new TurnoVM(baseDay.AddHours(10), "Carla López",     "Resultado de estudio","En curso"),
-                new TurnoVM(baseDay.AddHours(11), "Diego Pérez",     "Consulta general",   "Completado"),
-                new TurnoVM(baseDay.AddDays(1).AddHours(8.5), "Elena Ríos", "Chequeo anual", "Pendiente"),
-                new TurnoVM(baseDay.AddHours(12.5), "Facundo Ruiz",  "Gripe y fiebre",     "Cancelado"),
+                new TurnoVM(baseDay.AddHours(9),   "Ana Gómez",    "Control de presión",  "Pendiente"),
+                new TurnoVM(baseDay.AddHours(9.5),"Bruno Martínez","Dolor abdominal",     "Pendiente"),
+                new TurnoVM(baseDay.AddHours(10),  "Carla López",  "Resultado de estudio","En curso"),
+                new TurnoVM(baseDay.AddHours(11),  "Diego Pérez",  "Consulta general",    "Completado"),
+                new TurnoVM(baseDay.AddHours(12.5),"Facundo Ruiz", "Gripe y fiebre",      "Cancelado"),
             };
         }
 
-        // =================== Filtros ===================
-
         private void AplicarFiltros()
         {
-            var fechaFiltro = dtpFecha.Value.Date;
-            var estado = (cboEstado.SelectedItem?.ToString() ?? "Todos");
-            var q = (txtBuscar.Text ?? "").Trim().ToLowerInvariant();
-            var soloPend = chkSoloPendientes.Checked;
+            SuspendLayout();
+            dgvTurnos.SuspendLayout();
 
-            IEnumerable<TurnoVM> query = _turnos;
+            try
+            {
+                var fechaFiltro = dtpFecha.Value.Date;
+                var estado = (cboEstado.SelectedItem?.ToString() ?? "Todos");
+                var q = (txtBuscar.Text ?? "").Trim().ToLowerInvariant();
+                var soloPend = chkSoloPendientes.Checked;
 
-            // Filtrar por día (solo el día seleccionado)
-            query = query.Where(t => t.FechaHora.Date == fechaFiltro);
+                IEnumerable<TurnoVM> query = _turnos;
+                query = query.Where(t => t.FechaHora.Date == fechaFiltro);
 
-            // Estado
-            if (estado != "Todos")
-                query = query.Where(t => t.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
+                if (estado != "Todos")
+                    query = query.Where(t => t.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
 
-            if (soloPend)
-                query = query.Where(t => t.Estado.Equals("Pendiente", StringComparison.OrdinalIgnoreCase));
+                if (soloPend)
+                    query = query.Where(t => t.Estado.Equals("Pendiente", StringComparison.OrdinalIgnoreCase));
 
-            // Texto
-            if (q.Length > 0)
-                query = query.Where(t =>
-                    (t.Paciente?.ToLowerInvariant().Contains(q) ?? false) ||
-                    (t.Motivo?.ToLowerInvariant().Contains(q) ?? false));
+                if (q.Length > 0)
+                    query = query.Where(t =>
+                        (t.Paciente?.ToLowerInvariant().Contains(q) ?? false) ||
+                        (t.Motivo?.ToLowerInvariant().Contains(q) ?? false));
 
-            _bs.DataSource = query.ToList();
-            _bs.ResetBindings(false);
+                _bs.DataSource = query.ToList();
+                _bs.ResetBindings(false);
+
+                // Ocultar columnas internas si quedaron
+                if (dgvTurnos.Columns.Contains("TurnoId"))
+                    dgvTurnos.Columns["TurnoId"].Visible = false;
+                if (dgvTurnos.Columns.Contains("FechaHora"))
+                    dgvTurnos.Columns["FechaHora"].Visible = false;
+
+                // Tamaños mínimos
+                if (dgvTurnos.Columns.Contains("Fecha"))
+                {
+                    dgvTurnos.Columns["Fecha"].MinimumWidth = 90;
+                    dgvTurnos.Columns["Fecha"].FillWeight = 70;
+                }
+                if (dgvTurnos.Columns.Contains("Hora"))
+                {
+                    dgvTurnos.Columns["Hora"].MinimumWidth = 70;
+                    dgvTurnos.Columns["Hora"].FillWeight = 55;
+                }
+            }
+            finally
+            {
+                dgvTurnos.ResumeLayout();
+                ResumeLayout();
+            }
         }
-
-        // =================== Grilla: formato + acciones ===================
 
         private void DgvTurnos_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -131,23 +164,22 @@ namespace CapaPresentacion.Formularios
                 var estado = e.Value?.ToString() ?? "";
                 var row = dgvTurnos.Rows[e.RowIndex];
 
-                // Reset básico
                 row.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 
                 switch (estado)
                 {
                     case "Pendiente":
-                        row.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(255, 249, 228); // amarillito
+                        row.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(255, 249, 228);
                         break;
                     case "En curso":
-                        row.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(232, 245, 233); // verdoso
+                        row.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(232, 245, 233);
                         break;
                     case "Completado":
                         row.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
                         row.DefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
                         break;
                     case "Cancelado":
-                        row.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(252, 231, 230); // rojizo suave
+                        row.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(252, 231, 230);
                         break;
                 }
             }
@@ -156,7 +188,6 @@ namespace CapaPresentacion.Formularios
         private void DgvTurnos_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-
             var col = dgvTurnos.Columns[e.ColumnIndex];
             var turno = dgvTurnos.Rows[e.RowIndex].DataBoundItem as TurnoVM;
             if (turno == null) return;
@@ -164,13 +195,9 @@ namespace CapaPresentacion.Formularios
             if (col is DataGridViewButtonColumn)
             {
                 if (col.HeaderText == "Atender")
-                {
                     AbrirTurno(turno);
-                }
                 else if (col.HeaderText == "Cancelar")
-                {
                     CancelarTurno(turno);
-                }
             }
         }
 
@@ -180,15 +207,8 @@ namespace CapaPresentacion.Formularios
                 AbrirTurno(t);
         }
 
-        // =================== Hooks para integrar con tu app ===================
-
         private void AbrirTurno(TurnoVM t)
         {
-            // Aquí abrís el formulario de atención / historia clínica, pasando el ID.
-            // Ejemplo:
-            // using var f = new FormHC(t.TurnoId);
-            // f.ShowDialog(this);
-
             MessageBox.Show($"Abrir turno de {t.Paciente} ({t.Fecha} {t.Hora})", "Atender",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -199,16 +219,11 @@ namespace CapaPresentacion.Formularios
                 "Confirmar cancelación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (r == DialogResult.Yes)
             {
-                // Aquí invocarías a tu repositorio/servicio para cancelar por ID
-                // _turnosService.Cancelar(t.TurnoId);
-
                 t.Estado = "Cancelado";
                 _bs.ResetBindings(false);
             }
         }
     }
-
-    // =================== ViewModel para la grilla ===================
 
     public class TurnoVM
     {
