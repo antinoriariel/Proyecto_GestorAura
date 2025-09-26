@@ -178,4 +178,16 @@
   <data name="usuarioIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\icons\usuario.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="notificacionesIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\icons\notificaciones.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="darkmodeIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\icons\darkmode.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="helpIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\icons\help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cambiarIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\icons\cambiar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

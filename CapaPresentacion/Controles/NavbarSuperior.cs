@@ -12,7 +12,7 @@ namespace CapaPresentacion.Controles
         private Button btnDarkMode;
         private Button btnNotificaciones;
         private Button btnAyuda;
-        private Button btnCerrarSesion;
+        private Button btnCambiarUser;
 
         public NavbarSuperior()
         {
@@ -34,7 +34,7 @@ namespace CapaPresentacion.Controles
             // --- Panel de botones (alineados a la derecha) ---
             panelBotones = new FlowLayoutPanel
             {
-                Dock = DockStyle.Right,                 // <- clave
+                Dock = DockStyle.Right,
                 FlowDirection = FlowDirection.RightToLeft,
                 WrapContents = false,
                 Padding = new Padding(0, 7, 10, 0),
@@ -47,27 +47,27 @@ namespace CapaPresentacion.Controles
             {
                 Text = "Medic - Gestión hospitalaria",
                 ForeColor = Color.White,
-                Dock = DockStyle.Fill,                  // <- ocupa el resto
-                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                Dock = DockStyle.Fill,
+                Font = new Font("Consolas", 12F, FontStyle.Bold),
                 TextAlign = ContentAlignment.MiddleCenter,
-                AutoEllipsis = true                     // recorta con "..." si no entra
+                AutoEllipsis = true
             };
 
             // --- Botones con íconos (luego cambias los íconos reales) ---
-            btnCerrarSesion = CrearBotonConIcono(Properties.Resources.ajustesIcon);
-            btnCerrarSesion.Click += (s, e) => BtnCerrarSesionClick?.Invoke(this, e);
+            btnCambiarUser = CrearBotonConIcono(Properties.Resources.cambiarIcon);
+            btnCambiarUser.Click += (s, e) => BtnCambiarUserClick?.Invoke(this, e);
 
-            btnAyuda = CrearBotonConIcono(Properties.Resources.ajustesIcon);
+            btnAyuda = CrearBotonConIcono(Properties.Resources.helpIcon);
             btnAyuda.Click += (s, e) => BtnAyudaClick?.Invoke(this, e);
 
-            btnNotificaciones = CrearBotonConIcono(Properties.Resources.ajustesIcon);
+            btnNotificaciones = CrearBotonConIcono(Properties.Resources.notificacionesIcon);
             btnNotificaciones.Click += (s, e) => BtnNotificacionesClick?.Invoke(this, e);
 
-            btnDarkMode = CrearBotonConIcono(Properties.Resources.ajustesIcon);
+            btnDarkMode = CrearBotonConIcono(Properties.Resources.darkmodeIcon);
             btnDarkMode.Click += (s, e) => BtnDarkModeClick?.Invoke(this, e);
 
             // Orden: de derecha a izquierda
-            panelBotones.Controls.Add(btnCerrarSesion);
+            panelBotones.Controls.Add(btnCambiarUser);
             panelBotones.Controls.Add(btnAyuda);
             panelBotones.Controls.Add(btnNotificaciones);
             panelBotones.Controls.Add(btnDarkMode);
@@ -126,6 +126,6 @@ namespace CapaPresentacion.Controles
         public event EventHandler? BtnDarkModeClick;
         public event EventHandler? BtnNotificacionesClick;
         public event EventHandler? BtnAyudaClick;
-        public event EventHandler? BtnCerrarSesionClick;
+        public event EventHandler? BtnCambiarUserClick;
     }
 }

@@ -113,6 +113,26 @@ namespace CapaPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cambiarIcon {
+            get {
+                object obj = ResourceManager.GetObject("cambiarIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap darkmodeIcon {
+            get {
+                object obj = ResourceManager.GetObject("darkmodeIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap doctorLogo {
             get {
                 object obj = ResourceManager.GetObject("doctorLogo", resourceCulture);
@@ -126,6 +146,16 @@ namespace CapaPresentacion.Properties {
         internal static System.Drawing.Bitmap hcIcon {
             get {
                 object obj = ResourceManager.GetObject("hcIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap helpIcon {
+            get {
+                object obj = ResourceManager.GetObject("helpIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -176,6 +206,16 @@ namespace CapaPresentacion.Properties {
         internal static System.Drawing.Bitmap notaIcon {
             get {
                 object obj = ResourceManager.GetObject("notaIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notificacionesIcon {
+            get {
+                object obj = ResourceManager.GetObject("notificacionesIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
