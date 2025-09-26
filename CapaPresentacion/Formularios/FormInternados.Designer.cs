@@ -9,7 +9,7 @@
         private System.Windows.Forms.Label lblHeader;
 
         private System.Windows.Forms.GroupBox grpCamas;
-        private System.Windows.Forms.TableLayoutPanel tblCamas; // 👈 cambiamos DataGridView por TableLayoutPanel
+        private System.Windows.Forms.TableLayoutPanel tblCamas;
 
         private System.Windows.Forms.Panel footerPanel;
         private System.Windows.Forms.Button btnActualizar;
@@ -53,7 +53,7 @@
             // 
             // picHeader
             // 
-            picHeader.Image = Properties.Resources.hospitalBedIcon; // 👈 recurso necesario
+            picHeader.Image = Properties.Resources.hospitalBedIcon;
             picHeader.Location = new Point(14, 9);
             picHeader.Name = "picHeader";
             picHeader.Size = new Size(35, 30);
@@ -86,7 +86,7 @@
             // 
             // tblCamas
             // 
-            tblCamas.ColumnCount = 4; // 👈 cuadrícula 4 columnas
+            tblCamas.ColumnCount = 4;
             tblCamas.ColumnStyles.Clear();
             for (int i = 0; i < 4; i++)
                 tblCamas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
