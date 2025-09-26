@@ -71,7 +71,8 @@ namespace CapaPresentacion.Controles
             {
                 Dock = DockStyle.Fill,
                 Font = new Font("Consolas", 9F, FontStyle.Bold),
-                TextAlign = ContentAlignment.MiddleCenter
+                TextAlign = ContentAlignment.MiddleCenter,
+                Padding = new Padding(0, 13, 0, 0)
             };
 
             pictureBox1 = new PictureBox
@@ -84,7 +85,8 @@ namespace CapaPresentacion.Controles
             {
                 Dock = DockStyle.Fill,
                 Font = new Font("Consolas", 9F, FontStyle.Bold | FontStyle.Italic),
-                TextAlign = ContentAlignment.MiddleCenter
+                TextAlign = ContentAlignment.MiddleCenter,
+                Padding = new Padding(0, 0, 0, 14)
             };
 
             tableLayoutUser.Controls.Add(lblRolUsuario, 0, 0);
