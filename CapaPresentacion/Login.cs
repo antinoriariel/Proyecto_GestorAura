@@ -21,7 +21,6 @@ namespace CapaPresentacion
             this.FormBorderStyle = FormBorderStyle.None;
             this.BackColor = Color.Teal;
 
-            // Esquinas redondeadas
             this.Load += (s, e) =>
             {
                 AplicarEsquinasRedondeadas(12);
@@ -80,10 +79,24 @@ namespace CapaPresentacion
 
             if (userData != null)
             {
+                // Ocultamos el login actual
                 this.Hide();
-                // 🔥 Pasamos rol y nombre completo real
+
+                // 🔥 Pasamos rol y nombre completo real al Dashboard
                 var dashboard_form = new Dashboard(userData.Rol, userData.NombreCompleto);
-                dashboard_form.FormClosed += (s, args) => this.Close();
+
+                // Cuando el Dashboard se cierre (porque cerraron sesión o cambiaron de usuario),
+                // volvemos a mostrar este login en lugar de cerrarlo
+                dashboard_form.FormClosed += (s, args) =>
+                {
+                    if (!this.IsDisposed)
+                    {
+                        this.Show();
+                        txtPassword.Clear();
+                        txtUsername.Focus();
+                    }
+                };
+
                 dashboard_form.Show();
             }
             else
@@ -125,6 +138,5 @@ namespace CapaPresentacion
                 pb.Region = new Region(path);
             }
         }
-
     }
 }
