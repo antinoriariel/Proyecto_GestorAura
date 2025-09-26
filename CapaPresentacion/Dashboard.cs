@@ -42,7 +42,6 @@ namespace CapaPresentacion
             navbarSuperior1.BtnNotificacionesClick += (s, e) =>
                 MessageBox.Show("🔔 Notificaciones pendientes", "Info");
 
-            // 👉 Ahora abre el navegador en lugar de MessageBox
             navbarSuperior1.BtnAyudaClick += (s, e) =>
             {
                 try
@@ -62,9 +61,11 @@ namespace CapaPresentacion
 
             // 👉 Si el usuario es administrador, cargar InicioAdmin automáticamente
             if (_rolUsuario.Equals("administrador", StringComparison.OrdinalIgnoreCase))
-            {
                 MostrarFormUnico<InicioAdmin>();
-            }
+            else if (_rolUsuario.Equals("medico", StringComparison.OrdinalIgnoreCase))
+                MostrarFormUnico<InicioMedico>();
+            else if (_rolUsuario.Equals("secretaria", StringComparison.OrdinalIgnoreCase))
+                MostrarFormUnico<InicioSecre>();
         }
 
         // ============================================================
@@ -80,8 +81,8 @@ namespace CapaPresentacion
             // Cuando el login se cierre, cerramos también el dashboard
             login.FormClosed += (s, args) => this.Close();
 
-            this.Hide();   // Ocultamos el dashboard
-            login.Show();  // Mostramos el login
+            this.Hide();
+            login.Show();
         }
 
         private void CargarSidebar(string rol, string nombreUsuario)
@@ -134,27 +135,44 @@ namespace CapaPresentacion
             panelMenu.Controls.Add(sidebar);
         }
 
+        // ========== ADMIN ==========
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
 
-            // 🔹 Abrir FormCargaUsuarios al hacer clic en "Usuarios"
+            // 🔹 Inicio
+            sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioAdmin>();
+
+            // 🔹 Usuarios
             sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>();
         }
 
+        // ========== MÉDICO ==========
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
+            sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
+
+            // 🔹 Inicio
+            sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
+
             sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
             sidebar.BtnHistoriasClick += (s, e) => MostrarForm(new FormHC());
-            sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
         }
 
+        // ========== SECRETARIA ==========
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
-            sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
+
+            // 🔹 Inicio
+            sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioSecre>();
+
+            sidebar.BtnTurnosClick += (s, e) => MostrarForm(new FormTurnos());
         }
 
+        // ============================================================
+        // Helpers para mostrar formularios
+        // ============================================================
         private void MostrarForm(Form form)
         {
             form.MdiParent = this;
