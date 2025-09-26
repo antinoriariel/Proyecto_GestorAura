@@ -70,7 +70,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Administrador"
                     };
-                    adminSidebar.SetUserPanelImage(rol); // 👈 asignar gif dinámico
+                    adminSidebar.SetUserPanelImage(Properties.Resources.adminLogo); // ✅ asignar gif dinámico
                     ConfigurarEventosAdmin(adminSidebar);
                     sidebar = adminSidebar;
                     break;
@@ -81,7 +81,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Médico"
                     };
-                    medicoSidebar.SetUserPanelImage(rol);
+                    medicoSidebar.SetUserPanelImage(Properties.Resources.doctorLogo); // ✅ asignar gif dinámico
                     ConfigurarEventosMedico(medicoSidebar);
                     sidebar = medicoSidebar;
                     break;
@@ -92,7 +92,7 @@ namespace CapaPresentacion
                         Username = nombreUsuario,
                         RolUsuario = "Secretaria"
                     };
-                    secretariaSidebar.SetUserPanelImage(rol);
+                    secretariaSidebar.SetUserPanelImage(Properties.Resources.secreLogo); // ✅ asignar gif dinámico
                     ConfigurarEventosSecretaria(secretariaSidebar);
                     sidebar = secretariaSidebar;
                     break;
@@ -162,5 +162,31 @@ namespace CapaPresentacion
             form.Show();
             form.BringToFront();
         }
+
+        private void MostrarFormUnico<T>() where T : Form, new()
+        {
+            // Verificar si ya existe una instancia abierta
+            foreach (Form form in this.MdiChildren)
+            {
+                if (form is T)
+                {
+                    form.BringToFront();
+                    form.WindowState = FormWindowState.Normal;
+                    return; // 👈 ya existe, no abrir otra
+                }
+            }
+
+            // Si no existe, instanciar uno nuevo
+            T nuevoForm = new T
+            {
+                MdiParent = this,
+                FormBorderStyle = FormBorderStyle.None,
+                Dock = DockStyle.Fill,
+                TopLevel = false
+            };
+            nuevoForm.Show();
+            nuevoForm.BringToFront();
+        }
+
     }
 }
