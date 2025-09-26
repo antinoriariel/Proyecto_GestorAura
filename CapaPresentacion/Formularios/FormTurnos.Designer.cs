@@ -4,6 +4,36 @@ namespace CapaPresentacion.Formularios
     {
         private System.ComponentModel.IContainer components = null;
 
+        private System.Windows.Forms.Panel headerPanel;
+        private System.Windows.Forms.PictureBox picHeader;
+        private System.Windows.Forms.Label lblHeader;
+
+        private System.Windows.Forms.GroupBox grpDatos;
+        private System.Windows.Forms.TableLayoutPanel grid;
+
+        private System.Windows.Forms.Label lblPaciente;
+        private System.Windows.Forms.ComboBox cboPaciente;
+
+        private System.Windows.Forms.Label lblMedico;
+        private System.Windows.Forms.ComboBox cboMedico;
+
+        private System.Windows.Forms.Label lblFecha;
+        private System.Windows.Forms.DateTimePicker dtpFecha;
+
+        private System.Windows.Forms.Label lblHora;
+        private System.Windows.Forms.DateTimePicker dtpHora;
+
+        private System.Windows.Forms.Label lblMotivo;
+        private System.Windows.Forms.TextBox txtMotivo;
+
+        private System.Windows.Forms.Label lblObs;
+        private System.Windows.Forms.TextBox txtObs;
+
+        private System.Windows.Forms.Panel footerPanel;
+        private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.Button btnCancelar;
+
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -11,192 +41,204 @@ namespace CapaPresentacion.Formularios
             base.Dispose(disposing);
         }
 
+        #region Windows Form Designer generated code
         private void InitializeComponent()
         {
-            comboBox1 = new ComboBox();
-            comboBox2 = new ComboBox();
-            txtMotivo = new TextBox();
-            label1 = new Label();
-            lblPaciente = new Label();
-            lblMedico = new Label();
-            dtpFecha = new DateTimePicker();
-            label2 = new Label();
-            lblHora = new Label();
-            dtpHora = new DateTimePicker();
-            lblMotivo = new Label();
-            txtObs = new TextBox();
-            lblObs = new Label();
-            bGuardar = new Button();
-            bCancelar = new Button();
-            SuspendLayout();
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(135, 86);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(177, 28);
-            comboBox1.TabIndex = 0;
-            // 
-            // comboBox2
-            // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(135, 139);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(177, 28);
-            comboBox2.TabIndex = 1;
-            // 
-            // txtMotivo
-            // 
-            txtMotivo.Location = new Point(135, 298);
-            txtMotivo.Name = "txtMotivo";
-            txtMotivo.Size = new Size(265, 27);
-            txtMotivo.TabIndex = 2;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(188, 27);
-            label1.Name = "label1";
-            label1.Size = new Size(122, 20);
-            label1.TabIndex = 3;
-            label1.Text = "AGENDA TURNO";
-            // 
-            // lblPaciente
-            // 
-            lblPaciente.AutoSize = true;
-            lblPaciente.Location = new Point(52, 89);
-            lblPaciente.Name = "lblPaciente";
-            lblPaciente.Size = new Size(64, 20);
-            lblPaciente.TabIndex = 4;
+            components = new System.ComponentModel.Container();
+
+            // ===== Form =====
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(241, 244, 246); // gris claro suave
+            this.ClientSize = new System.Drawing.Size(820, 540);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Padding = new System.Windows.Forms.Padding(24, 16, 24, 16);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Agenda de Turnos";
+            this.KeyPreview = true;
+
+            // ===== Header =====
+            headerPanel = new System.Windows.Forms.Panel();
+            headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            headerPanel.Height = 64;
+            headerPanel.BackColor = System.Drawing.Color.FromArgb(41, 57, 71); // como tu barra superior
+
+            picHeader = new System.Windows.Forms.PictureBox();
+            picHeader.Size = new System.Drawing.Size(40, 40);
+            picHeader.Location = new System.Drawing.Point(16, 12);
+            picHeader.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            picHeader.Image = Properties.Resources.calendarTodayIcon; // reemplaza si no existe
+
+            lblHeader = new System.Windows.Forms.Label();
+            lblHeader.AutoSize = true;
+            lblHeader.Location = new System.Drawing.Point(64, 18);
+            lblHeader.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold);
+            lblHeader.ForeColor = System.Drawing.Color.White;
+            lblHeader.Text = "Agenda de turnos";
+
+            headerPanel.Controls.Add(picHeader);
+            headerPanel.Controls.Add(lblHeader);
+
+            // ===== GroupBox + Grid =====
+            grpDatos = new System.Windows.Forms.GroupBox();
+            grpDatos.Text = "Datos del turno";
+            grpDatos.Dock = System.Windows.Forms.DockStyle.Top;
+            grpDatos.Padding = new System.Windows.Forms.Padding(16);
+            grpDatos.Height = 320;
+            grpDatos.BackColor = System.Drawing.Color.White;
+
+            grid = new System.Windows.Forms.TableLayoutPanel();
+            grid.ColumnCount = 2;
+            grid.RowCount = 6;
+            grid.Dock = System.Windows.Forms.DockStyle.Fill;
+            grid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F)); // columna de labels
+            grid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            for (int i = 0; i < 6; i++)
+                grid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
+
+            // Paciente
+            lblPaciente = new System.Windows.Forms.Label();
             lblPaciente.Text = "Paciente";
-            // 
-            // lblMedico
-            // 
+            lblPaciente.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblPaciente.AutoSize = true;
+
+            cboPaciente = new System.Windows.Forms.ComboBox();
+            cboPaciente.Name = "cboPaciente";
+            cboPaciente.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cboPaciente.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            cboPaciente.IntegralHeight = false;
+            cboPaciente.MaxDropDownItems = 12;
+
+            // Médico
+            lblMedico = new System.Windows.Forms.Label();
+            lblMedico.Text = "Médico";
+            lblMedico.Anchor = System.Windows.Forms.AnchorStyles.Left;
             lblMedico.AutoSize = true;
-            lblMedico.Location = new Point(57, 142);
-            lblMedico.Name = "lblMedico";
-            lblMedico.Size = new Size(59, 20);
-            lblMedico.TabIndex = 5;
-            lblMedico.Text = "Medico";
-            // 
-            // dtpFecha
-            // 
-            dtpFecha.Location = new Point(135, 191);
+
+            cboMedico = new System.Windows.Forms.ComboBox();
+            cboMedico.Name = "cboMedico";
+            cboMedico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cboMedico.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            cboMedico.IntegralHeight = false;
+
+            // Fecha
+            lblFecha = new System.Windows.Forms.Label();
+            lblFecha.Text = "Fecha";
+            lblFecha.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblFecha.AutoSize = true;
+
+            dtpFecha = new System.Windows.Forms.DateTimePicker();
             dtpFecha.Name = "dtpFecha";
-            dtpFecha.Size = new Size(299, 27);
-            dtpFecha.TabIndex = 6;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(65, 196);
-            label2.Name = "label2";
-            label2.Size = new Size(51, 20);
-            label2.TabIndex = 7;
-            label2.Text = "Fecha ";
-            // 
-            // lblHora
-            // 
-            lblHora.AutoSize = true;
-            lblHora.Location = new Point(66, 250);
-            lblHora.Name = "lblHora";
-            lblHora.Size = new Size(42, 20);
-            lblHora.TabIndex = 8;
+            dtpFecha.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            dtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            dtpFecha.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy";
+            dtpFecha.MinDate = System.DateTime.Today;
+
+            // Hora
+            lblHora = new System.Windows.Forms.Label();
             lblHora.Text = "Hora";
-            // 
-            // dtpHora
-            // 
-            dtpHora.Location = new Point(135, 245);
+            lblHora.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblHora.AutoSize = true;
+
+            dtpHora = new System.Windows.Forms.DateTimePicker();
             dtpHora.Name = "dtpHora";
-            dtpHora.Size = new Size(299, 27);
-            dtpHora.TabIndex = 9;
-            // 
-            // lblMotivo
-            // 
-            lblMotivo.AutoSize = true;
-            lblMotivo.Location = new Point(60, 298);
-            lblMotivo.Name = "lblMotivo";
-            lblMotivo.Size = new Size(56, 20);
-            lblMotivo.TabIndex = 10;
+            dtpHora.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            dtpHora.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            dtpHora.CustomFormat = "HH:mm";
+            dtpHora.ShowUpDown = true; // spinner en vez de calendario
+
+            // Motivo
+            lblMotivo = new System.Windows.Forms.Label();
             lblMotivo.Text = "Motivo";
-            // 
-            // txtObs
-            // 
-            txtObs.Location = new Point(135, 351);
-            txtObs.Name = "txtObs";
-            txtObs.Size = new Size(265, 27);
-            txtObs.TabIndex = 11;
-            // 
-            // lblObs
-            // 
-            lblObs.AutoSize = true;
-            lblObs.Location = new Point(23, 351);
-            lblObs.Name = "lblObs";
-            lblObs.Size = new Size(105, 20);
-            lblObs.TabIndex = 12;
+            lblMotivo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblMotivo.AutoSize = true;
+
+            txtMotivo = new System.Windows.Forms.TextBox();
+            txtMotivo.Name = "txtMotivo";
+            txtMotivo.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            txtMotivo.PlaceholderText = "Ej.: control, resultado de estudio, dolor…";
+
+            // Observaciones
+            lblObs = new System.Windows.Forms.Label();
             lblObs.Text = "Observaciones";
-            // 
-            // bGuardar
-            // 
-            bGuardar.Location = new Point(123, 415);
-            bGuardar.Name = "bGuardar";
-            bGuardar.Size = new Size(116, 37);
-            bGuardar.TabIndex = 13;
-            bGuardar.Text = "Guardar";
-            bGuardar.UseVisualStyleBackColor = true;
-            // 
-            // bCancelar
-            // 
-            bCancelar.Location = new Point(277, 415);
-            bCancelar.Name = "bCancelar";
-            bCancelar.Size = new Size(112, 37);
-            bCancelar.TabIndex = 14;
-            bCancelar.Text = "Cancelar";
-            bCancelar.UseVisualStyleBackColor = true;
-            // 
-            // FormTurnos
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(499, 480);
-            ControlBox = false;
-            Controls.Add(bCancelar);
-            Controls.Add(bGuardar);
-            Controls.Add(lblObs);
-            Controls.Add(txtObs);
-            Controls.Add(lblMotivo);
-            Controls.Add(dtpHora);
-            Controls.Add(lblHora);
-            Controls.Add(label2);
-            Controls.Add(dtpFecha);
-            Controls.Add(lblMedico);
-            Controls.Add(lblPaciente);
-            Controls.Add(label1);
-            Controls.Add(txtMotivo);
-            Controls.Add(comboBox2);
-            Controls.Add(comboBox1);
-            FormBorderStyle = FormBorderStyle.None;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "FormTurnos";
-            ResumeLayout(false);
-            PerformLayout();
+            lblObs.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            lblObs.AutoSize = true;
+
+            txtObs = new System.Windows.Forms.TextBox();
+            txtObs.Name = "txtObs";
+            txtObs.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            txtObs.Multiline = true;
+            txtObs.Height = 60;
+
+            // Agregar al grid
+            grid.Controls.Add(lblPaciente, 0, 0);
+            grid.Controls.Add(cboPaciente, 1, 0);
+
+            grid.Controls.Add(lblMedico, 0, 1);
+            grid.Controls.Add(cboMedico, 1, 1);
+
+            grid.Controls.Add(lblFecha, 0, 2);
+            grid.Controls.Add(dtpFecha, 1, 2);
+
+            grid.Controls.Add(lblHora, 0, 3);
+            grid.Controls.Add(dtpHora, 1, 3);
+
+            grid.Controls.Add(lblMotivo, 0, 4);
+            grid.Controls.Add(txtMotivo, 1, 4);
+
+            grid.Controls.Add(lblObs, 0, 5);
+            grid.Controls.Add(txtObs, 1, 5);
+
+            grpDatos.Controls.Add(grid);
+
+            // ===== Footer (botonera) =====
+            footerPanel = new System.Windows.Forms.Panel();
+            footerPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            footerPanel.Height = 64;
+            footerPanel.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            footerPanel.BackColor = System.Drawing.Color.Transparent;
+
+            btnGuardar = new System.Windows.Forms.Button();
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Text = "Guardar";
+            btnGuardar.AutoSize = true;
+            btnGuardar.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            btnGuardar.Size = new System.Drawing.Size(120, 36);
+            btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+
+            btnCancelar = new System.Windows.Forms.Button();
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.AutoSize = true;
+            btnCancelar.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            btnCancelar.Size = new System.Drawing.Size(120, 36);
+
+            // Alinear a la derecha
+            btnCancelar.Location = new System.Drawing.Point(this.ClientSize.Width - 120 - 24, 12);
+            btnGuardar.Location = new System.Drawing.Point(this.ClientSize.Width - (120 * 2) - 32, 12);
+            btnCancelar.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            btnGuardar.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+
+            footerPanel.Controls.Add(btnGuardar);
+            footerPanel.Controls.Add(btnCancelar);
+
+            // ===== Agregar todo al Form =====
+            this.Controls.Add(footerPanel);
+            this.Controls.Add(grpDatos);
+            this.Controls.Add(headerPanel);
+
+            // ===== Config global =====
+            this.AcceptButton = btnGuardar;
+            this.CancelButton = btnCancelar;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
+
+            // ===== Eventos clave (puedes mover el código a FormTurnos.cs) =====
+            // btnGuardar.Click += (s, e) => this.OnGuardar();
+            // btnCancelar.Click += (s, e) => this.Close();
+            // this.KeyDown += (s, e) => { if (e.KeyCode == System.Windows.Forms.Keys.Escape) this.Close(); };
         }
-        private ComboBox comboBox1;
-        private ComboBox comboBox2;
-        private TextBox txtMotivo;
-        private Label label1;
-        private Label lblPaciente;
-        private Label lblMedico;
-        private DateTimePicker dtpFecha;
-        private Label label2;
-        private Label lblHora;
-        private DateTimePicker dtpHora;
-        private Label lblMotivo;
-        private TextBox txtObs;
-        private Label lblObs;
-        private Button bGuardar;
-        private Button bCancelar;
+        #endregion
     }
 }
