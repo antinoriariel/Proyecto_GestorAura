@@ -13,7 +13,10 @@ namespace CapaPresentacion
         {
             InitializeComponent();
 
-            // 🔒 Evitar doble suscripción al click de Guardar
+            // Fuente uniforme (igual que FormHC)
+            this.Font = new Font("Consolas", 12F, FontStyle.Bold);
+
+            // 🔒 Evitar doble suscripción
             btnGuardar.Click -= btnGuardar_Click;
             btnGuardar.Click += btnGuardar_Click;
 
@@ -100,13 +103,14 @@ namespace CapaPresentacion
                     return;
                 }
 
-                // Teléfono (opcional, formato válido si se completa)
+                // Teléfono (opcional, pero si está se valida con al menos un dígito)
                 string telefono = txtTelefono.Text?.Trim() ?? string.Empty;
                 if (!string.IsNullOrWhiteSpace(telefono))
                 {
-                    if (!Regex.IsMatch(telefono, @"^[0-9+()\-\s]{7,20}$"))
+                    if (!Regex.IsMatch(telefono, @"^[0-9+()\-\s]{7,20}$") ||
+                        !Regex.IsMatch(telefono, @"\d")) // debe contener al menos un número
                     {
-                        MessageBox.Show("⚠️ El teléfono solo puede contener números, +, (), - y espacios; y tener entre 7 y 20 caracteres.",
+                        MessageBox.Show("⚠️ El teléfono debe tener entre 7 y 20 caracteres, puede contener números, +, (), - y espacios; y debe incluir al menos un dígito.",
                             "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
