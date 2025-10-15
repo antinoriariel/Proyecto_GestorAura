@@ -157,8 +157,10 @@ namespace CapaPresentacion
             // Placeholders informativos
             sidebar.BtnAuditoriaClick += (s, e) =>
                 MessageBox.Show("ℹ️ Requiere integración DB", "Auditoría");
+
             //sidebar.BtnBackupClick += (s, e) =>
             //MessageBox.Show("ℹ️ Requiere integración DB", "Backup");
+
             sidebar.BtnConfiguracionClick += (s, e) =>
                 MessageBox.Show("ℹ️ Requiere integración DB", "Ajustes");
         }
@@ -178,7 +180,7 @@ namespace CapaPresentacion
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
 
             // 🔹 Pacientes → Internados
-            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormPacientesMedico>();
 
             // 🔹 Solicitudes y Resultados
             sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
