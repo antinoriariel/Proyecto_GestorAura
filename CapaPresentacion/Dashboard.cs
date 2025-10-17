@@ -180,7 +180,7 @@ namespace CapaPresentacion
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
 
             // 🔹 Pacientes → Internados
-            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormPacientesMedico>();
+            // sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormPacientesMedico>();
 
             // 🔹 Solicitudes y Resultados
             sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
