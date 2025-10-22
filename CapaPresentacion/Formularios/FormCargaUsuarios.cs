@@ -26,8 +26,19 @@ namespace CapaPresentacion
                 if (e.KeyCode == Keys.Escape) this.Close();
             };
 
-            // 🗓️ Restringir fecha para que el usuario tenga ≥ 18 años
+            // 🗓️ Restringir fecha (≥18 años)
             dtpFechaNacimiento.MaxDate = DateTime.Today.AddYears(-18);
+
+            // 🆕 Cargar roles disponibles en ComboBox
+            cmbRol.Items.Clear();
+            cmbRol.Items.AddRange(new string[]
+            {
+                "medico",
+                "secretaria",
+                "administrador",
+                "administrativo" // 🆕 nuevo rol
+            });
+            cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void btnGuardar_Click(object? sender, EventArgs e)
@@ -64,7 +75,7 @@ namespace CapaPresentacion
                     return;
                 }
 
-                // Nombre (solo letras, min 3, max 50)
+                // Nombre (solo letras)
                 string nombre = txtNombre.Text?.Trim() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(nombre) || nombre.Length < 3 || nombre.Length > 50 ||
                     !Regex.IsMatch(nombre, @"^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$"))
@@ -74,7 +85,7 @@ namespace CapaPresentacion
                     return;
                 }
 
-                // Apellido (solo letras, min 3, max 50)
+                // Apellido (solo letras)
                 string apellido = txtApellido.Text?.Trim() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(apellido) || apellido.Length < 3 || apellido.Length > 50 ||
                     !Regex.IsMatch(apellido, @"^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s]+$"))
@@ -84,7 +95,7 @@ namespace CapaPresentacion
                     return;
                 }
 
-                // DNI (exactamente 8 dígitos)
+                // DNI (8 dígitos)
                 string dniTxt = txtDni.Text?.Trim() ?? string.Empty;
                 if (!Regex.IsMatch(dniTxt, @"^\d{8}$"))
                 {
@@ -95,20 +106,19 @@ namespace CapaPresentacion
 
                 // Fecha de nacimiento (≥ 18 años)
                 DateTime fnac = dtpFechaNacimiento.Value.Date;
-                DateTime limite18 = DateTime.Today.AddYears(-18);
-                if (fnac > limite18)
+                if (fnac > DateTime.Today.AddYears(-18))
                 {
                     MessageBox.Show("⚠️ El usuario debe ser mayor de 18 años.",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Teléfono (opcional, pero si está se valida con al menos un dígito)
+                // Teléfono (opcional)
                 string telefono = txtTelefono.Text?.Trim() ?? string.Empty;
                 if (!string.IsNullOrWhiteSpace(telefono))
                 {
                     if (!Regex.IsMatch(telefono, @"^[0-9+()\-\s]{7,20}$") ||
-                        !Regex.IsMatch(telefono, @"\d")) // debe contener al menos un número
+                        !Regex.IsMatch(telefono, @"\d"))
                     {
                         MessageBox.Show("⚠️ El teléfono debe tener entre 7 y 20 caracteres, puede contener números, +, (), - y espacios; y debe incluir al menos un dígito.",
                             "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -116,12 +126,12 @@ namespace CapaPresentacion
                     }
                 }
 
-                // Rol
+                // Rol (ahora incluye "administrativo")
                 string rol = cmbRol.SelectedItem?.ToString() ?? string.Empty;
                 if (string.IsNullOrEmpty(rol) ||
-                    !(rol == "medico" || rol == "secretaria" || rol == "administrador"))
+                    !(rol == "medico" || rol == "secretaria" || rol == "administrador" || rol == "administrativo"))
                 {
-                    MessageBox.Show("⚠️ Debe seleccionar un rol válido (medico, secretaria o administrador).",
+                    MessageBox.Show("⚠️ Debe seleccionar un rol válido (medico, secretaria, administrador o administrativo).",
                         "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -162,13 +172,12 @@ namespace CapaPresentacion
             txtTelefono.Clear();
             cmbRol.SelectedIndex = -1;
 
-            // Resetear fecha por defecto al límite de 18 años
             var limite18 = DateTime.Today.AddYears(-18);
             dtpFechaNacimiento.MaxDate = limite18;
             dtpFechaNacimiento.Value = limite18;
         }
 
-        // 🎨 Handler para estilizar el ComboBox Rol
+        // 🎨 Estilo ComboBox
         private void cmbRol_DrawItem(object? sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
@@ -176,7 +185,6 @@ namespace CapaPresentacion
             {
                 var combo = (ComboBox)sender!;
                 string text = combo.GetItemText(combo.Items[e.Index]);
-
                 var foreColor = ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                     ? SystemColors.HighlightText
                     : SystemColors.ControlText;
