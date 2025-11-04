@@ -71,10 +71,17 @@ namespace CapaPresentacion
         // ============================================================
         private void VolverALogin()
         {
-            var login = new Login { StartPosition = FormStartPosition.CenterScreen };
-            login.FormClosed += (s, e) => this.Close();
-            this.Hide();
+            // Crear nuevo formulario de login
+            var login = new Login
+            {
+                StartPosition = FormStartPosition.CenterScreen
+            };
+
+            // Mostrarlo antes de cerrar el dashboard
             login.Show();
+
+            // Cerrar el dashboard actual
+            this.Close();
         }
 
         private void CargarSidebar(string rol, string nombre)
