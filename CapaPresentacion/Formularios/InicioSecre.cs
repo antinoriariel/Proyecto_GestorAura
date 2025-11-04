@@ -2,7 +2,6 @@
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using CapaNegocio;
 
 namespace CapaPresentacion.Formularios
@@ -50,22 +49,71 @@ namespace CapaPresentacion.Formularios
             lblVersion.Text = "GestorAura v1.0";
             lblEstadoServidor.Text = "🟢 Servidor activo";
             lblFraseMotivacional.Text =
-                $"📅 Hoy es {DateTime.Now:dddd, dd MMMM yyyy} - \"La organización es la clave del éxito\"";
+                $"📅 Hoy es {DateTime.Now:dddd, dd MMMM yyyy}  -  \"La organización es la clave del éxito\"";
 
-            // === Gráfico de ejemplo ===
-            var serie = chartAgenda.Series["Turnos"];
-            serie.Points.Clear();
-            var horas = new[] { "08:00", "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00" };
-            var valores = new[] { 2, 3, 1, 3, 1, 2, 1, 1 };
-            for (int i = 0; i < horas.Length; i++)
-                serie.Points.AddXY(horas[i], valores[i]);
+            // === ComboBox médicos ===
+            cmbMedicos.Items.AddRange(new string[] { "Dr. Pérez", "Dra. Gómez", "Dr. Fernández" });
+            cmbMedicos.SelectedIndex = 0;
 
-            chartAgenda.Titles.Clear();
-            chartAgenda.Titles.Add("Distribución de turnos del día");
-            chartAgenda.Titles[0].Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            // === Celdas interactivas ===
+            foreach (Control c in tblCalendario.Controls)
+            {
+                if (c is Label lbl && lbl.Tag?.ToString() == "slot")
+                {
+                    lbl.Cursor = Cursors.Hand;
+                    lbl.Click += LblSlot_Click;
+                }
+            }
 
             // === Tabla de turnos demo ===
             dgvTurnos.DataSource = CrearTablaTurnosDemo();
+        }
+
+        private void LblSlot_Click(object? sender, EventArgs e)
+        {
+            if (sender is not Label lbl) return;
+
+            if (lbl.Text == "Ocupado")
+            {
+                var result = MessageBox.Show(
+                    "Seleccione una acción para este turno:\n\n- Cambiar estado a Libre\n- Asignar a otro paciente",
+                    "Turno ocupado",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button3);
+
+                if (result == DialogResult.Yes)
+                {
+                    lbl.Text = "Libre";
+                    lbl.BackColor = Color.FromArgb(224, 255, 224);
+                }
+                else if (result == DialogResult.No)
+                {
+                    string nuevo = Microsoft.VisualBasic.Interaction.InputBox(
+                        "Ingrese el nombre del nuevo paciente:", "Reasignar turno", "Apellido, Nombre");
+                    if (!string.IsNullOrWhiteSpace(nuevo))
+                    {
+                        lbl.Text = $"Asignado a\n{nuevo}";
+                        lbl.BackColor = Color.FromArgb(255, 240, 200);
+                    }
+                }
+            }
+            else if (lbl.Text == "Libre")
+            {
+                var result = MessageBox.Show("¿Desea asignar este horario a un nuevo paciente?",
+                    "Turno libre", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    string nuevo = Microsoft.VisualBasic.Interaction.InputBox(
+                        "Ingrese el nombre del paciente:", "Nuevo turno", "Apellido, Nombre");
+                    if (!string.IsNullOrWhiteSpace(nuevo))
+                    {
+                        lbl.Text = $"Asignado a\n{nuevo}";
+                        lbl.BackColor = Color.FromArgb(255, 240, 200);
+                    }
+                }
+            }
         }
 
         private static DataTable CrearTablaTurnosDemo()

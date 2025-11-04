@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using System.Drawing;
+using System.Linq;
 
 namespace CapaPresentacion.Formularios
 {
@@ -27,7 +27,9 @@ namespace CapaPresentacion.Formularios
         private Label lblEstadoServidor;
 
         private GroupBox grpGrafico;
-        private Chart chartAgenda;
+        private ComboBox cmbMedicos;
+        private Label lblMedico;
+        private TableLayoutPanel tblCalendario;
 
         private GroupBox grpTurnos;
         private DataGridView dgvTurnos;
@@ -61,7 +63,9 @@ namespace CapaPresentacion.Formularios
             lblEstadoServidor = new Label();
 
             grpGrafico = new GroupBox();
-            chartAgenda = new Chart();
+            cmbMedicos = new ComboBox();
+            lblMedico = new Label();
+            tblCalendario = new TableLayoutPanel();
 
             grpTurnos = new GroupBox();
             dgvTurnos = new DataGridView();
@@ -113,24 +117,10 @@ namespace CapaPresentacion.Formularios
             grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
 
             lblBienvenida.Text = "Bienvenida:";
-            lblBienvenida.Anchor = AnchorStyles.Left;
-
-            lblUsuario.Text = "<usuario>";
-            lblUsuario.Anchor = AnchorStyles.Left;
             lblUsuario.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-
             lblRol.Text = "Rol:";
-            lblRol.Anchor = AnchorStyles.Left;
-
-            lblRolValor.Text = "<rol>";
-            lblRolValor.Anchor = AnchorStyles.Left;
             lblRolValor.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-
             lblEmail.Text = "Email:";
-            lblEmail.Anchor = AnchorStyles.Left;
-
-            lblEmailValor.Text = "<email>";
-            lblEmailValor.Anchor = AnchorStyles.Left;
             lblEmailValor.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
 
             grid.Controls.Add(lblBienvenida, 0, 0);
@@ -146,42 +136,98 @@ namespace CapaPresentacion.Formularios
             grpExtras.Dock = DockStyle.Top;
             grpExtras.Height = 80;
             grpExtras.Padding = new Padding(14, 12, 14, 12);
+            grpExtras.Controls.AddRange(new Control[] { lblFraseMotivacional, lblVersion, lblEstadoServidor });
 
             lblFraseMotivacional.AutoSize = true;
             lblFraseMotivacional.Location = new Point(14, 24);
-            lblFraseMotivacional.Text = "\"La organización es la clave del éxito en la gestión hospitalaria.\"";
-
             lblVersion.AutoSize = true;
             lblVersion.Location = new Point(14, 50);
-            lblVersion.Text = "Versión: 1.0.0";
-
             lblEstadoServidor.AutoSize = true;
             lblEstadoServidor.Location = new Point(180, 50);
-            lblEstadoServidor.Text = "Servidor: OK";
-
-            grpExtras.Controls.AddRange(new Control[] { lblFraseMotivacional, lblVersion, lblEstadoServidor });
 
             // ===== grpGrafico =====
             grpGrafico.Text = "Agenda del día";
             grpGrafico.BackColor = Color.White;
             grpGrafico.Dock = DockStyle.Top;
-            grpGrafico.Height = 200;
+            grpGrafico.Height = 350;
             grpGrafico.Padding = new Padding(14, 12, 14, 12);
-            grpGrafico.Controls.Add(chartAgenda);
 
-            chartAgenda.Dock = DockStyle.Fill;
-            var ca = new ChartArea("MainArea");
-            ca.AxisX.MajorGrid.Enabled = false;
-            ca.AxisY.MajorGrid.LineColor = Color.Gainsboro;
-            chartAgenda.ChartAreas.Add(ca);
-            chartAgenda.Legends.Clear();
-            var s = new Series("Turnos")
+            // --- Label + ComboBox ---
+            lblMedico.Text = "Médico:";
+            lblMedico.AutoSize = true;
+            lblMedico.Location = new Point(16, 30);
+
+            cmbMedicos.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMedicos.Location = new Point(80, 26);
+            cmbMedicos.Width = 200;
+
+            grpGrafico.Controls.Add(lblMedico);
+            grpGrafico.Controls.Add(cmbMedicos);
+
+            // --- Calendario ---
+            tblCalendario.Dock = DockStyle.Bottom;
+            tblCalendario.Height = 270;
+            tblCalendario.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            tblCalendario.ColumnCount = 6;
+            tblCalendario.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+            for (int i = 1; i <= 5; i++)
+                tblCalendario.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+
+            tblCalendario.RowCount = 10;
+            tblCalendario.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            for (int i = 1; i < 10; i++)
+                tblCalendario.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1F));
+
+            DateTime lunes = System.DateTime.Today.AddDays(-(int)System.DateTime.Today.DayOfWeek + 1);
+            string[] dias = { "Hora" };
+            for (int i = 0; i < 5; i++)
+                dias = dias.Append($"{lunes.AddDays(i):dddd dd}").ToArray();
+
+            for (int c = 0; c < dias.Length; c++)
             {
-                ChartType = SeriesChartType.Column,
-                ChartArea = "MainArea",
-                IsValueShownAsLabel = true
-            };
-            chartAgenda.Series.Add(s);
+                var lbl = new Label()
+                {
+                    Text = dias[c],
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+                    BackColor = Color.FromArgb(240, 243, 245)
+                };
+                tblCalendario.Controls.Add(lbl, c, 0);
+            }
+
+            string[] horas = { "08:00", "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00" };
+            for (int i = 0; i < horas.Length; i++)
+            {
+                var lblHora = new Label()
+                {
+                    Text = horas[i],
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    BackColor = Color.FromArgb(250, 250, 250)
+                };
+                tblCalendario.Controls.Add(lblHora, 0, i + 1);
+
+                for (int c = 1; c <= 5; c++)
+                {
+                    var lblSlot = new Label()
+                    {
+                        Dock = DockStyle.Fill,
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Margin = new Padding(0),
+                        Font = new Font("Segoe UI", 8.5F, FontStyle.Regular),
+                        Tag = "slot" // marcar como celda clickeable
+                    };
+
+                    bool ocupado = (c == 2 && i == 1) || (c == 4 && i == 3) || (c == 5 && i == 6);
+                    lblSlot.Text = ocupado ? "Ocupado" : "Libre";
+                    lblSlot.BackColor = ocupado ? Color.FromArgb(255, 224, 224) : Color.FromArgb(224, 255, 224);
+
+                    tblCalendario.Controls.Add(lblSlot, c, i + 1);
+                }
+            }
+
+            grpGrafico.Controls.Add(tblCalendario);
 
             // ===== grpTurnos =====
             grpTurnos.Text = "Turnos próximos";
