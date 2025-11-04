@@ -8,6 +8,9 @@ namespace CapaPresentacion.Formularios
 {
     public partial class InicioSecre : Form
     {
+        // Nueva propiedad para recibir el nombre del usuario logueado
+        public string NombreUsuario { get; set; } = string.Empty;
+
         public InicioSecre()
         {
             InitializeComponent();
@@ -16,12 +19,12 @@ namespace CapaPresentacion.Formularios
 
         private void InicioSecre_Load(object? sender, EventArgs e)
         {
-            // ===== Datos hardcodeados =====
-            lblUsuario.Text = "Layla"; // secretaria logueada
+            // ===== Datos del usuario logueado =====
+            lblUsuario.Text = string.IsNullOrWhiteSpace(NombreUsuario) ? "<usuario>" : NombreUsuario;
             lblEstadoServidor.Text = "Servidor: OK";
             lblVersion.Text = "Versión: 1.0.0";
 
-            // Extra: fecha de hoy
+            // ===== Frase motivacional y fecha actual =====
             lblFraseMotivacional.Text =
                 $"📅 Hoy es {DateTime.Now:dddd, dd MMMM yyyy} - \"La organización es la clave del éxito\"";
 
@@ -33,7 +36,7 @@ namespace CapaPresentacion.Formularios
             var serie = chartAgenda.Series["Turnos"];
             serie.Points.Clear();
 
-            // Turnos por hora (ejemplo)
+            // Ejemplo de distribución por hora
             var horas = new[] { "08:00", "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00" };
             var valores = new[] { 2, 3, 1, 3, 1, 2, 1, 1 };
             for (int i = 0; i < horas.Length; i++)

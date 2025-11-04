@@ -90,7 +90,7 @@ namespace CapaPresentacion.Formularios
             lblHeader.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             lblHeader.ForeColor = Color.White;
             lblHeader.Location = new Point(56, 12);
-            lblHeader.Text = "Panel principal secretaria";
+            lblHeader.Text = "Panel principal secretario/a";
 
             // ===== grpDatos =====
             grpDatos.Text = "Datos de la secretaria";
@@ -105,8 +105,9 @@ namespace CapaPresentacion.Formularios
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             grid.RowCount = 3;
-            for (int i = 0; i < 3; i++)
-                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
 
             lblBienvenida.Text = "Bienvenida:";
             lblBienvenida.Anchor = AnchorStyles.Left;
