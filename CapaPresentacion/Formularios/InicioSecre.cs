@@ -3,13 +3,16 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using CapaNegocio;
 
 namespace CapaPresentacion.Formularios
 {
     public partial class InicioSecre : Form
     {
-        // Nueva propiedad para recibir el nombre del usuario logueado
+        private readonly UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+
         public string NombreUsuario { get; set; } = string.Empty;
+        public string RolUsuario { get; set; } = "Secretaria";
 
         public InicioSecre()
         {
@@ -19,24 +22,39 @@ namespace CapaPresentacion.Formularios
 
         private void InicioSecre_Load(object? sender, EventArgs e)
         {
-            // ===== Datos del usuario logueado =====
-            lblUsuario.Text = string.IsNullOrWhiteSpace(NombreUsuario) ? "<usuario>" : NombreUsuario;
-            lblEstadoServidor.Text = "Servidor: OK";
-            lblVersion.Text = "Versión: 1.0.0";
+            // === Datos desde la BD ===
+            try
+            {
+                DataTable dt = usuarioNegocio.ObtenerDatosSecretaria(NombreUsuario);
+                if (dt.Rows.Count > 0)
+                {
+                    var r = dt.Rows[0];
+                    lblUsuario.Text = $"{r["nombre"]} {r["apellido"]}";
+                    lblRolValor.Text = r["rol"].ToString();
+                    lblEmailValor.Text = r["email"].ToString();
+                }
+                else
+                {
+                    lblUsuario.Text = "<usuario no encontrado>";
+                    lblRolValor.Text = RolUsuario;
+                    lblEmailValor.Text = "—";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener datos del usuario: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-            // ===== Frase motivacional y fecha actual =====
+            // === Información general ===
+            lblVersion.Text = "GestorAura v1.0";
+            lblEstadoServidor.Text = "🟢 Servidor activo";
             lblFraseMotivacional.Text =
                 $"📅 Hoy es {DateTime.Now:dddd, dd MMMM yyyy} - \"La organización es la clave del éxito\"";
 
-            // ===== Resumen rápido =====
-            int totalTurnosHoy = 14;
-            lblEstadoServidor.Text += $" | Turnos agendados hoy: {totalTurnosHoy}";
-
-            // ===== Gráfico: agenda del día =====
+            // === Gráfico de ejemplo ===
             var serie = chartAgenda.Series["Turnos"];
             serie.Points.Clear();
-
-            // Ejemplo de distribución por hora
             var horas = new[] { "08:00", "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00" };
             var valores = new[] { 2, 3, 1, 3, 1, 2, 1, 1 };
             for (int i = 0; i < horas.Length; i++)
@@ -46,8 +64,7 @@ namespace CapaPresentacion.Formularios
             chartAgenda.Titles.Add("Distribución de turnos del día");
             chartAgenda.Titles[0].Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 
-            // ===== Tabla: turnos próximos =====
-            dgvTurnos.Columns.Clear();
+            // === Tabla de turnos demo ===
             dgvTurnos.DataSource = CrearTablaTurnosDemo();
         }
 

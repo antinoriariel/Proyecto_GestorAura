@@ -9,32 +9,34 @@ namespace CapaPresentacion
 {
     public partial class Dashboard : Form
     {
-        private readonly string _rolUsuario;
-        private readonly string _nombreUsuario;
+        private readonly string rolUsuario;
+        private readonly string nombreCompleto;
+        private readonly string username; // 👈 nombre real de usuario (para consultas a BD)
 
-        public Dashboard(string rolUsuario, string nombreUsuario)
+        public Dashboard(string rolUsuario, string nombreCompleto, string username)
         {
             InitializeComponent();
 
-            _rolUsuario = rolUsuario;
-            _nombreUsuario = nombreUsuario;
+            this.rolUsuario = rolUsuario;
+            this.nombreCompleto = nombreCompleto;
+            this.username = username;
 
             this.IsMdiContainer = true;
 
-            // Color de fondo MDI
+            // 🔹 Color de fondo del contenedor MDI
             foreach (Control ctrl in this.Controls)
             {
                 if (ctrl is MdiClient client)
                     client.BackColor = ColorTranslator.FromHtml("#D7DADB");
             }
 
-            // Cargar sidebar según rol
-            CargarSidebar(_rolUsuario, _nombreUsuario);
+            // 🔹 Cargar sidebar correspondiente
+            CargarSidebar(rolUsuario, nombreCompleto);
 
-            // Eventos navbar superior
+            // 🔹 Eventos navbar superior
             navbarSuperior1.BtnCambiarUserClick += (s, e) => VolverALogin();
             navbarSuperior1.BtnDarkModeClick += (s, e) =>
-                MessageBox.Show("🌙 Cambiar a modo oscuro", "Info");
+                MessageBox.Show("🌙 Cambiar a modo oscuro (pendiente)", "Info");
             navbarSuperior1.BtnNotificacionesClick += (s, e) =>
                 MessageBox.Show("🔔 Notificaciones pendientes", "Info");
 
@@ -51,35 +53,31 @@ namespace CapaPresentacion
                 catch (Exception ex)
                 {
                     MessageBox.Show("No se pudo abrir la página de ayuda: " + ex.Message,
-                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
 
-            // Mostrar pantalla inicial según rol
-            if (_rolUsuario.Equals("administrador", StringComparison.OrdinalIgnoreCase))
-                MostrarFormUnico<InicioAdmin>(f => f.Text = "Inicio Administrador");
-            else if (_rolUsuario.Equals("medico", StringComparison.OrdinalIgnoreCase))
-                MostrarFormUnico<InicioMedico>(f => f.Text = "Inicio Médico");
-            else if (_rolUsuario.Equals("secretaria", StringComparison.OrdinalIgnoreCase))
-                MostrarFormUnico<InicioSecre>(f => f.NombreUsuario = _nombreUsuario);
+            // 🔹 Abrir formulario inicial según rol
+            if (rolUsuario.Equals("administrador", StringComparison.OrdinalIgnoreCase))
+                MostrarFormUnico<InicioAdmin>();
+            else if (rolUsuario.Equals("medico", StringComparison.OrdinalIgnoreCase))
+                MostrarFormUnico<InicioMedico>();
+            else if (rolUsuario.Equals("secretaria", StringComparison.OrdinalIgnoreCase))
+                AbrirInicioSecretaria();
         }
 
         // ============================================================
-        // Método auxiliar: volver al login sin cerrar la app
+        // MÉTODOS AUXILIARES
         // ============================================================
         private void VolverALogin()
         {
-            var login = new Login
-            {
-                StartPosition = FormStartPosition.CenterScreen
-            };
-
-            login.FormClosed += (s, args) => this.Close();
+            var login = new Login { StartPosition = FormStartPosition.CenterScreen };
+            login.FormClosed += (s, e) => this.Close();
             this.Hide();
             login.Show();
         }
 
-        private void CargarSidebar(string rol, string nombreUsuario)
+        private void CargarSidebar(string rol, string nombre)
         {
             SidebarBase sidebar = null;
 
@@ -88,7 +86,7 @@ namespace CapaPresentacion
                 case "administrador":
                     var adminSidebar = new AdminSidebar
                     {
-                        Username = nombreUsuario,
+                        Username = nombre,
                         RolUsuario = "Administrador"
                     };
                     adminSidebar.SetUserPanelImage(Properties.Resources.adminLogo);
@@ -99,7 +97,7 @@ namespace CapaPresentacion
                 case "medico":
                     var medicoSidebar = new MedicoSidebar
                     {
-                        Username = nombreUsuario,
+                        Username = nombre,
                         RolUsuario = "Médico"
                     };
                     medicoSidebar.SetUserPanelImage(Properties.Resources.doctorLogo);
@@ -108,19 +106,19 @@ namespace CapaPresentacion
                     break;
 
                 case "secretaria":
-                    var secretariaSidebar = new SecretariaSidebar
+                    var secreSidebar = new SecretariaSidebar
                     {
-                        Username = nombreUsuario,
+                        Username = nombre,
                         RolUsuario = "Secretaria"
                     };
-                    secretariaSidebar.SetUserPanelImage(Properties.Resources.secreLogo);
-                    ConfigurarEventosSecretaria(secretariaSidebar);
-                    sidebar = secretariaSidebar;
+                    secreSidebar.SetUserPanelImage(Properties.Resources.secreLogo);
+                    ConfigurarEventosSecretaria(secreSidebar);
+                    sidebar = secreSidebar;
                     break;
 
                 default:
                     MessageBox.Show("Rol no reconocido. No se cargará el menú lateral.",
-                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
             }
 
@@ -129,30 +127,34 @@ namespace CapaPresentacion
             panelMenu.Controls.Add(sidebar);
         }
 
-        // ========== ADMIN ==========
+        // ============================================================
+        // EVENTOS SIDEBAR - ADMIN
+        // ============================================================
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
-            sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioAdmin>(f => { });
-            sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>(f => { });
-            sidebar.BtnMedicosClick += (s, e) => MostrarFormUnico<FormMedicos>(f => { });
-            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>(f => { });
-            sidebar.BtnBackupClick += (s, e) => MostrarFormUnico<FormBackup>(f => { });
+            sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioAdmin>();
+            sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>();
+            sidebar.BtnMedicosClick += (s, e) => MostrarFormUnico<FormMedicos>();
+            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+            sidebar.BtnBackupClick += (s, e) => MostrarFormUnico<FormBackup>();
             sidebar.BtnAuditoriaClick += (s, e) =>
-                MessageBox.Show("ℹ️ Requiere integración DB", "Auditoría");
+                MessageBox.Show("ℹ️ Módulo de auditoría pendiente de integración.", "Info");
             sidebar.BtnConfiguracionClick += (s, e) =>
-                MessageBox.Show("ℹ️ Requiere integración DB", "Ajustes");
+                MessageBox.Show("⚙️ Configuración en desarrollo.", "Info");
         }
 
-        // ========== MÉDICO ==========
+        // ============================================================
+        // EVENTOS SIDEBAR - MÉDICO
+        // ============================================================
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
-            sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>(f => { });
-            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>(f => { });
-            sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>(f => { });
-            sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>(f => { });
-            sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>(f => { });
+            sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
+            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
+            sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
+            sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
+            sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
             sidebar.BtnInterconsultasClick += (s, e) =>
                 MessageBox.Show("🩺 Módulo de interconsultas en desarrollo.", "Info");
             sidebar.BtnRecetasClick += (s, e) =>
@@ -168,35 +170,36 @@ namespace CapaPresentacion
                 catch (Exception ex)
                 {
                     MessageBox.Show("No se pudo abrir la página de recetas: " + ex.Message,
-                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
-            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>(f => { });
+            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
         }
 
-        // ========== SECRETARIA ==========
+        // ============================================================
+        // EVENTOS SIDEBAR - SECRETARIA
+        // ============================================================
         private void ConfigurarEventosSecretaria(SecretariaSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
-            sidebar.BtnDashboardClick += (s, e) =>
-                MostrarFormUnico<InicioSecre>(f => f.NombreUsuario = _nombreUsuario);
-            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>(f => { });
-            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>(f => { });
-            sidebar.BtnNotasClick += (s, e) => MostrarFormUnico<FormNotas>(f => { });
-            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>(f => { });
+            sidebar.BtnDashboardClick += (s, e) => AbrirInicioSecretaria();
+            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
+            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
+            sidebar.BtnNotasClick += (s, e) => MostrarFormUnico<FormNotas>();
+            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
         }
 
         // ============================================================
-        // Método genérico y sobrecargado para mostrar un único formulario MDI
+        // FORMULARIOS MDI
         // ============================================================
-        private void MostrarFormUnico<T>(Action<T> configurador) where T : Form, new()
+        private void MostrarFormUnico<T>() where T : Form, new()
         {
-            foreach (Form form in this.MdiChildren)
+            foreach (Form f in this.MdiChildren)
             {
-                if (form is T)
+                if (f is T)
                 {
-                    form.BringToFront();
-                    form.WindowState = FormWindowState.Normal;
+                    f.BringToFront();
+                    f.WindowState = FormWindowState.Normal;
                     return;
                 }
             }
@@ -208,11 +211,38 @@ namespace CapaPresentacion
                 Dock = DockStyle.Fill,
                 TopLevel = false
             };
-
-            configurador?.Invoke(nuevoForm); // 🔹 permite pasar datos como NombreUsuario
-
             nuevoForm.Show();
             nuevoForm.BringToFront();
+        }
+
+        // ============================================================
+        // PANEL DE SECRETARIA (INICIO PERSONALIZADO)
+        // ============================================================
+        private void AbrirInicioSecretaria()
+        {
+            // 🔹 Evita duplicados si ya está abierto
+            foreach (Form f in this.MdiChildren)
+            {
+                if (f is InicioSecre)
+                {
+                    f.BringToFront();
+                    f.WindowState = FormWindowState.Normal;
+                    return;
+                }
+            }
+
+            // 🔹 Crea y muestra el formulario de secretaria con su usuario real
+            InicioSecre formSecre = new InicioSecre
+            {
+                MdiParent = this,
+                FormBorderStyle = FormBorderStyle.None,
+                Dock = DockStyle.Fill,
+                TopLevel = false,
+                NombreUsuario = username,
+                RolUsuario = rolUsuario
+            };
+            formSecre.Show();
+            formSecre.BringToFront();
         }
     }
 }

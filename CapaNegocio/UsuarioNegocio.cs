@@ -8,11 +8,13 @@ namespace CapaNegocio
     {
         private readonly UsuarioDAO usuarioDAO = new UsuarioDAO();
 
+        // ===============================================================
+        // MÉTODO LOGIN
+        // ===============================================================
         public UsuarioLoginResult? Login(string username, string password)
         {
             DataRow? row = usuarioDAO.ObtenerUsuarioPorUsername(username);
             if (row == null) return null; // usuario no existe
-
             if (!(bool)row["activo"]) return null; // usuario desactivado
 
             byte[] hash = (byte[])row["password_hash"];
@@ -31,12 +33,24 @@ namespace CapaNegocio
             return null;
         }
 
+        // ===============================================================
+        // MÉTODO REGISTRO DE USUARIO
+        // ===============================================================
         public void RegistrarUsuario(string username, string password, string email,
                                      string nombre, string apellido, decimal dni,
                                      DateTime fNacimiento, string telefono, string rol)
         {
             var (hash, salt) = PasswordHelper.CrearPasswordHash(password);
             usuarioDAO.InsertarUsuario(username, hash, salt, email, nombre, apellido, dni, fNacimiento, telefono, rol);
+        }
+
+        // ===============================================================
+        // NUEVO MÉTODO: Obtener datos generales de la secretaria
+        // ===============================================================
+        public DataTable ObtenerDatosSecretaria(string username)
+        {
+            // Solo devuelve nombre, apellido, rol y email
+            return usuarioDAO.ObtenerDatosSecretaria(username);
         }
     }
 }

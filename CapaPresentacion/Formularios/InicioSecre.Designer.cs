@@ -17,6 +17,9 @@ namespace CapaPresentacion.Formularios
         private Label lblBienvenida;
         private Label lblUsuario;
         private Label lblRol;
+        private Label lblRolValor;
+        private Label lblEmail;
+        private Label lblEmailValor;
 
         private GroupBox grpExtras;
         private Label lblFraseMotivacional;
@@ -29,7 +32,6 @@ namespace CapaPresentacion.Formularios
         private GroupBox grpTurnos;
         private DataGridView dgvTurnos;
 
-        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -40,8 +42,6 @@ namespace CapaPresentacion.Formularios
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-
             headerPanel = new Panel();
             picHeader = new PictureBox();
             lblHeader = new Label();
@@ -51,6 +51,9 @@ namespace CapaPresentacion.Formularios
             lblBienvenida = new Label();
             lblUsuario = new Label();
             lblRol = new Label();
+            lblRolValor = new Label();
+            lblEmail = new Label();
+            lblEmailValor = new Label();
 
             grpExtras = new GroupBox();
             lblFraseMotivacional = new Label();
@@ -81,7 +84,7 @@ namespace CapaPresentacion.Formularios
             headerPanel.Controls.Add(picHeader);
             headerPanel.Controls.Add(lblHeader);
 
-            picHeader.Image = Properties.Resources.dashboardIcon; // ⚠️ crea un recurso apropiado
+            picHeader.Image = Properties.Resources.dashboardIcon;
             picHeader.Location = new Point(14, 10);
             picHeader.Size = new Size(32, 32);
             picHeader.SizeMode = PictureBoxSizeMode.Zoom;
@@ -96,7 +99,7 @@ namespace CapaPresentacion.Formularios
             grpDatos.Text = "Datos de la secretaria";
             grpDatos.BackColor = Color.White;
             grpDatos.Dock = DockStyle.Top;
-            grpDatos.Height = 100;
+            grpDatos.Height = 120;
             grpDatos.Padding = new Padding(14, 12, 14, 12);
             grpDatos.Controls.Add(grid);
 
@@ -111,16 +114,31 @@ namespace CapaPresentacion.Formularios
 
             lblBienvenida.Text = "Bienvenida:";
             lblBienvenida.Anchor = AnchorStyles.Left;
+
             lblUsuario.Text = "<usuario>";
             lblUsuario.Anchor = AnchorStyles.Left;
             lblUsuario.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
 
-            lblRol.Text = "Rol: Secretaria";
+            lblRol.Text = "Rol:";
             lblRol.Anchor = AnchorStyles.Left;
+
+            lblRolValor.Text = "<rol>";
+            lblRolValor.Anchor = AnchorStyles.Left;
+            lblRolValor.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+
+            lblEmail.Text = "Email:";
+            lblEmail.Anchor = AnchorStyles.Left;
+
+            lblEmailValor.Text = "<email>";
+            lblEmailValor.Anchor = AnchorStyles.Left;
+            lblEmailValor.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
 
             grid.Controls.Add(lblBienvenida, 0, 0);
             grid.Controls.Add(lblUsuario, 1, 0);
             grid.Controls.Add(lblRol, 0, 1);
+            grid.Controls.Add(lblRolValor, 1, 1);
+            grid.Controls.Add(lblEmail, 0, 2);
+            grid.Controls.Add(lblEmailValor, 1, 2);
 
             // ===== grpExtras =====
             grpExtras.Text = "Extras";
