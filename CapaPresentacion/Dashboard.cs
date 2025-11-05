@@ -181,7 +181,7 @@ namespace CapaPresentacion
             sidebar.BtnDashboardClick += (s, e) =>
                 MostrarFormUnico<InicioSecre>(f => f.NombreUsuario = _nombreUsuario);
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>(f => { });
-            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>(f => { });
+            sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormPacientesSecretaria>(f => { });
             sidebar.BtnNotasClick += (s, e) => MostrarFormUnico<FormNotas>(f => { });
             sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>(f => { });
         }
