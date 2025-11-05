@@ -9,29 +9,32 @@ namespace CapaPresentacion.Formularios
     {
         private IContainer components = null;
 
+        // Root
+        private TableLayoutPanel root;
+
         // Título
         private Label lblTitulo;
 
         // Ficha
         private GroupBox gbEdicion;
-        private Label lblDni, lblFecNac, lblEmail, lblNombre, lblSexo, lblDomicilio, lblApellido, lblTelefono, lblContacto, lblObra, lblAfiliado, lblNotas, lblLeyenda;
-        private TextBox txtDni, txtEmail, txtNombre, txtDomicilio, txtApellido, txtTelefono, txtContactoEmergencia, txtNroAfiliado;
-        private DateTimePicker dtpFechaNac;
-        private ComboBox cboSexo, cboObraSocial;
-        private RichTextBox txtNotas;
+        private TableLayoutPanel tlpFicha;
+        private Label lblDni, lblNombre, lblApellido, lblSexo, lblNacimiento, lblTelefono, lblEmail, lblGrupo, lblAlergias;
+        private TextBox txtDni, txtNombre, txtApellido, txtTelefono, txtEmail;
+        private ComboBox cboSexo, cboGrupo;
+        private DateTimePicker dtpNacimiento;
+        private RichTextBox txtAlergias;
         private CheckBox chkActivo;
 
         // Acciones
         private GroupBox gbAcciones;
-        private Button btnNuevo, btnGuardar, btnActualizar, btnEliminar, btnLimpiar, btnAdjuntar, btnExportar;
-        private ToolTip toolTip1;
+        private FlowLayoutPanel flpAcciones;
+        private Button btnNuevo, btnGuardar, btnActualizar, btnEliminar, btnLimpiar;
 
         // Buscar
         private GroupBox gbBusqueda;
-        private Label lblBuscar;
+        private TableLayoutPanel tlpBuscar;
         private TextBox txtBuscar;
-        private Button btnBuscar;
-        private Button btnQuitarFiltro;
+        private Button btnBuscar, btnQuitarFiltro;
         private CheckBox chkSoloActivos;
 
         // Grilla
@@ -41,7 +44,8 @@ namespace CapaPresentacion.Formularios
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null)) components.Dispose();
+            if (disposing && components != null)
+                components.Dispose();
             base.Dispose(disposing);
         }
 
@@ -55,184 +59,245 @@ namespace CapaPresentacion.Formularios
             Text = "Pacientes - Secretaría";
             StartPosition = FormStartPosition.CenterParent;
             BackColor = Color.White;
-            MinimumSize = new Size(1200, 750);
+            MinimumSize = new Size(1100, 750);
+
+            // ===== Root layout =====
+            root = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.White,
+                ColumnCount = 1,
+                RowCount = 5,
+                Padding = new Padding(12),
+            };
+            root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));          // Título
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));          // Ficha
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));          // Acciones
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));          // Buscar
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));     // Grilla
+            Controls.Add(root);
 
             // ===== Título =====
             lblTitulo = new Label
             {
-                Text = "Pacientes (Secretaría)",
+                Text = "Gestión de Pacientes",
                 Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold),
                 AutoSize = true,
-                Location = new Point(16, 12)
+                Margin = new Padding(4, 0, 0, 10)
             };
-            Controls.Add(lblTitulo);
+            root.Controls.Add(lblTitulo, 0, 0);
 
-            // ===== Grupo FICHA =====
+            // ===== Grupo Ficha =====
             gbEdicion = new GroupBox
             {
                 Text = "Ficha del paciente",
-                Location = new Point(12, 46),
-                Size = new Size(1160, 340),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
-            };
-            Controls.Add(gbEdicion);
-
-            // Columnas pensadas para que todo se vea cómodo
-            int x1 = 16;    // Columna 1
-            int x2 = 400;   // Columna 2
-            int x3 = 760;   // Columna 3 (ancha)
-            int w1 = 360;   // ancho col1
-            int w2 = 220;   // ancho col2
-            int w3 = gbEdicion.Width - x3 - 24; // dinámico
-            int y = 28;     // fila
-            int rowGap = 40;
-
-            // Recalcular w3 cuando se redimensiona
-            gbEdicion.Resize += (_, __) =>
-            {
-                int dyn = gbEdicion.Width - x3 - 24;
-                if (txtEmail != null) txtEmail.Width = dyn;
-                if (txtDomicilio != null) txtDomicilio.Width = dyn;
-                if (txtContactoEmergencia != null) txtContactoEmergencia.Width = dyn;
-                if (txtNotas != null) txtNotas.Width = dyn - 170;
-            };
-
-            // ===== Fila 1: DNI / Fecha Nac. / Email
-            lblDni = new Label { Text = "DNI *", Location = new Point(x1, y) };
-            txtDni = new TextBox { Location = new Point(x1, y + 18), Size = new Size(w1, 28) };
-            gbEdicion.Controls.AddRange(new Control[] { lblDni, txtDni });
-
-            lblFecNac = new Label { Text = "Fecha nac. *", Location = new Point(x2, y) };
-            dtpFechaNac = new DateTimePicker { Format = DateTimePickerFormat.Short, MaxDate = DateTime.Today, Location = new Point(x2, y + 18), Size = new Size(w2, 28) };
-            gbEdicion.Controls.AddRange(new Control[] { lblFecNac, dtpFechaNac });
-
-            lblEmail = new Label { Text = "Email", Location = new Point(x3, y) };
-            txtEmail = new TextBox { Location = new Point(x3, y + 18), Size = new Size(w3, 28), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
-            gbEdicion.Controls.AddRange(new Control[] { lblEmail, txtEmail });
-
-            // ===== Fila 2: Nombre / Sexo / Domicilio
-            y += rowGap;
-            lblNombre = new Label { Text = "Nombre *", Location = new Point(x1, y) };
-            txtNombre = new TextBox { Location = new Point(x1, y + 18), Size = new Size(w1, 28) };
-            gbEdicion.Controls.AddRange(new Control[] { lblNombre, txtNombre });
-
-            lblSexo = new Label { Text = "Sexo *", Location = new Point(x2, y) };
-            cboSexo = new ComboBox { Location = new Point(x2, y + 18), Size = new Size(w2, 28), DropDownStyle = ComboBoxStyle.DropDownList };
-            gbEdicion.Controls.AddRange(new Control[] { lblSexo, cboSexo });
-
-            lblDomicilio = new Label { Text = "Domicilio", Location = new Point(x3, y) };
-            txtDomicilio = new TextBox { Location = new Point(x3, y + 18), Size = new Size(w3, 28), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
-            gbEdicion.Controls.AddRange(new Control[] { lblDomicilio, txtDomicilio });
-
-            // ===== Fila 3: Apellido / Teléfono / Contacto emergencia
-            y += rowGap;
-            lblApellido = new Label { Text = "Apellido *", Location = new Point(x1, y) };
-            txtApellido = new TextBox { Location = new Point(x1, y + 18), Size = new Size(w1, 28) };
-            gbEdicion.Controls.AddRange(new Control[] { lblApellido, txtApellido });
-
-            lblTelefono = new Label { Text = "Teléfono", Location = new Point(x2, y) };
-            txtTelefono = new TextBox { Location = new Point(x2, y + 18), Size = new Size(w2, 28) };
-            gbEdicion.Controls.AddRange(new Control[] { lblTelefono, txtTelefono });
-
-            lblContacto = new Label { Text = "Contacto de emergencia", Location = new Point(x3, y) };
-            txtContactoEmergencia = new TextBox { Location = new Point(x3, y + 18), Size = new Size(w3, 28), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
-            gbEdicion.Controls.AddRange(new Control[] { lblContacto, txtContactoEmergencia });
-
-            // ===== Fila 4: Obra social / N° Afiliado / Notas + Activo
-            y += rowGap;
-            lblObra = new Label { Text = "Obra social", Location = new Point(x1, y) };
-            cboObraSocial = new ComboBox { Location = new Point(x1, y + 18), Size = new Size(w1, 28), DropDownStyle = ComboBoxStyle.DropDownList };
-            gbEdicion.Controls.AddRange(new Control[] { lblObra, cboObraSocial });
-
-            lblAfiliado = new Label { Text = "N° Afiliado", Location = new Point(x2, y) };
-            txtNroAfiliado = new TextBox { Location = new Point(x2, y + 18), Size = new Size(w2, 28) };
-            gbEdicion.Controls.AddRange(new Control[] { lblAfiliado, txtNroAfiliado });
-
-            lblNotas = new Label { Text = "Notas", Location = new Point(x3, y) };
-            txtNotas = new RichTextBox { Location = new Point(x3, y + 18), Size = new Size(w3 - 170, 76), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, BorderStyle = BorderStyle.FixedSingle };
-            gbEdicion.Controls.AddRange(new Control[] { lblNotas, txtNotas });
-
-            chkActivo = new CheckBox { Text = "Activo (baja lógica)", Location = new Point(x3 + w3 - 150, y + 30), AutoSize = true, Anchor = AnchorStyles.Top | AnchorStyles.Right, Checked = true };
-            gbEdicion.Controls.Add(chkActivo);
-
-            // Leyenda de obligatorios
-            lblLeyenda = new Label
-            {
-                Text = "Campos marcados con * son obligatorios",
-                ForeColor = Color.DimGray,
+                Dock = DockStyle.Top,
                 AutoSize = true,
-                Location = new Point(16, gbEdicion.Height - 22),
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Left
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Padding = new Padding(10),
+                Margin = new Padding(0, 0, 0, 10)
             };
-            gbEdicion.Controls.Add(lblLeyenda);
+            root.Controls.Add(gbEdicion, 0, 1);
 
-            // ===== Grupo ACCIONES (botones grandes) =====
+            // ** TLP de ficha **
+            tlpFicha = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 6,
+                RowCount = 4,
+                Padding = new Padding(0),
+            };
+            // Columnas: Label | Control | Label | Control | Label | Control
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+            gbEdicion.Controls.Add(tlpFicha);
+
+            // Helpers
+            Label L(string t) => new Label
+            {
+                Text = t,
+                AutoSize = true,
+                Anchor = AnchorStyles.Left | AnchorStyles.Top,
+                Margin = new Padding(0, 0, 8, 4)
+            };
+            TextBox T() => new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 8, 8)
+            };
+
+            // ===== Fila 1: DNI | Fecha Nac | Email =====
+            lblDni = L("DNI *");
+            txtDni = T();
+            lblNacimiento = L("Fecha nac. *");
+            dtpNacimiento = new DateTimePicker
+            {
+                Format = DateTimePickerFormat.Short,
+                MaxDate = DateTime.Today,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 8, 8)
+            };
+            lblEmail = L("Email");
+            txtEmail = T();
+
+            tlpFicha.Controls.Add(lblDni, 0, 0);
+            tlpFicha.Controls.Add(txtDni, 1, 0);
+            tlpFicha.Controls.Add(lblNacimiento, 2, 0);
+            tlpFicha.Controls.Add(dtpNacimiento, 3, 0);
+            tlpFicha.Controls.Add(lblEmail, 4, 0);
+            tlpFicha.Controls.Add(txtEmail, 5, 0);
+
+            // ===== Fila 2: Nombre | Sexo | Teléfono =====
+            lblNombre = L("Nombre *");
+            txtNombre = T();
+            lblSexo = L("Sexo (H/M) *");
+            cboSexo = new ComboBox
+            {
+                Dock = DockStyle.Fill,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                IntegralHeight = false,
+                Margin = new Padding(0, 0, 8, 8)
+            };
+            lblTelefono = L("Teléfono");
+            txtTelefono = T();
+
+            tlpFicha.Controls.Add(lblNombre, 0, 1);
+            tlpFicha.Controls.Add(txtNombre, 1, 1);
+            tlpFicha.Controls.Add(lblSexo, 2, 1);
+            tlpFicha.Controls.Add(cboSexo, 3, 1);
+            tlpFicha.Controls.Add(lblTelefono, 4, 1);
+            tlpFicha.Controls.Add(txtTelefono, 5, 1);
+
+            // ===== Fila 3: Apellido | Grupo sanguíneo | Alergias =====
+            lblApellido = L("Apellido *");
+            txtApellido = T();
+            lblGrupo = L("Grupo sanguíneo");
+            cboGrupo = new ComboBox
+            {
+                Dock = DockStyle.Fill,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                IntegralHeight = false,
+                Margin = new Padding(0, 0, 8, 8)
+            };
+            lblAlergias = L("Alergias");
+            txtAlergias = new RichTextBox
+            {
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.FixedSingle,
+                Margin = new Padding(0, 0, 0, 8),
+                Height = 60
+            };
+
+            tlpFicha.Controls.Add(lblApellido, 0, 2);
+            tlpFicha.Controls.Add(txtApellido, 1, 2);
+            tlpFicha.Controls.Add(lblGrupo, 2, 2);
+            tlpFicha.Controls.Add(cboGrupo, 3, 2);
+            tlpFicha.Controls.Add(lblAlergias, 4, 2);
+            tlpFicha.Controls.Add(txtAlergias, 5, 2);
+
+            // ===== Fila 4: Activo (alineado a la derecha, sin placeholders) =====
+            var flpActivo = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.RightToLeft,
+                WrapContents = false,
+                Margin = new Padding(0, 0, 0, 0),
+                AutoSize = true
+            };
+
+            chkActivo = new CheckBox
+            {
+                Text = "Activo (baja lógica)",
+                AutoSize = true,
+                Checked = true,
+                Margin = new Padding(0, 2, 0, 0)
+            };
+
+            flpActivo.Controls.Add(chkActivo);
+            tlpFicha.Controls.Add(flpActivo, 0, 3);
+            tlpFicha.SetColumnSpan(flpActivo, 6);
+
+            // ===== Grupo Acciones =====
             gbAcciones = new GroupBox
             {
                 Text = "Acciones",
-                Location = new Point(12, 392),
-                Size = new Size(1160, 72),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Padding = new Padding(10),
+                Margin = new Padding(0, 0, 0, 10)
             };
-            Controls.Add(gbAcciones);
+            root.Controls.Add(gbAcciones, 0, 2);
 
-            btnNuevo = MakeButton("Nuevo");
-            btnGuardar = MakePrimaryButton("Guardar");
-            btnActualizar = MakeButton("Actualizar");
-            btnEliminar = MakeDangerButton("Dar de baja");
-            btnLimpiar = MakeButton("Limpiar");
-            btnAdjuntar = MakeButton("Adjuntar doc.");
-            btnExportar = MakeButton("Exportar Excel");
+            flpAcciones = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoSize = true
+            };
+            gbAcciones.Controls.Add(flpAcciones);
 
-            // Distribución en línea con margen
-            int bx = 16, by = 28, bw = 120, bh = 32, sep = 10;
-            Place(btnNuevo, bx, by, bw, bh);
-            Place(btnGuardar, bx += bw + sep, by, bw, bh);
-            Place(btnActualizar, bx += bw + sep, by, bw, bh);
-            Place(btnEliminar, bx += bw + sep, by, bw, bh);
-            Place(btnLimpiar, bx += bw + sep, by, 100, bh);
-            Place(btnAdjuntar, bx += 100 + sep, by, 120, bh);
-            Place(btnExportar, bx += 120 + sep, by, 120, bh);
+            btnNuevo = Btn("Nuevo");
+            btnGuardar = BtnPrimary("Guardar");
+            btnActualizar = Btn("Actualizar");
+            btnEliminar = BtnDanger("Dar de baja");
+            btnLimpiar = Btn("Limpiar");
 
-            gbAcciones.Controls.AddRange(new Control[] { btnNuevo, btnGuardar, btnActualizar, btnEliminar, btnLimpiar, btnAdjuntar, btnExportar });
+            flpAcciones.Controls.AddRange(new Control[]
+            {
+                btnNuevo, btnGuardar, btnActualizar, btnEliminar, btnLimpiar
+            });
 
-            toolTip1 = new ToolTip(components);
-            toolTip1.SetToolTip(btnNuevo, "Limpiar la ficha para cargar un paciente nuevo");
-            toolTip1.SetToolTip(btnGuardar, "Registrar un nuevo paciente");
-            toolTip1.SetToolTip(btnActualizar, "Guardar cambios del paciente seleccionado");
-            toolTip1.SetToolTip(btnEliminar, "Dar de baja lógica al paciente");
-            toolTip1.SetToolTip(btnLimpiar, "Borrar los campos del formulario");
-            toolTip1.SetToolTip(btnAdjuntar, "Adjuntar documentación del paciente");
-            toolTip1.SetToolTip(btnExportar, "Exportar listado a Excel");
-
-            // ===== Grupo BUSCAR =====
+            // ===== Grupo Buscar =====
             gbBusqueda = new GroupBox
             {
                 Text = "Buscar",
-                Location = new Point(12, 472),
-                Size = new Size(1160, 64),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Padding = new Padding(10),
+                Margin = new Padding(0, 0, 0, 10)
             };
-            Controls.Add(gbBusqueda);
+            root.Controls.Add(gbBusqueda, 0, 3);
 
-            lblBuscar = new Label { Text = "Buscar", Location = new Point(16, 28) };
-            txtBuscar = new TextBox { Location = new Point(70, 24), Size = new Size(780, 26), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right };
-            btnBuscar = MakePrimaryButton("Buscar");
-            btnBuscar.Location = new Point(860, 23);
-            btnBuscar.Size = new Size(90, 28);
-            btnQuitarFiltro = MakeButton("Quitar filtro");
-            btnQuitarFiltro.Location = new Point(956, 23);
-            btnQuitarFiltro.Size = new Size(100, 28);
-            chkSoloActivos = new CheckBox { Text = "Solo activos", Location = new Point(1066, 27), AutoSize = true, Checked = true, Anchor = AnchorStyles.Top | AnchorStyles.Right };
+            tlpBuscar = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoSize = true,
+                ColumnCount = 5,
+                RowCount = 1
+            };
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));  // textbox
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 16F));  // spacer
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));       // btn buscar
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));       // btn quitar
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));       // chk activos
+            gbBusqueda.Controls.Add(tlpBuscar);
 
-            gbBusqueda.Controls.AddRange(new Control[] { lblBuscar, txtBuscar, btnBuscar, btnQuitarFiltro, chkSoloActivos });
+            txtBuscar = new TextBox { Dock = DockStyle.Fill, Margin = new Padding(0) };
+            var spacer = new Panel { Dock = DockStyle.Fill, Width = 16 };
+            btnBuscar = BtnPrimary("Buscar");
+            btnQuitarFiltro = Btn("Quitar filtro");
+            chkSoloActivos = new CheckBox { Text = "Solo activos", AutoSize = true, Checked = true, Anchor = AnchorStyles.Left };
+
+            tlpBuscar.Controls.Add(txtBuscar, 0, 0);
+            tlpBuscar.Controls.Add(spacer, 1, 0);
+            tlpBuscar.Controls.Add(btnBuscar, 2, 0);
+            tlpBuscar.Controls.Add(btnQuitarFiltro, 3, 0);
+            tlpBuscar.Controls.Add(chkSoloActivos, 4, 0);
 
             // ===== Grilla =====
             dgvPacientes = new DataGridView
             {
-                Location = new Point(12, 544),
-                Size = new Size(1160, 165),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom,
+                Dock = DockStyle.Fill,
                 ReadOnly = true,
                 AllowUserToAddRows = false,
                 AllowUserToResizeRows = false,
@@ -240,11 +305,12 @@ namespace CapaPresentacion.Formularios
                 MultiSelect = false,
                 AutoGenerateColumns = false,
                 BorderStyle = BorderStyle.None,
-                BackgroundColor = Color.White
+                BackgroundColor = Color.White,
+                Margin = new Padding(0)
             };
-            Controls.Add(dgvPacientes);
+            root.Controls.Add(dgvPacientes, 0, 4);
 
-            // Menú contextual
+            // Context menu
             ctxGrid = new ContextMenuStrip(components);
             ctxVerFicha = new ToolStripMenuItem("Ver/Editar ficha");
             ctxDarDeBaja = new ToolStripMenuItem("Dar de baja");
@@ -254,40 +320,37 @@ namespace CapaPresentacion.Formularios
         }
         #endregion
 
-        // ===== Helpers de estilo y colocación =====
-        private static Button MakeButton(string text) =>
-            new Button
+        // ===== Botones (estilo) =====
+        private static Button Btn(string texto)
+        {
+            var b = new Button
             {
-                Text = text,
+                Text = texto,
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.White,
-                ForeColor = Color.Black
+                ForeColor = Color.Black,
+                Margin = new Padding(0, 0, 8, 0),
+                Height = 30,
+                AutoSize = true
             };
-
-        private static Button MakePrimaryButton(string text)
-        {
-            var b = MakeButton(text);
-            b.BackColor = Color.FromArgb(0, 136, 122);
-            b.ForeColor = Color.White;
-            b.FlatAppearance.BorderColor = Color.FromArgb(0, 120, 108);
+            b.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
             return b;
         }
-
-        private static Button MakeDangerButton(string text)
+        private static Button BtnPrimary(string texto)
         {
-            var b = MakeButton(text);
+            var b = Btn(texto);
+            b.BackColor = ColorTranslator.FromHtml("#0088cc");
+            b.ForeColor = Color.White;
+            b.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#007ab3");
+            return b;
+        }
+        private static Button BtnDanger(string texto)
+        {
+            var b = Btn(texto);
             b.BackColor = Color.FromArgb(203, 68, 53);
             b.ForeColor = Color.White;
             b.FlatAppearance.BorderColor = Color.FromArgb(180, 60, 47);
             return b;
         }
-
-        private static void Place(Control c, int x, int y, int w, int h)
-        {
-            c.Location = new Point(x, y);
-            c.Size = new Size(w, h);
-            c.Anchor = AnchorStyles.Left | AnchorStyles.Top;
-        }
     }
 }
-    
