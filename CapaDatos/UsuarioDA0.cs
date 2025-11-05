@@ -68,5 +68,31 @@ namespace CapaDatos
                 }
             }
         }
+
+        public DataTable ObtenerDatosSecretaria(string username)
+        {
+            using (SqlConnection conn = new SqlConnection(conexion))
+            {
+                string query = @"
+            SELECT nombre,
+                   apellido,
+                   rol,
+                   email
+            FROM users
+            WHERE username COLLATE Latin1_General_CS_AS = @user AND activo = 1";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.Add("@user", SqlDbType.VarChar, 30).Value = username;
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        return dt;
+                    }
+                }
+            }
+        }
     }
 }

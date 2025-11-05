@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using System.Drawing;
 
 namespace CapaPresentacion.Formularios
@@ -8,28 +7,27 @@ namespace CapaPresentacion.Formularios
     {
         private System.ComponentModel.IContainer components = null;
 
-        private Panel headerPanel;
-        private PictureBox picHeader;
-        private Label lblHeader;
+        // === Header ===
+        private Panel panelEncabezado;
+        private PictureBox iconoEncabezado;
+        private Label lblTitulo;
 
-        private GroupBox grpDatos;
-        private TableLayoutPanel grid;
-        private Label lblBienvenida;
-        private Label lblUsuario;
-        private Label lblRol;
+        // === Datos personales ===
+        private GroupBox grupoDatosSecretaria;
+        private TableLayoutPanel tablaDatos;
+        private Label lblEtiquetaBienvenida;
+        private Label lblNombreSecretaria;
+        private Label lblEtiquetaRol;
+        private Label lblRolSecretaria;
+        private Label lblEtiquetaEmail;
+        private Label lblEmailSecretaria;
 
-        private GroupBox grpExtras;
+        // === Sección extra ===
+        private GroupBox grupoExtras;
         private Label lblFraseMotivacional;
-        private Label lblVersion;
+        private Label lblVersionSistema;
         private Label lblEstadoServidor;
 
-        private GroupBox grpGrafico;
-        private Chart chartAgenda;
-
-        private GroupBox grpTurnos;
-        private DataGridView dgvTurnos;
-
-        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -40,157 +38,103 @@ namespace CapaPresentacion.Formularios
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            panelEncabezado = new Panel();
+            iconoEncabezado = new PictureBox();
+            lblTitulo = new Label();
 
-            headerPanel = new Panel();
-            picHeader = new PictureBox();
-            lblHeader = new Label();
+            grupoDatosSecretaria = new GroupBox();
+            tablaDatos = new TableLayoutPanel();
+            lblEtiquetaBienvenida = new Label();
+            lblNombreSecretaria = new Label();
+            lblEtiquetaRol = new Label();
+            lblRolSecretaria = new Label();
+            lblEtiquetaEmail = new Label();
+            lblEmailSecretaria = new Label();
 
-            grpDatos = new GroupBox();
-            grid = new TableLayoutPanel();
-            lblBienvenida = new Label();
-            lblUsuario = new Label();
-            lblRol = new Label();
-
-            grpExtras = new GroupBox();
+            grupoExtras = new GroupBox();
             lblFraseMotivacional = new Label();
-            lblVersion = new Label();
+            lblVersionSistema = new Label();
             lblEstadoServidor = new Label();
 
-            grpGrafico = new GroupBox();
-            chartAgenda = new Chart();
-
-            grpTurnos = new GroupBox();
-            dgvTurnos = new DataGridView();
-
-            // ===== Form =====
+            // === Formulario ===
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(241, 244, 246);
-            ClientSize = new Size(1000, 680);
+            ClientSize = new Size(1000, 300);
             FormBorderStyle = FormBorderStyle.None;
             Name = "InicioSecre";
             Padding = new Padding(21, 12, 21, 12);
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Inicio Secretaria";
+            Text = "Panel Secretaria";
 
-            // ===== Header =====
-            headerPanel.BackColor = Color.FromArgb(41, 57, 71);
-            headerPanel.Dock = DockStyle.Top;
-            headerPanel.Height = 52;
-            headerPanel.Controls.Add(picHeader);
-            headerPanel.Controls.Add(lblHeader);
+            // === Panel Encabezado ===
+            panelEncabezado.BackColor = Color.FromArgb(41, 57, 71);
+            panelEncabezado.Dock = DockStyle.Top;
+            panelEncabezado.Height = 52;
+            panelEncabezado.Controls.Add(iconoEncabezado);
+            panelEncabezado.Controls.Add(lblTitulo);
 
-            picHeader.Image = Properties.Resources.dashboardIcon; // ⚠️ crea un recurso apropiado
-            picHeader.Location = new Point(14, 10);
-            picHeader.Size = new Size(32, 32);
-            picHeader.SizeMode = PictureBoxSizeMode.Zoom;
+            iconoEncabezado.Image = Properties.Resources.dashboardIcon;
+            iconoEncabezado.Location = new Point(14, 10);
+            iconoEncabezado.Size = new Size(32, 32);
+            iconoEncabezado.SizeMode = PictureBoxSizeMode.Zoom;
 
-            lblHeader.AutoSize = true;
-            lblHeader.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
-            lblHeader.ForeColor = Color.White;
-            lblHeader.Location = new Point(56, 12);
-            lblHeader.Text = "Panel principal secretario/a";
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.White;
+            lblTitulo.Location = new Point(56, 12);
+            lblTitulo.Text = "Panel principal secretario/a";
 
-            // ===== grpDatos =====
-            grpDatos.Text = "Datos de la secretaria";
-            grpDatos.BackColor = Color.White;
-            grpDatos.Dock = DockStyle.Top;
-            grpDatos.Height = 100;
-            grpDatos.Padding = new Padding(14, 12, 14, 12);
-            grpDatos.Controls.Add(grid);
+            // === Grupo: Datos de la secretaria ===
+            grupoDatosSecretaria.Text = "Datos de la secretaria";
+            grupoDatosSecretaria.BackColor = Color.White;
+            grupoDatosSecretaria.Dock = DockStyle.Top;
+            grupoDatosSecretaria.Height = 120;
+            grupoDatosSecretaria.Padding = new Padding(14, 12, 14, 12);
+            grupoDatosSecretaria.Controls.Add(tablaDatos);
 
-            grid.Dock = DockStyle.Fill;
-            grid.ColumnCount = 2;
-            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
-            grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            grid.RowCount = 3;
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            tablaDatos.Dock = DockStyle.Fill;
+            tablaDatos.ColumnCount = 2;
+            tablaDatos.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
+            tablaDatos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tablaDatos.RowCount = 3;
+            tablaDatos.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            tablaDatos.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            tablaDatos.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
 
-            lblBienvenida.Text = "Bienvenida:";
-            lblBienvenida.Anchor = AnchorStyles.Left;
-            lblUsuario.Text = "<usuario>";
-            lblUsuario.Anchor = AnchorStyles.Left;
-            lblUsuario.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblEtiquetaBienvenida.Text = "Bienvenida:";
+            lblNombreSecretaria.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblEtiquetaRol.Text = "Rol:";
+            lblRolSecretaria.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblEtiquetaEmail.Text = "Email:";
+            lblEmailSecretaria.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
 
-            lblRol.Text = "Rol: Secretaria";
-            lblRol.Anchor = AnchorStyles.Left;
+            tablaDatos.Controls.Add(lblEtiquetaBienvenida, 0, 0);
+            tablaDatos.Controls.Add(lblNombreSecretaria, 1, 0);
+            tablaDatos.Controls.Add(lblEtiquetaRol, 0, 1);
+            tablaDatos.Controls.Add(lblRolSecretaria, 1, 1);
+            tablaDatos.Controls.Add(lblEtiquetaEmail, 0, 2);
+            tablaDatos.Controls.Add(lblEmailSecretaria, 1, 2);
 
-            grid.Controls.Add(lblBienvenida, 0, 0);
-            grid.Controls.Add(lblUsuario, 1, 0);
-            grid.Controls.Add(lblRol, 0, 1);
-
-            // ===== grpExtras =====
-            grpExtras.Text = "Extras";
-            grpExtras.BackColor = Color.White;
-            grpExtras.Dock = DockStyle.Top;
-            grpExtras.Height = 80;
-            grpExtras.Padding = new Padding(14, 12, 14, 12);
+            // === Grupo: Extras ===
+            grupoExtras.Text = "Extras";
+            grupoExtras.BackColor = Color.White;
+            grupoExtras.Dock = DockStyle.Top;
+            grupoExtras.Height = 80;
+            grupoExtras.Padding = new Padding(14, 12, 14, 12);
+            grupoExtras.Controls.AddRange(new Control[] { lblFraseMotivacional, lblVersionSistema, lblEstadoServidor });
 
             lblFraseMotivacional.AutoSize = true;
             lblFraseMotivacional.Location = new Point(14, 24);
-            lblFraseMotivacional.Text = "\"La organización es la clave del éxito en la gestión hospitalaria.\"";
-
-            lblVersion.AutoSize = true;
-            lblVersion.Location = new Point(14, 50);
-            lblVersion.Text = "Versión: 1.0.0";
-
+            lblVersionSistema.AutoSize = true;
+            lblVersionSistema.Location = new Point(14, 50);
             lblEstadoServidor.AutoSize = true;
             lblEstadoServidor.Location = new Point(180, 50);
-            lblEstadoServidor.Text = "Servidor: OK";
 
-            grpExtras.Controls.AddRange(new Control[] { lblFraseMotivacional, lblVersion, lblEstadoServidor });
-
-            // ===== grpGrafico =====
-            grpGrafico.Text = "Agenda del día";
-            grpGrafico.BackColor = Color.White;
-            grpGrafico.Dock = DockStyle.Top;
-            grpGrafico.Height = 200;
-            grpGrafico.Padding = new Padding(14, 12, 14, 12);
-            grpGrafico.Controls.Add(chartAgenda);
-
-            chartAgenda.Dock = DockStyle.Fill;
-            var ca = new ChartArea("MainArea");
-            ca.AxisX.MajorGrid.Enabled = false;
-            ca.AxisY.MajorGrid.LineColor = Color.Gainsboro;
-            chartAgenda.ChartAreas.Add(ca);
-            chartAgenda.Legends.Clear();
-            var s = new Series("Turnos")
-            {
-                ChartType = SeriesChartType.Column,
-                ChartArea = "MainArea",
-                IsValueShownAsLabel = true
-            };
-            chartAgenda.Series.Add(s);
-
-            // ===== grpTurnos =====
-            grpTurnos.Text = "Turnos próximos";
-            grpTurnos.BackColor = Color.White;
-            grpTurnos.Dock = DockStyle.Fill;
-            grpTurnos.Padding = new Padding(14, 12, 14, 12);
-            grpTurnos.Controls.Add(dgvTurnos);
-
-            dgvTurnos.Dock = DockStyle.Fill;
-            dgvTurnos.BackgroundColor = Color.White;
-            dgvTurnos.AllowUserToAddRows = false;
-            dgvTurnos.AllowUserToDeleteRows = false;
-            dgvTurnos.ReadOnly = true;
-            dgvTurnos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvTurnos.RowHeadersVisible = false;
-            dgvTurnos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvTurnos.EnableHeadersVisualStyles = false;
-            dgvTurnos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 57, 71);
-            dgvTurnos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvTurnos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-
-            // ===== Compose =====
-            Controls.Add(grpTurnos);
-            Controls.Add(grpGrafico);
-            Controls.Add(grpExtras);
-            Controls.Add(grpDatos);
-            Controls.Add(headerPanel);
+            // === Ensamblado final ===
+            Controls.Add(grupoExtras);
+            Controls.Add(grupoDatosSecretaria);
+            Controls.Add(panelEncabezado);
 
             ResumeLayout(false);
         }
