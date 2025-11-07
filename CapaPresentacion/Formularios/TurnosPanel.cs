@@ -1,7 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Data;
 using CapaNegocio;
 
 namespace CapaPresentacion.Formularios

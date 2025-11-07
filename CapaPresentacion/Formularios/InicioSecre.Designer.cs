@@ -7,12 +7,10 @@ namespace CapaPresentacion.Formularios
     {
         private System.ComponentModel.IContainer components = null;
 
-        // === Header ===
         private Panel panelEncabezado;
         private PictureBox iconoEncabezado;
         private Label lblTitulo;
 
-        // === Datos personales ===
         private GroupBox grupoDatosSecretaria;
         private TableLayoutPanel tablaDatos;
         private Label lblEtiquetaBienvenida;
@@ -22,11 +20,25 @@ namespace CapaPresentacion.Formularios
         private Label lblEtiquetaEmail;
         private Label lblEmailSecretaria;
 
-        // === Sección extra ===
         private GroupBox grupoExtras;
         private Label lblFraseMotivacional;
         private Label lblVersionSistema;
         private Label lblEstadoServidor;
+
+        private GroupBox grupoAgenda;
+        private ComboBox cmbMedicos;
+        private Label lblMedico;
+        private DataGridView dgvTurnos;
+
+        // 🔹 Nuevos controles para filtros debajo del grupoExtras
+        private Panel panelFiltros;
+        private TextBox txtBuscar;
+        private Button btnHoy;
+        private Button btnActualizar;
+        private Button btnLimpiar;
+        private DateTimePicker dtpFecha;
+        private Label lblBuscar;
+        private Label lblFecha;
 
         protected override void Dispose(bool disposing)
         {
@@ -35,7 +47,6 @@ namespace CapaPresentacion.Formularios
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
         private void InitializeComponent()
         {
             panelEncabezado = new Panel();
@@ -56,18 +67,34 @@ namespace CapaPresentacion.Formularios
             lblVersionSistema = new Label();
             lblEstadoServidor = new Label();
 
-            // === Formulario ===
+            grupoAgenda = new GroupBox();
+            cmbMedicos = new ComboBox();
+            lblMedico = new Label();
+            dgvTurnos = new DataGridView();
+
+            panelFiltros = new Panel();
+            txtBuscar = new TextBox();
+            btnHoy = new Button();
+            btnActualizar = new Button();
+            btnLimpiar = new Button();
+            dtpFecha = new DateTimePicker();
+            lblBuscar = new Label();
+            lblFecha = new Label();
+
+            SuspendLayout();
+
+            // === FORM ===
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(241, 244, 246);
-            ClientSize = new Size(1000, 300);
+            ClientSize = new Size(1000, 650);
             FormBorderStyle = FormBorderStyle.None;
             Name = "InicioSecre";
-            Padding = new Padding(21, 12, 21, 12);
+            Padding = new Padding(20);
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Panel Secretaria";
+            Text = "Inicio - Secretaría";
 
-            // === Panel Encabezado ===
+            // === HEADER ===
             panelEncabezado.BackColor = Color.FromArgb(41, 57, 71);
             panelEncabezado.Dock = DockStyle.Top;
             panelEncabezado.Height = 52;
@@ -83,10 +110,10 @@ namespace CapaPresentacion.Formularios
             lblTitulo.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             lblTitulo.ForeColor = Color.White;
             lblTitulo.Location = new Point(56, 12);
-            lblTitulo.Text = "Panel principal secretario/a";
+            lblTitulo.Text = "Panel de Inicio - Secretaría";
 
-            // === Grupo: Datos de la secretaria ===
-            grupoDatosSecretaria.Text = "Datos de la secretaria";
+            // === DATOS SECRETARIA ===
+            grupoDatosSecretaria.Text = "Datos personales";
             grupoDatosSecretaria.BackColor = Color.White;
             grupoDatosSecretaria.Dock = DockStyle.Top;
             grupoDatosSecretaria.Height = 120;
@@ -116,8 +143,8 @@ namespace CapaPresentacion.Formularios
             tablaDatos.Controls.Add(lblEtiquetaEmail, 0, 2);
             tablaDatos.Controls.Add(lblEmailSecretaria, 1, 2);
 
-            // === Grupo: Extras ===
-            grupoExtras.Text = "Extras";
+            // === EXTRAS ===
+            grupoExtras.Text = "Información general";
             grupoExtras.BackColor = Color.White;
             grupoExtras.Dock = DockStyle.Top;
             grupoExtras.Height = 80;
@@ -131,13 +158,87 @@ namespace CapaPresentacion.Formularios
             lblEstadoServidor.AutoSize = true;
             lblEstadoServidor.Location = new Point(180, 50);
 
-            // === Ensamblado final ===
+            // === PANEL DE FILTROS ===
+            panelFiltros.Dock = DockStyle.Top;
+            panelFiltros.Height = 55;
+            panelFiltros.Padding = new Padding(14, 8, 14, 8);
+            panelFiltros.BackColor = Color.FromArgb(246, 247, 249);
+
+            lblMedico.Text = "Médico:";
+            lblMedico.Location = new Point(20, 18);
+            lblMedico.AutoSize = true;
+
+            cmbMedicos.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMedicos.Location = new Point(80, 14);
+            cmbMedicos.Width = 220;
+
+            lblFecha.Text = "Fecha:";
+            lblFecha.Location = new Point(320, 18);
+            lblFecha.AutoSize = true;
+
+            dtpFecha.Format = DateTimePickerFormat.Short;
+            dtpFecha.Location = new Point(375, 14);
+            dtpFecha.Width = 110;
+
+            lblBuscar.Text = "Buscar:";
+            lblBuscar.Location = new Point(505, 18);
+            lblBuscar.AutoSize = true;
+
+            txtBuscar.Location = new Point(565, 14);
+            txtBuscar.Width = 160;
+
+            btnHoy.Text = "Hoy";
+            btnHoy.BackColor = Color.FromArgb(0, 136, 204);
+            btnHoy.ForeColor = Color.White;
+            btnHoy.FlatStyle = FlatStyle.Flat;
+            btnHoy.Location = new Point(740, 12);
+            btnHoy.Size = new Size(60, 28);
+
+            btnActualizar.Text = "Actualizar";
+            btnActualizar.BackColor = Color.FromArgb(0, 136, 204);
+            btnActualizar.ForeColor = Color.White;
+            btnActualizar.FlatStyle = FlatStyle.Flat;
+            btnActualizar.Location = new Point(810, 12);
+            btnActualizar.Size = new Size(90, 28);
+
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.BackColor = Color.LightGray;
+            btnLimpiar.FlatStyle = FlatStyle.Flat;
+            btnLimpiar.Location = new Point(910, 12);
+            btnLimpiar.Size = new Size(75, 28);
+
+            panelFiltros.Controls.AddRange(new Control[]
+            {
+                lblMedico, cmbMedicos,
+                lblFecha, dtpFecha,
+                lblBuscar, txtBuscar,
+                btnHoy, btnActualizar, btnLimpiar
+            });
+
+            // === AGENDA DEL DÍA ===
+            grupoAgenda.Text = "Agenda del día";
+            grupoAgenda.BackColor = Color.White;
+            grupoAgenda.Dock = DockStyle.Fill;
+            grupoAgenda.Padding = new Padding(14, 12, 14, 12);
+            grupoAgenda.Controls.Add(dgvTurnos);
+
+            dgvTurnos.Dock = DockStyle.Fill;
+            dgvTurnos.ReadOnly = true;
+            dgvTurnos.AllowUserToAddRows = false;
+            dgvTurnos.AllowUserToDeleteRows = false;
+            dgvTurnos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTurnos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvTurnos.BackgroundColor = Color.White;
+            dgvTurnos.BorderStyle = BorderStyle.FixedSingle;
+
+            // === ENSAMBLE ===
+            Controls.Add(grupoAgenda);
+            Controls.Add(panelFiltros);
             Controls.Add(grupoExtras);
             Controls.Add(grupoDatosSecretaria);
             Controls.Add(panelEncabezado);
 
             ResumeLayout(false);
         }
-        #endregion
     }
 }

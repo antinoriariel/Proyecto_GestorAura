@@ -65,7 +65,7 @@ namespace CapaDatos
             }
         }
 
-        // === ACTUALIZAR TURNO ===
+        // === ACTUALIZAR TURNO EXISTENTE ===
         public bool ActualizarTurno(int idTurno, DateTime fecha, TimeSpan hora, int idMedico, string estado, string motivo, string observaciones)
         {
             using (SqlConnection conn = new SqlConnection(conexion))
@@ -97,7 +97,7 @@ namespace CapaDatos
             }
         }
 
-        // === ELIMINAR (LÓGICO) ===
+        // === ELIMINACIÓN LÓGICA ===
         public bool EliminarTurno(int idTurno)
         {
             using (SqlConnection conn = new SqlConnection(conexion))
@@ -133,15 +133,100 @@ namespace CapaDatos
             using (SqlConnection conn = new SqlConnection(conexion))
             {
                 string query = @"
-                    SELECT m.id_medico, CONCAT(u.nombre, ' ', u.apellido, ' (', m.especialidad, ')') AS nombreCompleto
+                    SELECT 
+                        m.id_medico, 
+                        CONCAT(u.nombre, ' ', u.apellido, ' (', m.especialidad, ')') AS nombreCompleto
                     FROM medicos m
                     INNER JOIN users u ON m.id_usuario = u.id_usuario
                     ORDER BY u.nombre;";
+
                 using (SqlDataAdapter da = new SqlDataAdapter(query, conn))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
                     return dt;
+                }
+            }
+        }
+
+        // === TURNOS DEL DÍA POR ID DE MÉDICO ===
+        public DataTable ObtenerTurnosDelDia(DateTime fecha, int? idMedico = null)
+        {
+            using (SqlConnection conn = new SqlConnection(conexion))
+            {
+                string query = @"
+                    SELECT 
+                        t.id_turno,
+                        CONVERT(varchar(5), t.hora_turno, 108) AS hora_turno,
+                        CONCAT(p.nombre, ' ', p.apellido) AS paciente,
+                        CONCAT(u.nombre, ' ', u.apellido) AS medico,
+                        t.estado,
+                        t.motivo
+                    FROM turnos t
+                    INNER JOIN pacientes p ON t.id_paciente = p.id_paciente
+                    INNER JOIN medicos m ON t.id_medico = m.id_medico
+                    INNER JOIN users u ON m.id_usuario = u.id_usuario
+                    WHERE 
+                        CAST(t.fecha_turno AS date) = @fecha
+                        AND t.deleted_at IS NULL
+                        AND t.estado IN ('programado', 'confirmado')
+                        AND (@idMedico IS NULL OR t.id_medico = @idMedico)
+                    ORDER BY t.hora_turno ASC;";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.Add("@fecha", SqlDbType.Date).Value = fecha;
+                    cmd.Parameters.Add("@idMedico", SqlDbType.Int).Value = (object?)idMedico ?? DBNull.Value;
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        return dt;
+                    }
+                }
+            }
+        }
+
+        // === TURNOS DEL DÍA FILTRADOS POR NOMBRE DE MÉDICO ===
+        public DataTable ObtenerTurnosDelDiaPorNombre(DateTime fecha, string? nombreMedico = null)
+        {
+            using (SqlConnection conn = new SqlConnection(conexion))
+            {
+                string query = @"
+                    SELECT 
+                        t.id_turno,
+                        CONVERT(varchar(5), t.hora_turno, 108) AS hora_turno,
+                        CONCAT(p.nombre, ' ', p.apellido) AS paciente,
+                        CONCAT(u.nombre, ' ', u.apellido) AS medico,
+                        t.estado,
+                        t.motivo
+                    FROM turnos t
+                    INNER JOIN pacientes p ON t.id_paciente = p.id_paciente
+                    INNER JOIN medicos m ON t.id_medico = m.id_medico
+                    INNER JOIN users u ON m.id_usuario = u.id_usuario
+                    WHERE 
+                        CAST(t.fecha_turno AS date) = @fecha
+                        AND t.deleted_at IS NULL
+                        AND t.estado IN ('programado', 'confirmado')
+                        AND (
+                            @nombreMedico IS NULL 
+                            OR CONCAT(u.nombre, ' ', u.apellido) LIKE '%' + @nombreMedico + '%'
+                            OR CONCAT(u.apellido, ' ', u.nombre) LIKE '%' + @nombreMedico + '%'
+                        )
+                    ORDER BY t.hora_turno ASC;";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.Add("@fecha", SqlDbType.Date).Value = fecha;
+                    cmd.Parameters.Add("@nombreMedico", SqlDbType.VarChar, 100).Value = (object?)nombreMedico ?? DBNull.Value;
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        return dt;
+                    }
                 }
             }
         }

@@ -155,7 +155,7 @@ namespace CapaPresentacion
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
-            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
+            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
             sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
             sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
@@ -187,7 +187,7 @@ namespace CapaPresentacion
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
             sidebar.BtnDashboardClick += (s, e) => AbrirInicioSecretaria();
-            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
+            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormPacientesSecretaria>();
             sidebar.BtnNotasClick += (s, e) =>
             {

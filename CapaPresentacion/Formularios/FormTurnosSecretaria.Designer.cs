@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace CapaPresentacion.Formularios
 {
-    partial class FormTurnosMedico
+    partial class FormTurnosSecretaria
     {
         private System.ComponentModel.IContainer components = null;
 
