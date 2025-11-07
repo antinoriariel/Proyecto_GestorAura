@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using CapaPresentacion.Controles;
 using CapaPresentacion.Formularios;
 
@@ -71,16 +72,12 @@ namespace CapaPresentacion
         // ============================================================
         private void VolverALogin()
         {
-            // Crear nuevo formulario de login
             var login = new Login
             {
                 StartPosition = FormStartPosition.CenterScreen
             };
 
-            // Mostrarlo antes de cerrar el dashboard
             login.Show();
-
-            // Cerrar el dashboard actual
             this.Close();
         }
 
@@ -192,32 +189,44 @@ namespace CapaPresentacion
             sidebar.BtnDashboardClick += (s, e) => AbrirInicioSecretaria();
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosMedico>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormPacientesSecretaria>();
-            sidebar.BtnNotasClick += (s, e) => MostrarFormUnico<FormNotas>();
+            sidebar.BtnNotasClick += (s, e) =>
+            {
+                int idSecretaria = ObtenerIdSecretariaLogueada();
+                MostrarFormUnico<FormNotas>(idSecretaria);
+            };
             sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
         }
 
         // ============================================================
-        // FORMULARIOS MDI
+        // MÉTODO GENERALIZADO - MDI PARAMETRIZADO
         // ============================================================
-        private void MostrarFormUnico<T>() where T : Form, new()
+        private void MostrarFormUnico<T>(params object[] args) where T : Form
         {
-            foreach (Form f in this.MdiChildren)
+            // 🔹 Evita duplicados
+            var existente = MdiChildren.OfType<T>().FirstOrDefault();
+            if (existente != null)
             {
-                if (f is T)
-                {
-                    f.BringToFront();
-                    f.WindowState = FormWindowState.Normal;
-                    return;
-                }
+                existente.BringToFront();
+                existente.WindowState = FormWindowState.Normal;
+                return;
             }
 
-            T nuevoForm = new T
+            // 🔹 Crea la instancia (con o sin parámetros)
+            Form nuevoForm;
+            try
             {
-                MdiParent = this,
-                FormBorderStyle = FormBorderStyle.None,
-                Dock = DockStyle.Fill,
-                TopLevel = false
-            };
+                nuevoForm = (Form)Activator.CreateInstance(typeof(T), args);
+            }
+            catch (MissingMethodException)
+            {
+                nuevoForm = (Form)Activator.CreateInstance(typeof(T));
+            }
+
+            // 🔹 Configuración MDI estándar
+            nuevoForm.MdiParent = this;
+            nuevoForm.FormBorderStyle = FormBorderStyle.None;
+            nuevoForm.Dock = DockStyle.Fill;
+            nuevoForm.TopLevel = false;
             nuevoForm.Show();
             nuevoForm.BringToFront();
         }
@@ -227,7 +236,6 @@ namespace CapaPresentacion
         // ============================================================
         private void AbrirInicioSecretaria()
         {
-            // 🔹 Evita duplicados si ya está abierto
             foreach (Form f in this.MdiChildren)
             {
                 if (f is InicioSecre)
@@ -238,7 +246,6 @@ namespace CapaPresentacion
                 }
             }
 
-            // 🔹 Crea y muestra el formulario de secretaria con su usuario real
             InicioSecre formSecre = new InicioSecre
             {
                 MdiParent = this,
@@ -250,6 +257,17 @@ namespace CapaPresentacion
             };
             formSecre.Show();
             formSecre.BringToFront();
+        }
+
+        // ============================================================
+        // OBTENER ID SECRETARIA (SIMPLIFICADO)
+        // ============================================================
+        private int ObtenerIdSecretariaLogueada()
+        {
+            // 🔹 En la versión final, este método debe consultar a la BD
+            // para obtener el id_usuario según el username actual.
+            // Por ahora devolvemos un valor simulado (ejemplo: 3).
+            return 3;
         }
     }
 }

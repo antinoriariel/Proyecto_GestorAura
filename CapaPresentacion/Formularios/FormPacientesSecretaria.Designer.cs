@@ -9,10 +9,9 @@ namespace CapaPresentacion.Formularios
     {
         private IContainer components = null;
 
-        // Root
-        private TableLayoutPanel root;
-
-        // Título
+        // Header
+        private Panel panelEncabezado;
+        private PictureBox iconoEncabezado;
         private Label lblTitulo;
 
         // Ficha
@@ -55,50 +54,59 @@ namespace CapaPresentacion.Formularios
             components = new Container();
 
             // ===== Form =====
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(241, 244, 246);
+            ClientSize = new Size(1100, 750);
+            FormBorderStyle = FormBorderStyle.None;
+            Name = "FormPacientesSecretaria";
+            Padding = new Padding(21, 12, 21, 12);
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Gestión de Pacientes";
             Font = new Font("Segoe UI", 9F);
-            Text = "Pacientes - Secretaría";
-            StartPosition = FormStartPosition.CenterParent;
-            BackColor = Color.White;
-            MinimumSize = new Size(1100, 750);
 
-            // ===== Root layout =====
-            root = new TableLayoutPanel
+            // ===== Panel Encabezado =====
+            panelEncabezado = new Panel
             {
-                Dock = DockStyle.Fill,
-                BackColor = Color.White,
-                ColumnCount = 1,
-                RowCount = 5,
-                Padding = new Padding(12),
+                BackColor = Color.FromArgb(41, 57, 71),
+                Dock = DockStyle.Top,
+                Height = 60,
+                Margin = new Padding(0, 0, 0, 16)
             };
-            root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));          // Título
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));          // Ficha
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));          // Acciones
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));          // Buscar
-            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));     // Grilla
-            Controls.Add(root);
 
-            // ===== Título =====
+            iconoEncabezado = new PictureBox
+            {
+                Image = Properties.Resources.hospitalBedIcon,
+                Location = new Point(16, 14),
+                Size = new Size(32, 32),
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+
             lblTitulo = new Label
             {
-                Text = "Gestión de Pacientes",
-                Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold),
                 AutoSize = true,
-                Margin = new Padding(4, 0, 0, 10)
+                Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold),
+                ForeColor = Color.White,
+                Location = new Point(60, 16),
+                Text = "Gestión de Pacientes"
             };
-            root.Controls.Add(lblTitulo, 0, 0);
+
+            panelEncabezado.Controls.Add(iconoEncabezado);
+            panelEncabezado.Controls.Add(lblTitulo);
 
             // ===== Grupo Ficha =====
             gbEdicion = new GroupBox
             {
                 Text = "Ficha del paciente",
+                BackColor = Color.White,
                 Dock = DockStyle.Top,
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(10),
-                Margin = new Padding(0, 0, 0, 10)
+                Padding = new Padding(14, 12, 14, 12),
+                Margin = new Padding(0, 16, 0, 12),
+                Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(41, 57, 71)
             };
-            root.Controls.Add(gbEdicion, 0, 1);
 
             // ** TLP de ficha **
             tlpFicha = new TableLayoutPanel
@@ -111,11 +119,11 @@ namespace CapaPresentacion.Formularios
                 Padding = new Padding(0),
             };
             // Columnas: Label | Control | Label | Control | Label | Control
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
             gbEdicion.Controls.Add(tlpFicha);
 
@@ -125,12 +133,17 @@ namespace CapaPresentacion.Formularios
                 Text = t,
                 AutoSize = true,
                 Anchor = AnchorStyles.Left | AnchorStyles.Top,
-                Margin = new Padding(0, 0, 8, 4)
+                Margin = new Padding(0, 6, 12, 8),
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = Color.FromArgb(60, 60, 60)
             };
             TextBox T() => new TextBox
             {
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 8, 8)
+                Margin = new Padding(0, 0, 12, 12),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = new Font("Segoe UI", 9F),
+                BackColor = Color.FromArgb(250, 250, 250)
             };
 
             // ===== Fila 1: DNI | Fecha Nac | Email =====
@@ -142,7 +155,8 @@ namespace CapaPresentacion.Formularios
                 Format = DateTimePickerFormat.Short,
                 MaxDate = DateTime.Today,
                 Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 8, 8)
+                Margin = new Padding(0, 0, 12, 12),
+                Font = new Font("Segoe UI", 9F)
             };
             lblEmail = L("Email");
             txtEmail = T();
@@ -163,7 +177,10 @@ namespace CapaPresentacion.Formularios
                 Dock = DockStyle.Fill,
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 IntegralHeight = false,
-                Margin = new Padding(0, 0, 8, 8)
+                Margin = new Padding(0, 0, 12, 12),
+                Font = new Font("Segoe UI", 9F),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(250, 250, 250)
             };
             lblTelefono = L("Teléfono");
             txtTelefono = T();
@@ -184,15 +201,20 @@ namespace CapaPresentacion.Formularios
                 Dock = DockStyle.Fill,
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 IntegralHeight = false,
-                Margin = new Padding(0, 0, 8, 8)
+                Margin = new Padding(0, 0, 12, 12),
+                Font = new Font("Segoe UI", 9F),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(250, 250, 250)
             };
             lblAlergias = L("Alergias");
             txtAlergias = new RichTextBox
             {
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.FixedSingle,
-                Margin = new Padding(0, 0, 0, 8),
-                Height = 60
+                Margin = new Padding(0, 0, 0, 12),
+                Height = 60,
+                Font = new Font("Segoe UI", 9F),
+                BackColor = Color.FromArgb(250, 250, 250)
             };
 
             tlpFicha.Controls.Add(lblApellido, 0, 2);
@@ -202,22 +224,24 @@ namespace CapaPresentacion.Formularios
             tlpFicha.Controls.Add(lblAlergias, 4, 2);
             tlpFicha.Controls.Add(txtAlergias, 5, 2);
 
-            // ===== Fila 4: Activo (alineado a la derecha, sin placeholders) =====
+            // ===== Fila 4: Activo =====
             var flpActivo = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                FlowDirection = FlowDirection.RightToLeft,
+                FlowDirection = FlowDirection.LeftToRight,
                 WrapContents = false,
-                Margin = new Padding(0, 0, 0, 0),
+                Margin = new Padding(0, 4, 0, 0),
                 AutoSize = true
             };
 
             chkActivo = new CheckBox
             {
-                Text = "Activo (baja lógica)",
+                Text = "Paciente activo",
                 AutoSize = true,
                 Checked = true,
-                Margin = new Padding(0, 2, 0, 0)
+                Margin = new Padding(0, 0, 0, 0),
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = Color.FromArgb(60, 60, 60)
             };
 
             flpActivo.Controls.Add(chkActivo);
@@ -228,13 +252,15 @@ namespace CapaPresentacion.Formularios
             gbAcciones = new GroupBox
             {
                 Text = "Acciones",
+                BackColor = Color.White,
                 Dock = DockStyle.Top,
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(10),
-                Margin = new Padding(0, 0, 0, 10)
+                Padding = new Padding(14, 12, 14, 12),
+                Margin = new Padding(0, 0, 0, 12),
+                Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(41, 57, 71)
             };
-            root.Controls.Add(gbAcciones, 0, 2);
 
             flpAcciones = new FlowLayoutPanel
             {
@@ -259,14 +285,16 @@ namespace CapaPresentacion.Formularios
             // ===== Grupo Buscar =====
             gbBusqueda = new GroupBox
             {
-                Text = "Buscar",
+                Text = "Buscar paciente",
+                BackColor = Color.White,
                 Dock = DockStyle.Top,
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(10),
-                Margin = new Padding(0, 0, 0, 10)
+                Padding = new Padding(14, 12, 14, 12),
+                Margin = new Padding(0, 0, 0, 12),
+                Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(41, 57, 71)
             };
-            root.Controls.Add(gbBusqueda, 0, 3);
 
             tlpBuscar = new TableLayoutPanel
             {
@@ -275,18 +303,34 @@ namespace CapaPresentacion.Formularios
                 ColumnCount = 5,
                 RowCount = 1
             };
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));  // textbox
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 16F));  // spacer
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));       // btn buscar
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));       // btn quitar
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));       // chk activos
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 12F));
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             gbBusqueda.Controls.Add(tlpBuscar);
 
-            txtBuscar = new TextBox { Dock = DockStyle.Fill, Margin = new Padding(0) };
-            var spacer = new Panel { Dock = DockStyle.Fill, Width = 16 };
+            txtBuscar = new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = new Font("Segoe UI", 9F),
+                BackColor = Color.FromArgb(250, 250, 250)
+            };
+            var spacer = new Panel { Dock = DockStyle.Fill, Width = 12 };
             btnBuscar = BtnPrimary("Buscar");
             btnQuitarFiltro = Btn("Quitar filtro");
-            chkSoloActivos = new CheckBox { Text = "Solo activos", AutoSize = true, Checked = true, Anchor = AnchorStyles.Left };
+            chkSoloActivos = new CheckBox
+            {
+                Text = "Solo activos",
+                AutoSize = true,
+                Checked = true,
+                Anchor = AnchorStyles.Left,
+                Margin = new Padding(12, 0, 0, 0),
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = Color.FromArgb(60, 60, 60)
+            };
 
             tlpBuscar.Controls.Add(txtBuscar, 0, 0);
             tlpBuscar.Controls.Add(spacer, 1, 0);
@@ -306,9 +350,10 @@ namespace CapaPresentacion.Formularios
                 AutoGenerateColumns = false,
                 BorderStyle = BorderStyle.None,
                 BackgroundColor = Color.White,
-                Margin = new Padding(0)
+                Margin = new Padding(0),
+                Font = new Font("Segoe UI", 9F),
+                GridColor = Color.FromArgb(230, 230, 230)
             };
-            root.Controls.Add(dgvPacientes, 0, 4);
 
             // Context menu
             ctxGrid = new ContextMenuStrip(components);
@@ -317,10 +362,17 @@ namespace CapaPresentacion.Formularios
             ctxReactivar = new ToolStripMenuItem("Reactivar");
             ctxGrid.Items.AddRange(new ToolStripItem[] { ctxVerFicha, ctxDarDeBaja, ctxReactivar });
             dgvPacientes.ContextMenuStrip = ctxGrid;
+
+            // ===== Ensamblado final =====
+            Controls.Add(dgvPacientes);
+            Controls.Add(gbBusqueda);
+            Controls.Add(gbAcciones);
+            Controls.Add(gbEdicion);
+            Controls.Add(panelEncabezado);
         }
         #endregion
 
-        // ===== Botones (estilo) =====
+        // ===== Botones (estilo Apple) =====
         private static Button Btn(string texto)
         {
             var b = new Button
@@ -328,28 +380,59 @@ namespace CapaPresentacion.Formularios
                 Text = texto,
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.White,
-                ForeColor = Color.Black,
+                ForeColor = Color.FromArgb(60, 60, 60),
                 Margin = new Padding(0, 0, 8, 0),
-                Height = 30,
-                AutoSize = true
+                Height = 34,
+                AutoSize = true,
+                Cursor = Cursors.Hand,
+                Font = new Font("Segoe UI", 9F),
+                Padding = new Padding(16, 0, 16, 0)
             };
             b.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
+            b.FlatAppearance.BorderSize = 1;
+            b.FlatAppearance.MouseOverBackColor = Color.FromArgb(245, 245, 245);
             return b;
         }
+
         private static Button BtnPrimary(string texto)
         {
-            var b = Btn(texto);
-            b.BackColor = ColorTranslator.FromHtml("#0088cc");
-            b.ForeColor = Color.White;
-            b.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#007ab3");
+            var b = new Button
+            {
+                Text = texto,
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(0, 122, 255),
+                ForeColor = Color.White,
+                Margin = new Padding(0, 0, 8, 0),
+                Height = 34,
+                AutoSize = true,
+                Cursor = Cursors.Hand,
+                Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+                Padding = new Padding(16, 0, 16, 0)
+            };
+            b.FlatAppearance.BorderColor = Color.FromArgb(0, 122, 255);
+            b.FlatAppearance.BorderSize = 0;
+            b.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 108, 230);
             return b;
         }
+
         private static Button BtnDanger(string texto)
         {
-            var b = Btn(texto);
-            b.BackColor = Color.FromArgb(203, 68, 53);
-            b.ForeColor = Color.White;
-            b.FlatAppearance.BorderColor = Color.FromArgb(180, 60, 47);
+            var b = new Button
+            {
+                Text = texto,
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(255, 59, 48),
+                ForeColor = Color.White,
+                Margin = new Padding(0, 0, 8, 0),
+                Height = 34,
+                AutoSize = true,
+                Cursor = Cursors.Hand,
+                Font = new Font("Segoe UI", 9F),
+                Padding = new Padding(16, 0, 16, 0)
+            };
+            b.FlatAppearance.BorderColor = Color.FromArgb(255, 59, 48);
+            b.FlatAppearance.BorderSize = 0;
+            b.FlatAppearance.MouseOverBackColor = Color.FromArgb(230, 50, 40);
             return b;
         }
     }
