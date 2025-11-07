@@ -26,6 +26,11 @@ namespace CapaPresentacion.Formularios
         private Button btnActualizar;
 
         private GroupBox grpListado;
+        private Panel panelBotones;
+        private Button btnAgregar;
+        private Button btnEditar;
+        private Button btnEliminar;
+        private Button btnRefrescar;
         private DataGridView dgvTurnos;
 
         private Panel footerPanel;
@@ -62,6 +67,11 @@ namespace CapaPresentacion.Formularios
             btnActualizar = new Button();
 
             grpListado = new GroupBox();
+            panelBotones = new Panel();
+            btnAgregar = new Button();
+            btnEditar = new Button();
+            btnEliminar = new Button();
+            btnRefrescar = new Button();
             dgvTurnos = new DataGridView();
 
             footerPanel = new Panel();
@@ -77,7 +87,7 @@ namespace CapaPresentacion.Formularios
             headerPanel.Controls.Add(picHeader);
             headerPanel.Controls.Add(lblHeader);
 
-            picHeader.Image = Properties.Resources.medicoTurno;
+            picHeader.Image = Properties.Resources.turnosIcon; // usa tu recurso disponible
             picHeader.SizeMode = PictureBoxSizeMode.Zoom;
             picHeader.Location = new Point(14, 10);
             picHeader.Size = new Size(34, 32);
@@ -86,7 +96,7 @@ namespace CapaPresentacion.Formularios
             lblHeader.ForeColor = Color.White;
             lblHeader.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             lblHeader.Location = new Point(56, 12);
-            lblHeader.Text = "Agenda del médico";
+            lblHeader.Text = "Gestión de Turnos";
 
             // ===== Filtros =====
             grpFiltros.Text = "Filtros";
@@ -128,7 +138,7 @@ namespace CapaPresentacion.Formularios
             lblBuscar.AutoSize = true;
 
             txtBuscar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtBuscar.PlaceholderText = "Paciente, motivo…";
+            txtBuscar.PlaceholderText = "Paciente, motivo o médico…";
 
             chkSoloPendientes.Text = "Solo pendientes";
             chkSoloPendientes.AutoSize = true;
@@ -140,8 +150,10 @@ namespace CapaPresentacion.Formularios
 
             btnHoy.Text = "Hoy";
             btnHoy.AutoSize = true;
+
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.AutoSize = true;
+
             btnActualizar.Text = "Actualizar";
             btnActualizar.AutoSize = true;
 
@@ -160,10 +172,36 @@ namespace CapaPresentacion.Formularios
 
             grpFiltros.Controls.Add(gridFiltros);
 
-            // ===== Listado =====
+            // ===== Listado + Botonera CRUD =====
             grpListado.Text = "Turnos";
             grpListado.Dock = DockStyle.Fill;
             grpListado.Padding = new Padding(14);
+
+            panelBotones.Dock = DockStyle.Top;
+            panelBotones.Height = 44;
+            panelBotones.Padding = new Padding(0, 0, 0, 8);
+            panelBotones.BackColor = Color.Transparent;
+
+            int btnW = 110, btnH = 30, sep = 8, left = 0;
+
+            Button[] botones = { btnAgregar, btnEditar, btnEliminar, btnRefrescar };
+            string[] textos = { "Agregar", "Editar", "Eliminar", "Refrescar" };
+
+            for (int i = 0; i < botones.Length; i++)
+            {
+                var b = botones[i];
+                b.Text = textos[i];
+                b.Size = new Size(btnW, btnH);
+                b.Location = new Point(left, 6);
+                b.FlatStyle = FlatStyle.Flat;
+                b.BackColor = Color.FromArgb(0, 136, 204);
+                b.ForeColor = Color.White;
+                b.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+                b.Cursor = Cursors.Hand;
+                b.FlatAppearance.BorderSize = 0;
+                panelBotones.Controls.Add(b);
+                left += btnW + sep;
+            }
 
             dgvTurnos.Dock = DockStyle.Fill;
             dgvTurnos.AllowUserToAddRows = false;
@@ -183,6 +221,7 @@ namespace CapaPresentacion.Formularios
             dgvTurnos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
 
             grpListado.Controls.Add(dgvTurnos);
+            grpListado.Controls.Add(panelBotones);
 
             // ===== Footer =====
             footerPanel.Dock = DockStyle.Bottom;
@@ -190,24 +229,24 @@ namespace CapaPresentacion.Formularios
             footerPanel.Padding = new Padding(14, 6, 14, 6);
 
             lblHint.AutoSize = true;
-            lblHint.Text = "Doble clic para abrir turno. Botones para acciones rápidas.";
+            lblHint.Text = "Doble clic para editar. Usa Agregar/Editar/Eliminar para CRUD.";
             footerPanel.Controls.Add(lblHint);
 
             // ===== Form =====
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(241, 244, 246);
-            ClientSize = new System.Drawing.Size(960, 560);
+            ClientSize = new System.Drawing.Size(1024, 600);
             Controls.Add(grpListado);
             Controls.Add(grpFiltros);
             Controls.Add(footerPanel);
             Controls.Add(headerPanel);
             FormBorderStyle = FormBorderStyle.None;
             KeyPreview = true;
-            Name = "FormTurnosMedico";
+            Name = "FormTurnosSecretaria";
             Padding = new Padding(21, 12, 21, 12);
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Turnos del Médico";
+            Text = "Turnos | Secretaría";
 
             ResumeLayout(false);
         }
