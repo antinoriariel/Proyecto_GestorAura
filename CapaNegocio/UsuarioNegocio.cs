@@ -14,8 +14,8 @@ namespace CapaNegocio
         public UsuarioLoginResult? Login(string username, string password)
         {
             DataRow? row = usuarioDAO.ObtenerUsuarioPorUsername(username);
-            if (row == null) return null; // usuario no existe
-            if (!(bool)row["activo"]) return null; // usuario desactivado
+            if (row == null) return null;
+            if (!(bool)row["activo"]) return null;
 
             byte[] hash = (byte[])row["password_hash"];
             byte[] salt = (byte[])row["password_salt"];
@@ -49,8 +49,21 @@ namespace CapaNegocio
         // ===============================================================
         public DataTable ObtenerDatosSecretaria(string username)
         {
-            // Solo devuelve nombre, apellido, rol y email
             return usuarioDAO.ObtenerDatosSecretaria(username);
         }
+
+        // ===============================================================
+        // NUEVO MÉTODO: Obtener ID de usuario por username
+        // ===============================================================
+        public int ObtenerIdPorUsername(string username)
+        {
+            return usuarioDAO.ObtenerIdPorUsername(username);
+        }
+
+        public DataTable ObtenerUsuariosChatPorRol(string rolActual)
+        {
+            return usuarioDAO.ObtenerUsuariosChatPorRol(rolActual);
+        }
+
     }
 }

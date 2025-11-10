@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CapaPresentacion.Controles;
 using CapaPresentacion.Formularios;
+using CapaNegocio;
 
 namespace CapaPresentacion
 {
@@ -12,7 +13,7 @@ namespace CapaPresentacion
     {
         private readonly string rolUsuario;
         private readonly string nombreCompleto;
-        private readonly string username; // 👈 nombre real de usuario (para consultas a BD)
+        private readonly string username; // nombre real de usuario
 
         public Dashboard(string rolUsuario, string nombreCompleto, string username)
         {
@@ -24,17 +25,14 @@ namespace CapaPresentacion
 
             this.IsMdiContainer = true;
 
-            // 🔹 Color de fondo del contenedor MDI
             foreach (Control ctrl in this.Controls)
             {
                 if (ctrl is MdiClient client)
                     client.BackColor = ColorTranslator.FromHtml("#D7DADB");
             }
 
-            // 🔹 Cargar sidebar correspondiente
             CargarSidebar(rolUsuario, nombreCompleto);
 
-            // 🔹 Eventos navbar superior
             navbarSuperior1.BtnCambiarUserClick += (s, e) => VolverALogin();
             navbarSuperior1.BtnDarkModeClick += (s, e) =>
                 MessageBox.Show("🌙 Cambiar a modo oscuro (pendiente)", "Info");
@@ -58,7 +56,7 @@ namespace CapaPresentacion
                 }
             };
 
-            // 🔹 Abrir formulario inicial según rol
+            // Abrir formulario inicial según rol
             if (rolUsuario.Equals("administrador", StringComparison.OrdinalIgnoreCase))
                 MostrarFormUnico<InicioAdmin>();
             else if (rolUsuario.Equals("medico", StringComparison.OrdinalIgnoreCase))
@@ -67,9 +65,6 @@ namespace CapaPresentacion
                 AbrirInicioSecretaria();
         }
 
-        // ============================================================
-        // MÉTODOS AUXILIARES
-        // ============================================================
         private void VolverALogin()
         {
             var login = new Login
@@ -142,8 +137,6 @@ namespace CapaPresentacion
             sidebar.BtnMedicosClick += (s, e) => MostrarFormUnico<FormMedicos>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
             sidebar.BtnBackupClick += (s, e) => MostrarFormUnico<FormBackup>();
-            sidebar.BtnAuditoriaClick += (s, e) =>
-                MessageBox.Show("ℹ️ Módulo de auditoría pendiente de integración.", "Info");
             sidebar.BtnConfiguracionClick += (s, e) =>
                 MessageBox.Show("⚙️ Configuración en desarrollo.", "Info");
         }
@@ -159,25 +152,11 @@ namespace CapaPresentacion
             sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
             sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
             sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
-            sidebar.BtnInterconsultasClick += (s, e) =>
-                MessageBox.Show("🩺 Módulo de interconsultas en desarrollo.", "Info");
-            sidebar.BtnRecetasClick += (s, e) =>
+            sidebar.BtnMensajesClick += (s, e) =>
             {
-                try
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = "https://rcta.me/",
-                        UseShellExecute = true
-                    });
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("No se pudo abrir la página de recetas: " + ex.Message,
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                int idUsuario = ObtenerIdUsuarioActual();
+                MostrarFormUnico<FormMensajes>(idUsuario, rolUsuario);
             };
-            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
         }
 
         // ============================================================
@@ -194,7 +173,11 @@ namespace CapaPresentacion
                 int idSecretaria = ObtenerIdSecretariaLogueada();
                 MostrarFormUnico<FormNotas>(idSecretaria);
             };
-            sidebar.BtnMensajesClick += (s, e) => MostrarFormUnico<FormMensajes>();
+            sidebar.BtnMensajesClick += (s, e) =>
+            {
+                int idUsuario = ObtenerIdUsuarioActual();
+                MostrarFormUnico<FormMensajes>(idUsuario, rolUsuario);
+            };
         }
 
         // ============================================================
@@ -202,7 +185,6 @@ namespace CapaPresentacion
         // ============================================================
         private void MostrarFormUnico<T>(params object[] args) where T : Form
         {
-            // 🔹 Evita duplicados
             var existente = MdiChildren.OfType<T>().FirstOrDefault();
             if (existente != null)
             {
@@ -211,7 +193,6 @@ namespace CapaPresentacion
                 return;
             }
 
-            // 🔹 Crea la instancia (con o sin parámetros)
             Form nuevoForm;
             try
             {
@@ -222,7 +203,6 @@ namespace CapaPresentacion
                 nuevoForm = (Form)Activator.CreateInstance(typeof(T));
             }
 
-            // 🔹 Configuración MDI estándar
             nuevoForm.MdiParent = this;
             nuevoForm.FormBorderStyle = FormBorderStyle.None;
             nuevoForm.Dock = DockStyle.Fill;
@@ -232,7 +212,7 @@ namespace CapaPresentacion
         }
 
         // ============================================================
-        // PANEL DE SECRETARIA (INICIO PERSONALIZADO)
+        // PANEL DE SECRETARIA
         // ============================================================
         private void AbrirInicioSecretaria()
         {
@@ -260,14 +240,26 @@ namespace CapaPresentacion
         }
 
         // ============================================================
-        // OBTENER ID SECRETARIA (SIMPLIFICADO)
+        // OBTENER ID USUARIO LOGUEADO
         // ============================================================
+        private int ObtenerIdUsuarioActual()
+        {
+            try
+            {
+                var usuarioNegocio = new UsuarioNegocio();
+                return usuarioNegocio.ObtenerIdPorUsername(username);
+            }
+            catch
+            {
+                MessageBox.Show("No se pudo obtener el ID del usuario logueado.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return 0;
+            }
+        }
+
         private int ObtenerIdSecretariaLogueada()
         {
-            // 🔹 En la versión final, este método debe consultar a la BD
-            // para obtener el id_usuario según el username actual.
-            // Por ahora devolvemos un valor simulado (ejemplo: 3).
-            return 3;
+            return ObtenerIdUsuarioActual();
         }
     }
 }

@@ -94,5 +94,53 @@ namespace CapaDatos
                 }
             }
         }
+
+        // ===============================================================
+        // NUEVO MÉTODO: Obtener el ID del usuario por su username
+        // ===============================================================
+        public int ObtenerIdPorUsername(string username)
+        {
+            using (SqlConnection conn = new SqlConnection(conexion))
+            {
+                string query = "SELECT id_usuario FROM users WHERE username COLLATE Latin1_General_CS_AS = @user";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.Add("@user", SqlDbType.VarChar, 30).Value = username;
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
+
+        public DataTable ObtenerUsuariosChatPorRol(string rolActual)
+        {
+            using (SqlConnection cn = new SqlConnection(conexion))
+            {
+                string query = @"
+            SELECT id_usuario, nombre, apellido, rol
+            FROM users
+            WHERE activo = 1
+              AND rol IN (
+                    CASE 
+                        WHEN @rol = 'secretaria' THEN 'medico'
+                        WHEN @rol = 'medico' THEN 'secretaria'
+                        ELSE 'none'
+                    END
+              )
+            ORDER BY nombre, apellido;";
+
+                using (SqlCommand cmd = new SqlCommand(query, cn))
+                {
+                    cmd.Parameters.AddWithValue("@rol", rolActual);
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        return dt;
+                    }
+                }
+            }
+        }
     }
 }
