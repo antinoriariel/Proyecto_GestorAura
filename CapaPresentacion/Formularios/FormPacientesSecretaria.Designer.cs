@@ -1,439 +1,231 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace CapaPresentacion.Formularios
+﻿namespace CapaPresentacion.Formularios
 {
     partial class FormPacientesSecretaria
     {
-        private IContainer components = null;
+        private System.ComponentModel.IContainer components = null;
 
         // Header
-        private Panel panelEncabezado;
-        private PictureBox iconoEncabezado;
-        private Label lblTitulo;
+        private System.Windows.Forms.Panel panelEncabezado;
+        private System.Windows.Forms.PictureBox iconoEncabezado;
+        private System.Windows.Forms.Label lblTitulo;
 
-        // Ficha
-        private GroupBox gbEdicion;
-        private TableLayoutPanel tlpFicha;
-        private Label lblDni, lblNombre, lblApellido, lblSexo, lblNacimiento, lblTelefono, lblEmail, lblGrupo, lblAlergias;
-        private TextBox txtDni, txtNombre, txtApellido, txtTelefono, txtEmail;
-        private ComboBox cboSexo, cboGrupo;
-        private DateTimePicker dtpNacimiento;
-        private RichTextBox txtAlergias;
-        private CheckBox chkActivo;
+        // Edición (datos + acciones + búsqueda unificada debajo de acciones)
+        private System.Windows.Forms.GroupBox gbEdicion;
+        private System.Windows.Forms.TableLayoutPanel tlpDatos;
+        private System.Windows.Forms.Label lblDni, lblNombre, lblApellido, lblNacimiento, lblEmail, lblTelefono, lblSexo, lblGrupo, lblAlergias, lblAcciones;
+        private System.Windows.Forms.TextBox txtDni, txtNombre, txtApellido, txtEmail, txtTelefono;
+        private System.Windows.Forms.DateTimePicker dtpNacimiento;
+        private System.Windows.Forms.ComboBox cboSexo, cboGrupo;
+        private System.Windows.Forms.RichTextBox txtAlergias;
+        private System.Windows.Forms.CheckBox chkActivo;
 
-        // Acciones
-        private GroupBox gbAcciones;
-        private FlowLayoutPanel flpAcciones;
-        private Button btnNuevo, btnGuardar, btnActualizar, btnEliminar, btnLimpiar;
+        // Acciones centradas
+        private System.Windows.Forms.TableLayoutPanel tlpAcciones;
+        private System.Windows.Forms.FlowLayoutPanel flpAcciones;
+        private System.Windows.Forms.Button btnNuevo, btnGuardar, btnActualizar, btnEliminar, btnLimpiar;
 
-        // Buscar
-        private GroupBox gbBusqueda;
-        private TableLayoutPanel tlpBuscar;
-        private TextBox txtBuscar;
-        private Button btnBuscar, btnQuitarFiltro;
-        private CheckBox chkSoloActivos;
+        // Barra de búsqueda (fija debajo de Acciones)
+        private System.Windows.Forms.Panel panelBuscar;
+        private System.Windows.Forms.TextBox txtBuscar;
+        private System.Windows.Forms.Button btnBuscar, btnQuitarFiltro;
+        private System.Windows.Forms.CheckBox chkSoloActivos;
 
-        // Grilla
-        private DataGridView dgvPacientes;
-        private ContextMenuStrip ctxGrid;
-        private ToolStripMenuItem ctxVerFicha, ctxDarDeBaja, ctxReactivar;
+        // Espaciador inferior
+        private System.Windows.Forms.Panel pnlSpacer;
+
+        // Grilla y menú contextual
+        private System.Windows.Forms.DataGridView dgvPacientes;
+        private System.Windows.Forms.ContextMenuStrip ctxMenu;
+        private System.Windows.Forms.ToolStripMenuItem ctxVerFicha, ctxDarDeBaja, ctxReactivar;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && components != null)
-                components.Dispose();
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
         private void InitializeComponent()
         {
-            components = new Container();
+            this.components = new System.ComponentModel.Container();
 
-            // ===== Form =====
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(241, 244, 246);
-            ClientSize = new Size(1100, 750);
-            FormBorderStyle = FormBorderStyle.None;
-            Name = "FormPacientesSecretaria";
-            Padding = new Padding(21, 12, 21, 12);
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Gestión de Pacientes";
-            Font = new Font("Segoe UI", 9F);
-
-            // ===== Panel Encabezado =====
-            panelEncabezado = new Panel
+            // Header
+            this.panelEncabezado = new System.Windows.Forms.Panel { Dock = System.Windows.Forms.DockStyle.Top, Height = 50, BackColor = System.Drawing.Color.FromArgb(20, 80, 120) };
+            this.iconoEncabezado = new System.Windows.Forms.PictureBox { Size = new System.Drawing.Size(28, 28), Location = new System.Drawing.Point(12, 11), SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom };
+            this.lblTitulo = new System.Windows.Forms.Label
             {
-                BackColor = Color.FromArgb(41, 57, 71),
-                Dock = DockStyle.Top,
-                Height = 60,
-                Margin = new Padding(0, 0, 0, 16)
-            };
-
-            iconoEncabezado = new PictureBox
-            {
-                Image = Properties.Resources.hospitalBedIcon,
-                Location = new Point(16, 14),
-                Size = new Size(32, 32),
-                SizeMode = PictureBoxSizeMode.Zoom
-            };
-
-            lblTitulo = new Label
-            {
+                Text = "Gestión de Pacientes",
+                ForeColor = System.Drawing.Color.White,
                 AutoSize = true,
-                Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold),
-                ForeColor = Color.White,
-                Location = new Point(60, 16),
-                Text = "Gestión de Pacientes"
+                Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold),
+                Location = new System.Drawing.Point(50, 13)
             };
+            this.panelEncabezado.Controls.Add(this.iconoEncabezado);
+            this.panelEncabezado.Controls.Add(this.lblTitulo);
 
-            panelEncabezado.Controls.Add(iconoEncabezado);
-            panelEncabezado.Controls.Add(lblTitulo);
-
-            // ===== Grupo Ficha =====
-            gbEdicion = new GroupBox
+            // ===== FICHA =====
+            this.gbEdicion = new System.Windows.Forms.GroupBox
             {
                 Text = "Ficha del paciente",
-                BackColor = Color.White,
-                Dock = DockStyle.Top,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(14, 12, 14, 12),
-                Margin = new Padding(0, 16, 0, 12),
-                Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(41, 57, 71)
+                Dock = System.Windows.Forms.DockStyle.Top,
+                Height = 510, // más alto: acciones + búsqueda + respiro
+                Padding = new System.Windows.Forms.Padding(10)
             };
 
-            // ** TLP de ficha **
-            tlpFicha = new TableLayoutPanel
+            this.tlpDatos = new System.Windows.Forms.TableLayoutPanel
             {
-                Dock = DockStyle.Fill,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                ColumnCount = 6,
-                RowCount = 4,
-                Padding = new Padding(0),
-            };
-            // Columnas: Label | Control | Label | Control | Label | Control
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
-            tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-            gbEdicion.Controls.Add(tlpFicha);
-
-            // Helpers
-            Label L(string t) => new Label
-            {
-                Text = t,
-                AutoSize = true,
-                Anchor = AnchorStyles.Left | AnchorStyles.Top,
-                Margin = new Padding(0, 6, 12, 8),
-                Font = new Font("Segoe UI", 9F),
-                ForeColor = Color.FromArgb(60, 60, 60)
-            };
-            TextBox T() => new TextBox
-            {
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 12, 12),
-                BorderStyle = BorderStyle.FixedSingle,
-                Font = new Font("Segoe UI", 9F),
-                BackColor = Color.FromArgb(250, 250, 250)
-            };
-
-            // ===== Fila 1: DNI | Fecha Nac | Email =====
-            lblDni = L("DNI *");
-            txtDni = T();
-            lblNacimiento = L("Fecha nac. *");
-            dtpNacimiento = new DateTimePicker
-            {
-                Format = DateTimePickerFormat.Short,
-                MaxDate = DateTime.Today,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0, 0, 12, 12),
-                Font = new Font("Segoe UI", 9F)
-            };
-            lblEmail = L("Email");
-            txtEmail = T();
-
-            tlpFicha.Controls.Add(lblDni, 0, 0);
-            tlpFicha.Controls.Add(txtDni, 1, 0);
-            tlpFicha.Controls.Add(lblNacimiento, 2, 0);
-            tlpFicha.Controls.Add(dtpNacimiento, 3, 0);
-            tlpFicha.Controls.Add(lblEmail, 4, 0);
-            tlpFicha.Controls.Add(txtEmail, 5, 0);
-
-            // ===== Fila 2: Nombre | Sexo | Teléfono =====
-            lblNombre = L("Nombre *");
-            txtNombre = T();
-            lblSexo = L("Sexo (H/M) *");
-            cboSexo = new ComboBox
-            {
-                Dock = DockStyle.Fill,
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                IntegralHeight = false,
-                Margin = new Padding(0, 0, 12, 12),
-                Font = new Font("Segoe UI", 9F),
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(250, 250, 250)
-            };
-            lblTelefono = L("Teléfono");
-            txtTelefono = T();
-
-            tlpFicha.Controls.Add(lblNombre, 0, 1);
-            tlpFicha.Controls.Add(txtNombre, 1, 1);
-            tlpFicha.Controls.Add(lblSexo, 2, 1);
-            tlpFicha.Controls.Add(cboSexo, 3, 1);
-            tlpFicha.Controls.Add(lblTelefono, 4, 1);
-            tlpFicha.Controls.Add(txtTelefono, 5, 1);
-
-            // ===== Fila 3: Apellido | Grupo sanguíneo | Alergias =====
-            lblApellido = L("Apellido *");
-            txtApellido = T();
-            lblGrupo = L("Grupo sanguíneo");
-            cboGrupo = new ComboBox
-            {
-                Dock = DockStyle.Fill,
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                IntegralHeight = false,
-                Margin = new Padding(0, 0, 12, 12),
-                Font = new Font("Segoe UI", 9F),
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(250, 250, 250)
-            };
-            lblAlergias = L("Alergias");
-            txtAlergias = new RichTextBox
-            {
-                Dock = DockStyle.Fill,
-                BorderStyle = BorderStyle.FixedSingle,
-                Margin = new Padding(0, 0, 0, 12),
-                Height = 60,
-                Font = new Font("Segoe UI", 9F),
-                BackColor = Color.FromArgb(250, 250, 250)
-            };
-
-            tlpFicha.Controls.Add(lblApellido, 0, 2);
-            tlpFicha.Controls.Add(txtApellido, 1, 2);
-            tlpFicha.Controls.Add(lblGrupo, 2, 2);
-            tlpFicha.Controls.Add(cboGrupo, 3, 2);
-            tlpFicha.Controls.Add(lblAlergias, 4, 2);
-            tlpFicha.Controls.Add(txtAlergias, 5, 2);
-
-            // ===== Fila 4: Activo =====
-            var flpActivo = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                FlowDirection = FlowDirection.LeftToRight,
-                WrapContents = false,
-                Margin = new Padding(0, 4, 0, 0),
+                Dock = System.Windows.Forms.DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 14,
                 AutoSize = true
             };
+            this.tlpDatos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tlpDatos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 
-            chkActivo = new CheckBox
+            this.lblDni = new System.Windows.Forms.Label { Text = "DNI *", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.txtDni = new System.Windows.Forms.TextBox { Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right, MaxLength = 8 };
+
+            this.lblNombre = new System.Windows.Forms.Label { Text = "Nombre *", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.txtNombre = new System.Windows.Forms.TextBox { Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right };
+
+            this.lblApellido = new System.Windows.Forms.Label { Text = "Apellido *", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.txtApellido = new System.Windows.Forms.TextBox { Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right };
+
+            this.lblNacimiento = new System.Windows.Forms.Label { Text = "Fecha de nacimiento *", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.dtpNacimiento = new System.Windows.Forms.DateTimePicker { Format = System.Windows.Forms.DateTimePickerFormat.Short, Anchor = System.Windows.Forms.AnchorStyles.Left };
+
+            this.lblEmail = new System.Windows.Forms.Label { Text = "Email", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.txtEmail = new System.Windows.Forms.TextBox { Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right };
+
+            this.lblTelefono = new System.Windows.Forms.Label { Text = "Teléfono", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.txtTelefono = new System.Windows.Forms.TextBox { Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right };
+
+            this.lblSexo = new System.Windows.Forms.Label { Text = "Sexo (H/M) *", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.cboSexo = new System.Windows.Forms.ComboBox { DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList, Anchor = System.Windows.Forms.AnchorStyles.Left };
+
+            this.lblGrupo = new System.Windows.Forms.Label { Text = "Grupo sanguíneo", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.cboGrupo = new System.Windows.Forms.ComboBox { DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList, Anchor = System.Windows.Forms.AnchorStyles.Left };
+
+            this.lblAlergias = new System.Windows.Forms.Label { Text = "Alergias", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+            this.txtAlergias = new System.Windows.Forms.RichTextBox { Height = 60, Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right };
+
+            this.chkActivo = new System.Windows.Forms.CheckBox { Text = "Paciente", Checked = true, Anchor = System.Windows.Forms.AnchorStyles.Left };
+
+            // ---- Acciones centradas ----
+            this.lblAcciones = new System.Windows.Forms.Label { Text = "Acciones", Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true };
+
+            this.tlpAcciones = new System.Windows.Forms.TableLayoutPanel
             {
-                Text = "Paciente activo",
-                AutoSize = true,
-                Checked = true,
-                Margin = new Padding(0, 0, 0, 0),
-                Font = new Font("Segoe UI", 9F),
-                ForeColor = Color.FromArgb(60, 60, 60)
+                Dock = System.Windows.Forms.DockStyle.Fill,
+                ColumnCount = 3,
+                RowCount = 1,
+                Margin = new System.Windows.Forms.Padding(0)
             };
+            this.tlpAcciones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpAcciones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tlpAcciones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 
-            flpActivo.Controls.Add(chkActivo);
-            tlpFicha.Controls.Add(flpActivo, 0, 3);
-            tlpFicha.SetColumnSpan(flpActivo, 6);
-
-            // ===== Grupo Acciones =====
-            gbAcciones = new GroupBox
+            this.flpAcciones = new System.Windows.Forms.FlowLayoutPanel
             {
-                Text = "Acciones",
-                BackColor = Color.White,
-                Dock = DockStyle.Top,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(14, 12, 14, 12),
-                Margin = new Padding(0, 0, 0, 12),
-                Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(41, 57, 71)
-            };
-
-            flpAcciones = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                FlowDirection = FlowDirection.LeftToRight,
+                FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight,
                 WrapContents = false,
-                AutoSize = true
-            };
-            gbAcciones.Controls.Add(flpAcciones);
-
-            btnNuevo = Btn("Nuevo");
-            btnGuardar = BtnPrimary("Guardar");
-            btnActualizar = Btn("Actualizar");
-            btnEliminar = BtnDanger("Dar de baja");
-            btnLimpiar = Btn("Limpiar");
-
-            flpAcciones.Controls.AddRange(new Control[]
-            {
-                btnNuevo, btnGuardar, btnActualizar, btnEliminar, btnLimpiar
-            });
-
-            // ===== Grupo Buscar =====
-            gbBusqueda = new GroupBox
-            {
-                Text = "Buscar paciente",
-                BackColor = Color.White,
-                Dock = DockStyle.Top,
                 AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(14, 12, 14, 12),
-                Margin = new Padding(0, 0, 0, 12),
-                Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(41, 57, 71)
+                Anchor = System.Windows.Forms.AnchorStyles.None,
+                Margin = new System.Windows.Forms.Padding(0)
             };
 
-            tlpBuscar = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoSize = true,
-                ColumnCount = 5,
-                RowCount = 1
-            };
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 12F));
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            tlpBuscar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            gbBusqueda.Controls.Add(tlpBuscar);
+            this.btnNuevo = new System.Windows.Forms.Button { Text = "Nuevo", Width = 90 };
+            this.btnGuardar = new System.Windows.Forms.Button { Text = "Guardar", Width = 90, BackColor = System.Drawing.Color.FromArgb(0, 136, 204), ForeColor = System.Drawing.Color.White, FlatStyle = System.Windows.Forms.FlatStyle.Flat };
+            this.btnActualizar = new System.Windows.Forms.Button { Text = "Actualizar", Width = 90 };
+            this.btnEliminar = new System.Windows.Forms.Button { Text = "Dar de baja", Width = 90, BackColor = System.Drawing.Color.FromArgb(220, 53, 69), ForeColor = System.Drawing.Color.White, FlatStyle = System.Windows.Forms.FlatStyle.Flat };
+            this.btnLimpiar = new System.Windows.Forms.Button { Text = "Limpiar", Width = 90 };
+            this.flpAcciones.Controls.AddRange(new System.Windows.Forms.Control[] { this.btnNuevo, this.btnGuardar, this.btnActualizar, this.btnEliminar, this.btnLimpiar });
 
-            txtBuscar = new TextBox
-            {
-                Dock = DockStyle.Fill,
-                Margin = new Padding(0),
-                BorderStyle = BorderStyle.FixedSingle,
-                Font = new Font("Segoe UI", 9F),
-                BackColor = Color.FromArgb(250, 250, 250)
-            };
-            var spacer = new Panel { Dock = DockStyle.Fill, Width = 12 };
-            btnBuscar = BtnPrimary("Buscar");
-            btnQuitarFiltro = Btn("Quitar filtro");
-            chkSoloActivos = new CheckBox
-            {
-                Text = "Solo activos",
-                AutoSize = true,
-                Checked = true,
-                Anchor = AnchorStyles.Left,
-                Margin = new Padding(12, 0, 0, 0),
-                Font = new Font("Segoe UI", 9F),
-                ForeColor = Color.FromArgb(60, 60, 60)
-            };
+            this.tlpAcciones.Controls.Add(this.flpAcciones, 1, 0);
 
-            tlpBuscar.Controls.Add(txtBuscar, 0, 0);
-            tlpBuscar.Controls.Add(spacer, 1, 0);
-            tlpBuscar.Controls.Add(btnBuscar, 2, 0);
-            tlpBuscar.Controls.Add(btnQuitarFiltro, 3, 0);
-            tlpBuscar.Controls.Add(chkSoloActivos, 4, 0);
+            // ---- Barra de búsqueda fija (debajo de Acciones) ----
+            this.panelBuscar = new System.Windows.Forms.Panel { Height = 40, Dock = System.Windows.Forms.DockStyle.Fill, Visible = true, Padding = new System.Windows.Forms.Padding(0) };
+            this.txtBuscar = new System.Windows.Forms.TextBox { Width = 520 };
+            this.btnBuscar = new System.Windows.Forms.Button { Text = "Buscar", Width = 80 };
+            this.btnQuitarFiltro = new System.Windows.Forms.Button { Text = "Quitar filtro", Width = 100 };
+            this.chkSoloActivos = new System.Windows.Forms.CheckBox { Text = "Solo activos", Checked = true, AutoSize = true, Margin = new System.Windows.Forms.Padding(12, 8, 0, 0) };
 
-            // ===== Grilla =====
-            dgvPacientes = new DataGridView
+            var flBuscarInline = new System.Windows.Forms.FlowLayoutPanel
             {
-                Dock = DockStyle.Fill,
-                ReadOnly = true,
+                Dock = System.Windows.Forms.DockStyle.Fill,
+                FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight,
+                WrapContents = false
+            };
+            flBuscarInline.Controls.AddRange(new System.Windows.Forms.Control[] { this.txtBuscar, this.btnBuscar, this.btnQuitarFiltro, this.chkSoloActivos });
+            this.panelBuscar.Controls.Add(flBuscarInline);
+
+            // Espaciador inferior para que no choque con la grilla
+            this.pnlSpacer = new System.Windows.Forms.Panel { Height = 8, Dock = System.Windows.Forms.DockStyle.Fill };
+
+            // ---- Filas del tlpDatos ----
+            int r = 0;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F)); this.tlpDatos.Controls.Add(this.lblDni, 0, r); this.tlpDatos.Controls.Add(this.txtDni, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F)); this.tlpDatos.Controls.Add(this.lblNombre, 0, r); this.tlpDatos.Controls.Add(this.txtNombre, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F)); this.tlpDatos.Controls.Add(this.lblApellido, 0, r); this.tlpDatos.Controls.Add(this.txtApellido, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F)); this.tlpDatos.Controls.Add(this.lblNacimiento, 0, r); this.tlpDatos.Controls.Add(this.dtpNacimiento, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F)); this.tlpDatos.Controls.Add(this.lblEmail, 0, r); this.tlpDatos.Controls.Add(this.txtEmail, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F)); this.tlpDatos.Controls.Add(this.lblTelefono, 0, r); this.tlpDatos.Controls.Add(this.txtTelefono, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F)); this.tlpDatos.Controls.Add(this.lblSexo, 0, r); this.tlpDatos.Controls.Add(this.cboSexo, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F)); this.tlpDatos.Controls.Add(this.lblGrupo, 0, r); this.tlpDatos.Controls.Add(this.cboGrupo, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F)); this.tlpDatos.Controls.Add(this.lblAlergias, 0, r); this.tlpDatos.Controls.Add(this.txtAlergias, 1, r); r++;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F)); this.tlpDatos.Controls.Add(this.chkActivo, 1, r); r++;
+
+            // Etiqueta Acciones
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpDatos.Controls.Add(this.lblAcciones, 0, r);
+            this.tlpDatos.SetColumnSpan(this.lblAcciones, 2);
+            r++;
+
+            // Acciones centradas
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
+            this.tlpDatos.Controls.Add(this.tlpAcciones, 0, r);
+            this.tlpDatos.SetColumnSpan(this.tlpAcciones, 2);
+            r++;
+
+            // Barra de búsqueda fija (debajo de Acciones)
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpDatos.Controls.Add(this.panelBuscar, 0, r);
+            this.tlpDatos.SetColumnSpan(this.panelBuscar, 2);
+            r++;
+
+            // Espaciador
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+            this.tlpDatos.Controls.Add(this.pnlSpacer, 0, r);
+            this.tlpDatos.SetColumnSpan(this.pnlSpacer, 2);
+            r++;
+
+            this.gbEdicion.Controls.Add(this.tlpDatos);
+
+            // ===== GRILLA =====
+            this.dgvPacientes = new System.Windows.Forms.DataGridView
+            {
+                Dock = System.Windows.Forms.DockStyle.Fill,
                 AllowUserToAddRows = false,
-                AllowUserToResizeRows = false,
-                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                MultiSelect = false,
-                AutoGenerateColumns = false,
-                BorderStyle = BorderStyle.None,
-                BackgroundColor = Color.White,
-                Margin = new Padding(0),
-                Font = new Font("Segoe UI", 9F),
-                GridColor = Color.FromArgb(230, 230, 230)
+                AllowUserToDeleteRows = false,
+                ReadOnly = true,
+                SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect,
+                ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components)
             };
 
-            // Context menu
-            ctxGrid = new ContextMenuStrip(components);
-            ctxVerFicha = new ToolStripMenuItem("Ver/Editar ficha");
-            ctxDarDeBaja = new ToolStripMenuItem("Dar de baja");
-            ctxReactivar = new ToolStripMenuItem("Reactivar");
-            ctxGrid.Items.AddRange(new ToolStripItem[] { ctxVerFicha, ctxDarDeBaja, ctxReactivar });
-            dgvPacientes.ContextMenuStrip = ctxGrid;
+            this.ctxMenu = this.dgvPacientes.ContextMenuStrip;
+            this.ctxVerFicha = new System.Windows.Forms.ToolStripMenuItem("Ver ficha");
+            this.ctxDarDeBaja = new System.Windows.Forms.ToolStripMenuItem("Dar de baja");
+            this.ctxReactivar = new System.Windows.Forms.ToolStripMenuItem("Reactivar");
+            this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.ctxVerFicha, this.ctxDarDeBaja, this.ctxReactivar });
 
-            // ===== Ensamblado final =====
-            Controls.Add(dgvPacientes);
-            Controls.Add(gbBusqueda);
-            Controls.Add(gbAcciones);
-            Controls.Add(gbEdicion);
-            Controls.Add(panelEncabezado);
-        }
-        #endregion
+            // Form
+            this.Text = "Medic - Gestión hospitalaria";
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.ClientSize = new System.Drawing.Size(1220, 720);
 
-        // ===== Botones (estilo Apple) =====
-        private static Button Btn(string texto)
-        {
-            var b = new Button
-            {
-                Text = texto,
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.White,
-                ForeColor = Color.FromArgb(60, 60, 60),
-                Margin = new Padding(0, 0, 8, 0),
-                Height = 34,
-                AutoSize = true,
-                Cursor = Cursors.Hand,
-                Font = new Font("Segoe UI", 9F),
-                Padding = new Padding(16, 0, 16, 0)
-            };
-            b.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
-            b.FlatAppearance.BorderSize = 1;
-            b.FlatAppearance.MouseOverBackColor = Color.FromArgb(245, 245, 245);
-            return b;
-        }
-
-        private static Button BtnPrimary(string texto)
-        {
-            var b = new Button
-            {
-                Text = texto,
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(0, 122, 255),
-                ForeColor = Color.White,
-                Margin = new Padding(0, 0, 8, 0),
-                Height = 34,
-                AutoSize = true,
-                Cursor = Cursors.Hand,
-                Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
-                Padding = new Padding(16, 0, 16, 0)
-            };
-            b.FlatAppearance.BorderColor = Color.FromArgb(0, 122, 255);
-            b.FlatAppearance.BorderSize = 0;
-            b.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 108, 230);
-            return b;
-        }
-
-        private static Button BtnDanger(string texto)
-        {
-            var b = new Button
-            {
-                Text = texto,
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(255, 59, 48),
-                ForeColor = Color.White,
-                Margin = new Padding(0, 0, 8, 0),
-                Height = 34,
-                AutoSize = true,
-                Cursor = Cursors.Hand,
-                Font = new Font("Segoe UI", 9F),
-                Padding = new Padding(16, 0, 16, 0)
-            };
-            b.FlatAppearance.BorderColor = Color.FromArgb(255, 59, 48);
-            b.FlatAppearance.BorderSize = 0;
-            b.FlatAppearance.MouseOverBackColor = Color.FromArgb(230, 50, 40);
-            return b;
+            // Orden de apilado: header -> ficha (con acciones + búsqueda) -> grilla
+            this.Controls.Add(this.dgvPacientes);
+            this.Controls.Add(this.gbEdicion);
+            this.Controls.Add(this.panelEncabezado);
         }
     }
 }

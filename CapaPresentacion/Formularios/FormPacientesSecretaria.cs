@@ -20,16 +20,22 @@ namespace CapaPresentacion.Formularios
             ConfigurarGrilla();
             CargarCombos();
 
+            // Barra de búsqueda fija y visible (ahora está dentro de gbEdicion bajo Acciones)
+            panelBuscar.Visible = true;
+
+            // Eventos búsqueda
             btnBuscar.Click += (_, __) => AplicarFiltro();
             btnQuitarFiltro.Click += (_, __) => { txtBuscar.Clear(); AplicarFiltro(); };
             chkSoloActivos.CheckedChanged += (_, __) => CargarPacientes(chkSoloActivos.Checked);
 
+            // Eventos acciones
             btnNuevo.Click += (_, __) => LimpiarFormulario(true);
             btnGuardar.Click += (_, __) => Guardar();
             btnActualizar.Click += (_, __) => Actualizar();
             btnEliminar.Click += (_, __) => DarDeBaja();
             btnLimpiar.Click += (_, __) => LimpiarFormulario();
 
+            // Eventos grilla/contextual
             dgvPacientes.CellDoubleClick += (_, __) => CargarDesdeSeleccion();
             ctxVerFicha.Click += (_, __) => CargarDesdeSeleccion();
             ctxDarDeBaja.Click += (_, __) => DarDeBaja();
@@ -73,6 +79,7 @@ namespace CapaPresentacion.Formularios
         {
             cboSexo.Items.AddRange(new[] { "H", "M" });
             cboSexo.SelectedIndex = 0;
+
             cboGrupo.Items.AddRange(new[] { "—", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" });
             cboGrupo.SelectedIndex = 0;
         }
@@ -167,13 +174,25 @@ namespace CapaPresentacion.Formularios
 
         private void LimpiarFormulario(bool nuevo = false)
         {
-            foreach (Control c in gbEdicion.Controls.OfType<TextBox>()) c.Text = string.Empty;
-            txtAlergias.Clear();
+            LimpiarControlesEntrada(gbEdicion);
             cboSexo.SelectedIndex = 0;
             cboGrupo.SelectedIndex = 0;
             chkActivo.Checked = true;
             dtpNacimiento.Value = new DateTime(1990, 1, 1);
             if (nuevo) txtDni.Focus();
+        }
+
+        private void LimpiarControlesEntrada(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                switch (c)
+                {
+                    case TextBox tb: tb.Clear(); break;
+                    case RichTextBox rtb: rtb.Clear(); break;
+                }
+                if (c.HasChildren) LimpiarControlesEntrada(c);
+            }
         }
 
         private Paciente CapturarFormulario() => new()
