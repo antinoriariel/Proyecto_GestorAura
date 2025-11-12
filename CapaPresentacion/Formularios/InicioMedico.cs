@@ -1,77 +1,160 @@
 ﻿using System;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
+using CapaNegocio;
 
 namespace CapaPresentacion.Formularios
 {
     public partial class InicioMedico : Form
     {
+        private readonly UsuarioNegocio _usuarioNegocio = new();
+        private readonly TurnoNegocio _turnoNegocio = new();
+        private readonly PacienteNegocio _pacienteNegocio = new();
+
+        private string _nombreMedicoCompleto = string.Empty;
+
+        // Propiedades que recibe desde Dashboard
+        public string NombreUsuario { get; set; } = string.Empty;
+        public string RolUsuario { get; set; } = "Médico";
+        public int IdUsuarioActual { get; set; }
+
         public InicioMedico()
         {
             InitializeComponent();
             Load += InicioMedico_Load;
+
+            // Scroll suave en DataGridViews
+            this.DoubleBuffered = true;
+            typeof(DataGridView)
+                .GetProperty("DoubleBuffered",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                ?.SetValue(dgvTurnos, true, null);
+            typeof(DataGridView)
+                .GetProperty("DoubleBuffered",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                ?.SetValue(dgvPacientes, true, null);
         }
 
         private void InicioMedico_Load(object? sender, EventArgs e)
         {
-            // ===== Datos hardcodeados (demo) =====
-            lblUsuario.Text = "Dr. Juan Pérez";
-            lblEspecialidad.Text = "Especialidad: Clínica Médica";
-            lblMatricula.Text = "Matrícula: Prov. 12.345 | Nac. 67.890";
-            lblEstadoServidor.Text = "Servidor: OK";
+            try
+            {
+                BackColor = ColorTranslator.FromHtml("#eeeeee");
 
-            // ===== Gráfico: turnos por día (demo) =====
-            var serie = chartTurnos.Series["Turnos"];
-            serie.Points.Clear();
-
-            var dias = new[] { "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb" };
-            var valores = new[] { 12, 15, 10, 18, 14, 6 };
-            for (int i = 0; i < dias.Length; i++)
-                serie.Points.AddXY(dias[i], valores[i]);
-
-            chartTurnos.Titles.Add("Turnos de la semana");
-            chartTurnos.Titles[0].Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-
-            // ===== Tabla: pacientes recientes (demo) =====
-            dgvPacientesRecientes.Columns.Clear();
-            dgvPacientesRecientes.DataSource = CrearTablaPacientesDemo();
-
-            // Ajustes finos de estilo
-            dgvPacientesRecientes.Columns["Paciente"].FillWeight = 200;
-            dgvPacientesRecientes.Columns["DNI"].FillWeight = 80;
-            dgvPacientesRecientes.Columns["Motivo"].FillWeight = 160;
-            dgvPacientesRecientes.Columns["FechaHora"].FillWeight = 120;
-            dgvPacientesRecientes.Columns["Estado"].FillWeight = 90;
+                CargarDatosMedico();
+                MostrarInformacionGeneral();
+                CargarTurnosDelDia();
+                CargarPacientes();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar el inicio del médico:\n" + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private static DataTable CrearTablaPacientesDemo()
+        // ============================================================
+        // DATOS DEL MÉDICO
+        // ============================================================
+        private void CargarDatosMedico()
         {
-            var dt = new DataTable();
-            dt.Columns.Add("Paciente");
-            dt.Columns.Add("DNI");
-            dt.Columns.Add("Motivo");
-            dt.Columns.Add("FechaHora");
-            dt.Columns.Add("Estado");
+            try
+            {
+                DataTable datos = _usuarioNegocio.ObtenerDatosMedico(NombreUsuario);
+                if (datos.Rows.Count > 0)
+                {
+                    var fila = datos.Rows[0];
+                    lblNombreMedico.Text = $"Dr. {fila["nombre"]} {fila["apellido"]}";
+                    lblEspecialidadValor.Text = fila["especialidad"]?.ToString() ?? "—";
 
-            dt.Rows.Add("García, Laura", "28.456.789", "Control posoperatorio", "26/09 08:30", "Finalizado");
-            dt.Rows.Add("Suárez, Martín", "32.112.334", "HTA descompensada", "26/09 09:00", "En curso");
-            dt.Rows.Add("López, Daniela", "41.556.120", "Resultados de laboratorio", "26/09 09:30", "Pendiente");
-            dt.Rows.Add("Ríos, Agustín", "27.889.004", "Dolor torácico", "26/09 10:15", "Finalizado");
-            dt.Rows.Add("Ruiz, Camila", "45.112.778", "Control clínico", "26/09 11:00", "Pendiente");
-            dt.Rows.Add("Fernández, Pablo", "33.987.654", "Chequeo general", "26/09 11:30", "Finalizado");
-            dt.Rows.Add("Martínez, Sofía", "29.443.221", "Consulta por cefalea", "26/09 12:00", "En curso");
-            dt.Rows.Add("Ramírez, Nicolás", "40.221.876", "Control de glucemia", "26/09 12:30", "Pendiente");
-            dt.Rows.Add("Torres, Julieta", "36.778.990", "Examen prequirúrgico", "26/09 13:00", "Finalizado");
-            dt.Rows.Add("Vega, Manuel", "31.456.112", "Control de presión arterial", "26/09 13:30", "Pendiente");
-            dt.Rows.Add("Sosa, Valentina", "44.569.001", "Chequeo pediátrico", "26/09 14:00", "En curso");
-            dt.Rows.Add("Domínguez, Javier", "27.003.456", "Revisión de estudios", "26/09 14:30", "Finalizado");
-            dt.Rows.Add("Alonso, Micaela", "35.671.223", "Consulta ginecológica", "26/09 15:00", "Pendiente");
-            dt.Rows.Add("Moreno, Esteban", "42.998.110", "Control postvacuna", "26/09 15:30", "Finalizado");
-            dt.Rows.Add("Pereyra, Lucía", "39.114.578", "Consulta por dolor lumbar", "26/09 16:00", "En curso");
+                    string matProv = fila["matricula_provincial"]?.ToString() ?? "—";
+                    string matNac = fila["matricula_nacional"]?.ToString() ?? "—";
+                    lblMatriculaValor.Text = $"Prov. {matProv} | Nac. {matNac}";
 
+                    _nombreMedicoCompleto = $"{fila["apellido"]}, {fila["nombre"]}";
+                    lblServidorValor.Text = "🟢 Servidor activo";
+                }
+                else
+                {
+                    lblNombreMedico.Text = $"Dr. {NombreUsuario}";
+                    lblEspecialidadValor.Text = "—";
+                    lblMatriculaValor.Text = "—";
+                    lblServidorValor.Text = "⚠ Sin datos en BD";
+                }
+            }
+            catch (Exception ex)
+            {
+                lblNombreMedico.Text = $"Dr. {NombreUsuario}";
+                lblEspecialidadValor.Text = "—";
+                lblMatriculaValor.Text = "—";
+                lblServidorValor.Text = "⚠ Error";
+                MessageBox.Show("Error al obtener datos del médico: " + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-            return dt;
+        private void MostrarInformacionGeneral()
+        {
+            lblVersionSistema.Text = "GestorAura v1.0";
+            lblFechaHoy.Text = $"📅 {DateTime.Now:dddd, dd MMMM yyyy}";
+        }
+
+        // ============================================================
+        // TURNOS DEL DÍA
+        // ============================================================
+        private void CargarTurnosDelDia()
+        {
+            try
+            {
+                DataTable turnos = _turnoNegocio.ObtenerTurnosDelDiaPorNombre(DateTime.Today, _nombreMedicoCompleto);
+                dgvTurnos.DataSource = turnos;
+
+                ConfigurarGrilla(dgvTurnos);
+                if (dgvTurnos.Columns.Contains("hora_turno"))
+                    dgvTurnos.Columns["hora_turno"].HeaderText = "Hora";
+                if (dgvTurnos.Columns.Contains("paciente"))
+                    dgvTurnos.Columns["paciente"].HeaderText = "Paciente";
+                if (dgvTurnos.Columns.Contains("estado"))
+                    dgvTurnos.Columns["estado"].HeaderText = "Estado";
+                if (dgvTurnos.Columns.Contains("motivo"))
+                    dgvTurnos.Columns["motivo"].HeaderText = "Motivo";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar los turnos del día: " + ex.Message);
+            }
+        }
+
+        // ============================================================
+        // PACIENTES
+        // ============================================================
+        private void CargarPacientes()
+        {
+            try
+            {
+                DataTable pacientes = _pacienteNegocio.ObtenerListaSimple(true);
+                dgvPacientes.DataSource = pacientes;
+                ConfigurarGrilla(dgvPacientes);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar la lista de pacientes: " + ex.Message);
+            }
+        }
+
+        // ============================================================
+        // CONFIGURACIÓN GENERAL DE GRILLAS
+        // ============================================================
+        private void ConfigurarGrilla(DataGridView dgv)
+        {
+            dgv.ReadOnly = true;
+            dgv.MultiSelect = false;
+            dgv.RowHeadersVisible = false;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv.DefaultCellStyle.Font = new Font("Consolas", 10F);
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Consolas", 10F, FontStyle.Bold);
         }
     }
 }

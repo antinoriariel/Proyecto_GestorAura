@@ -9,6 +9,9 @@ namespace CapaDatos
     {
         private readonly string conexion = ConfigurationManager.ConnectionStrings["conexionBD"].ConnectionString;
 
+        // ===============================================================
+        // OBTENER USUARIO POR USERNAME (LOGIN)
+        // ===============================================================
         public DataRow? ObtenerUsuarioPorUsername(string username)
         {
             using (SqlConnection conn = new SqlConnection(conexion))
@@ -31,7 +34,7 @@ namespace CapaDatos
 
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
-                        DataTable dt = new DataTable();
+                        DataTable dt = new();
                         da.Fill(dt);
                         return dt.Rows.Count > 0 ? dt.Rows[0] : null;
                     }
@@ -39,6 +42,9 @@ namespace CapaDatos
             }
         }
 
+        // ===============================================================
+        // INSERTAR USUARIO
+        // ===============================================================
         public void InsertarUsuario(string username, byte[] hash, byte[] salt,
                                     string email, string nombre, string apellido,
                                     decimal dni, DateTime fNacimiento, string telefono, string rol)
@@ -63,31 +69,33 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("@fnac", fNacimiento);
                     cmd.Parameters.AddWithValue("@tel", telefono);
                     cmd.Parameters.AddWithValue("@rol", rol);
-
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
+        // ===============================================================
+        // OBTENER DATOS SECRETARIA
+        // ===============================================================
         public DataTable ObtenerDatosSecretaria(string username)
         {
             using (SqlConnection conn = new SqlConnection(conexion))
             {
                 string query = @"
-            SELECT nombre,
-                   apellido,
-                   rol,
-                   email
-            FROM users
-            WHERE username COLLATE Latin1_General_CS_AS = @user AND activo = 1";
+                SELECT nombre,
+                       apellido,
+                       rol,
+                       email
+                FROM users
+                WHERE username COLLATE Latin1_General_CS_AS = @user
+                  AND activo = 1";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.Add("@user", SqlDbType.VarChar, 30).Value = username;
-
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
-                        DataTable dt = new DataTable();
+                        DataTable dt = new();
                         da.Fill(dt);
                         return dt;
                     }
@@ -96,7 +104,7 @@ namespace CapaDatos
         }
 
         // ===============================================================
-        // NUEVO MÉTODO: Obtener el ID del usuario por su username
+        // OBTENER ID POR USERNAME
         // ===============================================================
         public int ObtenerIdPorUsername(string username)
         {
@@ -113,29 +121,63 @@ namespace CapaDatos
             }
         }
 
+        // ===============================================================
+        // OBTENER USUARIOS DE CHAT SEGÚN ROL
+        // ===============================================================
         public DataTable ObtenerUsuariosChatPorRol(string rolActual)
         {
             using (SqlConnection cn = new SqlConnection(conexion))
             {
                 string query = @"
-            SELECT id_usuario, nombre, apellido, rol
-            FROM users
-            WHERE activo = 1
-              AND rol IN (
-                    CASE 
-                        WHEN @rol = 'secretaria' THEN 'medico'
-                        WHEN @rol = 'medico' THEN 'secretaria'
-                        ELSE 'none'
-                    END
-              )
-            ORDER BY nombre, apellido;";
+                SELECT id_usuario, nombre, apellido, rol
+                FROM users
+                WHERE activo = 1
+                  AND rol IN (
+                        CASE 
+                            WHEN @rol = 'secretaria' THEN 'medico'
+                            WHEN @rol = 'medico' THEN 'secretaria'
+                            ELSE 'none'
+                        END
+                  )
+                ORDER BY nombre, apellido;";
 
                 using (SqlCommand cmd = new SqlCommand(query, cn))
                 {
                     cmd.Parameters.AddWithValue("@rol", rolActual);
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
-                        DataTable dt = new DataTable();
+                        DataTable dt = new();
+                        da.Fill(dt);
+                        return dt;
+                    }
+                }
+            }
+        }
+
+        // ===============================================================
+        // OBTENER DATOS MÉDICO
+        // ===============================================================
+        public DataTable ObtenerDatosMedico(string username)
+        {
+            using (SqlConnection cn = new SqlConnection(conexion))
+            {
+                string query = @"
+                SELECT u.nombre,
+                       u.apellido,
+                       m.especialidad,
+                       m.matricula_provincial,
+                       m.matricula_nacional
+                FROM users u
+                INNER JOIN medicos m ON u.id_usuario = m.id_usuario
+                WHERE u.username COLLATE Latin1_General_CS_AS = @username
+                  AND u.activo = 1";
+
+                using (SqlCommand cmd = new SqlCommand(query, cn))
+                {
+                    cmd.Parameters.Add("@username", SqlDbType.VarChar, 30).Value = username;
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new();
                         da.Fill(dt);
                         return dt;
                     }

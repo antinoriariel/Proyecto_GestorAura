@@ -6,14 +6,14 @@ namespace CapaNegocio
 {
     public class UsuarioNegocio
     {
-        private readonly UsuarioDAO usuarioDAO = new UsuarioDAO();
+        private readonly UsuarioDAO _usuarioDAO = new();
 
         // ===============================================================
         // MÉTODO LOGIN
         // ===============================================================
         public UsuarioLoginResult? Login(string username, string password)
         {
-            DataRow? row = usuarioDAO.ObtenerUsuarioPorUsername(username);
+            DataRow? row = _usuarioDAO.ObtenerUsuarioPorUsername(username);
             if (row == null) return null;
             if (!(bool)row["activo"]) return null;
 
@@ -34,36 +34,74 @@ namespace CapaNegocio
         }
 
         // ===============================================================
-        // MÉTODO REGISTRO DE USUARIO
+        // REGISTRO DE NUEVO USUARIO
         // ===============================================================
         public void RegistrarUsuario(string username, string password, string email,
                                      string nombre, string apellido, decimal dni,
                                      DateTime fNacimiento, string telefono, string rol)
         {
             var (hash, salt) = PasswordHelper.CrearPasswordHash(password);
-            usuarioDAO.InsertarUsuario(username, hash, salt, email, nombre, apellido, dni, fNacimiento, telefono, rol);
+            _usuarioDAO.InsertarUsuario(username, hash, salt, email, nombre, apellido, dni, fNacimiento, telefono, rol);
         }
 
         // ===============================================================
-        // NUEVO MÉTODO: Obtener datos generales de la secretaria
+        // DATOS DE SECRETARIA
         // ===============================================================
         public DataTable ObtenerDatosSecretaria(string username)
         {
-            return usuarioDAO.ObtenerDatosSecretaria(username);
+            try
+            {
+                return _usuarioDAO.ObtenerDatosSecretaria(username);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener datos de la secretaria: " + ex.Message);
+            }
         }
 
         // ===============================================================
-        // NUEVO MÉTODO: Obtener ID de usuario por username
+        // DATOS DE MÉDICO
+        // ===============================================================
+        public DataTable ObtenerDatosMedico(string username)
+        {
+            try
+            {
+                return _usuarioDAO.ObtenerDatosMedico(username);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener datos del médico: " + ex.Message);
+            }
+        }
+
+        // ===============================================================
+        // ID DE USUARIO POR USERNAME
         // ===============================================================
         public int ObtenerIdPorUsername(string username)
         {
-            return usuarioDAO.ObtenerIdPorUsername(username);
+            try
+            {
+                return _usuarioDAO.ObtenerIdPorUsername(username);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener ID de usuario: " + ex.Message);
+            }
         }
 
+        // ===============================================================
+        // LISTADO DE USUARIOS PARA CHAT
+        // ===============================================================
         public DataTable ObtenerUsuariosChatPorRol(string rolActual)
         {
-            return usuarioDAO.ObtenerUsuariosChatPorRol(rolActual);
+            try
+            {
+                return _usuarioDAO.ObtenerUsuariosChatPorRol(rolActual);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener usuarios de chat: " + ex.Message);
+            }
         }
-
     }
 }
