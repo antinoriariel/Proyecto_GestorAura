@@ -12,9 +12,16 @@ namespace CapaPresentacion.Formularios
         private readonly TurnoNegocio _turnoNegocio = new();
         private DataTable _dtTurnos = new();
 
-        public FormTurnosSecretaria()
+        // Rol del usuario actual
+        private readonly string _rolUsuario;
+
+        // ====================================================
+        // Constructor (recibe el rol)
+        // ====================================================
+        public FormTurnosSecretaria(string rolUsuario)
         {
             InitializeComponent();
+            _rolUsuario = rolUsuario?.Trim().ToLower() ?? "secretaria";
             Load += OnLoad;
         }
 
@@ -23,6 +30,7 @@ namespace CapaPresentacion.Formularios
             InicializarUI();
             ConectarEventos();
             CargarTurnos();
+            AplicarRestriccionesPorRol();
         }
 
         // ====================================================
@@ -62,6 +70,22 @@ namespace CapaPresentacion.Formularios
             btnAgregar.Click += BtnAgregar_Click;
             btnEditar.Click += BtnEditar_Click;
             btnEliminar.Click += BtnEliminar_Click;
+        }
+
+        // ====================================================
+        // Restricciones por rol
+        // ====================================================
+        private void AplicarRestriccionesPorRol()
+        {
+            // 🔹 Si el rol es "medico", oculta botones de modificación
+            if (_rolUsuario == "medico")
+            {
+                if (btnAgregar != null) btnAgregar.Visible = false;
+                if (btnEditar != null) btnEditar.Visible = false;
+
+                // Puedes opcionalmente deshabilitar eliminar también:
+                // if (btnEliminar != null) btnEliminar.Enabled = false;
+            }
         }
 
         // ====================================================
@@ -134,19 +158,16 @@ namespace CapaPresentacion.Formularios
             {
                 try
                 {
-                    // Si viene como TimeSpan
                     if (e.Value is TimeSpan ts)
                     {
                         e.Value = ts.ToString(@"hh\:mm");
                         e.FormattingApplied = true;
                     }
-                    // Si viene como DateTime
                     else if (e.Value is DateTime dt)
                     {
                         e.Value = dt.ToString("HH:mm");
                         e.FormattingApplied = true;
                     }
-                    // Si viene como string
                     else if (e.Value is string s && TimeSpan.TryParse(s, out var t))
                     {
                         e.Value = t.ToString(@"hh\:mm");
@@ -155,7 +176,6 @@ namespace CapaPresentacion.Formularios
                 }
                 catch
                 {
-                    // Si no se puede convertir, no formatear nada
                     e.FormattingApplied = false;
                 }
             }
