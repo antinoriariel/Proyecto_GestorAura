@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Windows.Forms;
 
 namespace CapaPresentacion
@@ -6,13 +6,13 @@ namespace CapaPresentacion
     internal static class Program
     {
         /// <summary>
-        /// Punto de entrada principal para la aplicación.
+        /// Punto de entrada principal para la aplicaciï¿½n.
         /// </summary>
         [STAThread]
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new /*Dashboard("administrador", "Antinori, Ariel")*/Login()); // Login es el formulario de inicio
+            Application.Run(new Login()); // Login es el formulario de inicio
         }
     }
 }

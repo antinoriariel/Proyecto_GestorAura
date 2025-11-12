@@ -150,7 +150,7 @@ namespace CapaPresentacion
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
 
-            // ✅ Corrección: pasar el ID real del médico a FormHC
+            // Historia clínica tradicional
             sidebar.BtnHistoriasClick += (s, e) =>
             {
                 int idUsuario = ObtenerIdUsuarioActual();
@@ -161,13 +161,43 @@ namespace CapaPresentacion
                     return;
                 }
 
-                // Crear y abrir FormHC con el ID real
-                var formHC = new FormHC { IdUsuarioActual = idUsuario };
+                var formHC = new FormHC();
                 MostrarFormUnico(formHC);
             };
 
-            sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
-            sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
+            // Nueva opción: Panel de Historias Clínicas (FormDashHC)
+            sidebar.BtnHCClick += (s, e) =>
+            {
+                try
+                {
+                    int idMedico = ObtenerIdUsuarioActual();
+                    var formDashHC = new FormDashHC();
+                    MostrarFormUnico(formDashHC);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al abrir el panel de Historias Clínicas:\n" + ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
+            // Adjuntos del paciente
+            sidebar.BtnAdjuntosClick += (s, e) =>
+            {
+                try
+                {
+                    int idUsuario = ObtenerIdUsuarioActual();
+                    var formAdjuntos = new FormAdjuntosPaciente(idUsuario);
+                    MostrarFormUnico(formAdjuntos);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al abrir el formulario de adjuntos:\n" + ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
+            // Mensajes
             sidebar.BtnMensajesClick += (s, e) =>
             {
                 int idUsuario = ObtenerIdUsuarioActual();
@@ -227,7 +257,6 @@ namespace CapaPresentacion
             nuevoForm.BringToFront();
         }
 
-        // ✅ Nueva sobrecarga para instancias ya creadas
         private void MostrarFormUnico(Form form)
         {
             var existente = MdiChildren.FirstOrDefault(f => f.GetType() == form.GetType());

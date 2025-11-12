@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
 using System.Configuration;
+using System.Data;
+using Microsoft.Data.SqlClient;
 
 namespace CapaDatos
 {
@@ -9,6 +10,9 @@ namespace CapaDatos
     {
         private readonly string conexion = ConfigurationManager.ConnectionStrings["conexionBD"].ConnectionString;
 
+        /// <summary>
+        /// Lista completa de pacientes (DTO) con control de activos.
+        /// </summary>
         public List<PacienteDTO> ObtenerPacientes(bool soloActivos = false)
         {
             List<PacienteDTO> lista = new();
@@ -36,16 +40,39 @@ namespace CapaDatos
                     Apellido = dr["apellido"].ToString(),
                     Sexo = dr["sexo"].ToString(),
                     FechaNac = Convert.ToDateTime(dr["f_nacimiento"]),
-                    Telefono = dr["telefono"]?.ToString(),
-                    Email = dr["email"]?.ToString(),
-                    Direccion = dr["direccion"]?.ToString(),
-                    GrupoSanguineo = dr["grupo_sanguineo"]?.ToString(),
-                    Alergias = dr["alergias"]?.ToString(),
+                    Telefono = dr["telefono"] is DBNull ? null : dr["telefono"].ToString(),
+                    Email = dr["email"] is DBNull ? null : dr["email"].ToString(),
+                    Direccion = dr["direccion"] is DBNull ? null : dr["direccion"].ToString(),
+                    GrupoSanguineo = dr["grupo_sanguineo"] is DBNull ? null : dr["grupo_sanguineo"].ToString(),
+                    Alergias = dr["alergias"] is DBNull ? null : dr["alergias"].ToString(),
                     FechaAlta = Convert.ToDateTime(dr["created_at"]),
                     Activo = dr["deleted_at"] is DBNull
                 });
             }
             return lista;
+        }
+
+        /// <summary>
+        /// NUEVO: devuelve un DataTable con columnas (id_paciente, nombre, apellido),
+        /// pensado para combos/listas de selección rápida en la UI.
+        /// </summary>
+        public DataTable ObtenerListaSimple(bool soloActivos = true)
+        {
+            var tabla = new DataTable();
+
+            using SqlConnection conn = new(conexion);
+            string query = @"
+                SELECT id_paciente, nombre, apellido
+                FROM pacientes
+                " + (soloActivos ? "WHERE deleted_at IS NULL" : "") + @"
+                ORDER BY apellido, nombre;";
+
+            using SqlCommand cmd = new(query, conn);
+            using SqlDataAdapter da = new(cmd);
+            conn.Open();
+            da.Fill(tabla);
+
+            return tabla;
         }
 
         public void InsertarPaciente(PacienteDTO p)

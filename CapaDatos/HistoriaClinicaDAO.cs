@@ -15,6 +15,9 @@ namespace CapaDatos
             _connectionString = ConfigurationManager.ConnectionStrings["conexionBD"].ConnectionString;
         }
 
+        // ==============================================================
+        // INSERTAR HISTORIA CLÍNICA
+        // ==============================================================
         public bool InsertarHistoriaClinica(
             int idPaciente,
             int idUsuario,
@@ -52,8 +55,8 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("@indicaciones", (object?)indicaciones ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@impresion_general", DBNull.Value);
                     cmd.Parameters.AddWithValue("@examenes", DBNull.Value);
-                    cmd.Parameters.AddWithValue("@tipo_consulta", (object?)tipoConsulta ?? DBNull.Value); // 'guardia','consulta','control','internacion'
-                    cmd.Parameters.AddWithValue("@estado", string.IsNullOrWhiteSpace(estado) ? "abierta" : estado); // 'abierta','cerrada','archivada'
+                    cmd.Parameters.AddWithValue("@tipo_consulta", (object?)tipoConsulta ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@estado", string.IsNullOrWhiteSpace(estado) ? "abierta" : estado);
                     cmd.Parameters.AddWithValue("@fecha_hora", fechaHora);
 
                     cn.Open();
@@ -63,6 +66,9 @@ namespace CapaDatos
             }
         }
 
+        // ==============================================================
+        // OBTENER PACIENTES / BUSCAR PACIENTES
+        // ==============================================================
         public List<(int Id, string NombreCompleto)> ObtenerPacientes()
         {
             var lista = new List<(int, string)>();
@@ -77,9 +83,7 @@ namespace CapaDatos
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
-                        {
                             lista.Add((dr.GetInt32(0), dr.GetString(1)));
-                        }
                     }
                 }
             }
@@ -100,9 +104,98 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("@txt", $"%{texto}%");
                     cn.Open();
                     using (SqlDataReader dr = cmd.ExecuteReader())
-                    {
                         tabla.Load(dr);
-                    }
+                }
+            }
+            return tabla;
+        }
+
+        // ==============================================================
+        // NUEVOS MÉTODOS PARA DASHBOARD HC
+        // ==============================================================
+
+        /// <summary>
+        /// Devuelve todas las historias clínicas con información de paciente y médico.
+        /// </summary>
+        public DataTable ObtenerHistoriasDetalladas(int? idPaciente = null, DateTime? desde = null, DateTime? hasta = null)
+        {
+            var tabla = new DataTable();
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    SELECT 
+                        hc.id_hc AS id_historia,
+                        p.id_paciente,
+                        CONCAT(p.apellido, ', ', p.nombre) AS paciente,
+                        u.nombre + ' ' + u.apellido AS medico,
+                        hc.fecha_hora,
+                        hc.estado,
+                        hc.tipo_consulta,
+                        hc.mdc AS motivo,
+                        hc.impresion_diagnostica,
+                        hc.diagnostico,
+                        hc.indicaciones,
+                        hc.evolucion AS observaciones
+                    FROM historias_clinicas hc
+                    INNER JOIN pacientes p ON hc.id_paciente = p.id_paciente
+                    LEFT JOIN users u ON hc.id_usuario = u.id_usuario
+                    WHERE (@idPaciente IS NULL OR hc.id_paciente = @idPaciente)
+                      AND (@desde IS NULL OR hc.fecha_hora >= @desde)
+                      AND (@hasta IS NULL OR hc.fecha_hora <= @hasta)
+                    ORDER BY hc.fecha_hora DESC;";
+
+                using (SqlCommand cmd = new SqlCommand(query, cn))
+                {
+                    cmd.Parameters.AddWithValue("@idPaciente", (object?)idPaciente ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@desde", (object?)desde ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@hasta", (object?)hasta ?? DBNull.Value);
+
+                    cn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                        tabla.Load(dr);
+                }
+            }
+            return tabla;
+        }
+
+        /// <summary>
+        /// Devuelve una historia clínica completa (detallada) para exportar a PDF.
+        /// </summary>
+        public DataTable ObtenerHistoriaDetalladaPorId(int idHistoria)
+        {
+            var tabla = new DataTable();
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    SELECT 
+                        hc.id_hc AS id_historia,
+                        hc.id_paciente,
+                        p.nombre AS nombre_paciente,
+                        p.apellido AS apellido_paciente,
+                        p.dni AS dni_paciente,
+                        p.f_nacimiento,
+                        u.nombre AS nombre_medico,
+                        u.apellido AS apellido_medico,
+                        hc.fecha_hora,
+                        hc.estado,
+                        hc.tipo_consulta,
+                        hc.mdc AS motivo,
+                        hc.impresion_diagnostica,
+                        hc.diagnostico,
+                        hc.indicaciones,
+                        hc.antecedentes_patologicos AS antecedentes,
+                        hc.evolucion AS observaciones
+                    FROM historias_clinicas hc
+                    INNER JOIN pacientes p ON hc.id_paciente = p.id_paciente
+                    LEFT JOIN users u ON hc.id_usuario = u.id_usuario
+                    WHERE hc.id_hc = @id_hc;";
+
+                using (SqlCommand cmd = new SqlCommand(query, cn))
+                {
+                    cmd.Parameters.AddWithValue("@id_hc", idHistoria);
+                    cn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                        tabla.Load(dr);
                 }
             }
             return tabla;
