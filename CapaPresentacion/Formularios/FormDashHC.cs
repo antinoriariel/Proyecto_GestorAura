@@ -86,19 +86,29 @@ namespace CapaPresentacion.Formularios
                 return;
             }
 
-            int idHistoria = Convert.ToInt32(dgvHistorias.CurrentRow.Cells["id_historia"].Value);
-
-            // Abre el nuevo formulario modal para editar
-            /*
-            using (FormEditarHC form = new(idHistoria))
+            // 🔹 Obtener el id_paciente directamente de la fila seleccionada
+            DataRowView drv = dgvHistorias.CurrentRow.DataBoundItem as DataRowView;
+            if (drv == null)
             {
+                MessageBox.Show("No se pudo obtener el paciente asociado.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int idPaciente = Convert.ToInt32(drv["id_paciente"]);
+            int idUsuarioActual = _idUsuarioActual;
+
+            using (FormEditarHC form = new(idUsuarioActual, idPaciente))
+            {
+                form.StartPosition = FormStartPosition.CenterParent;
                 form.ShowDialog();
             }
-            */
 
-            // Refresca la lista al cerrar
             CargarHistorias();
         }
+
+
+
 
         private void btnAdjuntos_Click(object sender, EventArgs e)
         {

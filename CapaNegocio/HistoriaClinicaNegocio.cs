@@ -86,6 +86,29 @@ namespace CapaNegocio
             return _dao.ObtenerHistoriasDetalladas(idPaciente, desde, hasta);
         }
 
+        public bool ActualizarHistoriaClinica(
+    int idHistoria,
+    string estado,
+    string motivo,
+    DateTime fechaHora,
+    string impresionDiagnostica,
+    string diagnostico,
+    string indicaciones,
+    string antecedentes,
+    string observaciones,
+    string tipoConsulta,
+    int idUsuarioActual)
+        {
+            return _dao.ActualizarHistoriaClinica(
+                idHistoria, estado, motivo, fechaHora, impresionDiagnostica,
+                diagnostico, indicaciones, antecedentes, observaciones,
+                tipoConsulta, idUsuarioActual);
+        }
+        public DataTable ObtenerHistoriasPorPaciente(int idPaciente)
+        {
+            return _dao.ObtenerHistoriasPorPaciente(idPaciente);
+        }
+
         /// <summary>
         /// Exporta una historia clínica a PDF en la ruta indicada.
         /// </summary>

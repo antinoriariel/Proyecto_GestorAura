@@ -14,6 +14,7 @@ namespace CapaPresentacion
         private readonly string rolUsuario;
         private readonly string nombreCompleto;
         private readonly string username; // nombre real de usuario
+        private readonly int idUsuarioActual; // ✅ id obtenido desde la BD
 
         public Dashboard(string rolUsuario, string nombreCompleto, string username)
         {
@@ -22,6 +23,9 @@ namespace CapaPresentacion
             this.rolUsuario = rolUsuario;
             this.nombreCompleto = nombreCompleto;
             this.username = username;
+
+            // ✅ Obtener el ID real del usuario logueado (solo una vez)
+            idUsuarioActual = ObtenerIdUsuarioActual();
 
             this.IsMdiContainer = true;
 
@@ -155,8 +159,7 @@ namespace CapaPresentacion
             {
                 try
                 {
-                    int idMedico = ObtenerIdUsuarioActual();
-                    var formDashPacientes = new FormDashPacientesMed(/*idMedico*/);
+                    var formDashPacientes = new FormDashPacientesMed(idUsuarioActual); // ✅ id del médico actual
                     MostrarFormUnico(formDashPacientes);
                 }
                 catch (Exception ex)
@@ -169,15 +172,14 @@ namespace CapaPresentacion
             // === HISTORIA CLÍNICA ===
             sidebar.BtnHistoriasClick += (s, e) =>
             {
-                int idUsuario = ObtenerIdUsuarioActual();
-                if (idUsuario == 0)
+                if (idUsuarioActual == 0)
                 {
                     MessageBox.Show("No se pudo obtener el ID del usuario médico.",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                var formHC = new FormHC(idUsuario); // ✅ constructor corregido
+                var formHC = new FormHC(idUsuarioActual);
                 MostrarFormUnico(formHC);
             };
 
@@ -186,8 +188,7 @@ namespace CapaPresentacion
             {
                 try
                 {
-                    int idMedico = ObtenerIdUsuarioActual();
-                    var formDashHC = new FormDashHC(idMedico);
+                    var formDashHC = new FormDashHC(idUsuarioActual);
                     MostrarFormUnico(formDashHC);
                 }
                 catch (Exception ex)
@@ -202,8 +203,7 @@ namespace CapaPresentacion
             {
                 try
                 {
-                    int idUsuario = ObtenerIdUsuarioActual();
-                    var formAdjuntos = new FormAdjuntosPaciente(idUsuario);
+                    var formAdjuntos = new FormAdjuntosPaciente(idUsuarioActual);
                     MostrarFormUnico(formAdjuntos);
                 }
                 catch (Exception ex)
@@ -216,8 +216,7 @@ namespace CapaPresentacion
             // === MENSAJES ===
             sidebar.BtnMensajesClick += (s, e) =>
             {
-                int idUsuario = ObtenerIdUsuarioActual();
-                MostrarFormUnico<FormMensajes>(idUsuario, rolUsuario);
+                MostrarFormUnico<FormMensajes>(idUsuarioActual, rolUsuario);
             };
         }
 
@@ -230,16 +229,9 @@ namespace CapaPresentacion
             sidebar.BtnDashboardClick += (s, e) => AbrirInicioSecretaria();
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormPacientesSecretaria>();
-            sidebar.BtnNotasClick += (s, e) =>
-            {
-                int idSecretaria = ObtenerIdSecretariaLogueada();
-                MostrarFormUnico<FormNotas>(idSecretaria);
-            };
+            sidebar.BtnNotasClick += (s, e) => MostrarFormUnico<FormNotas>(idUsuarioActual);
             sidebar.BtnMensajesClick += (s, e) =>
-            {
-                int idUsuario = ObtenerIdUsuarioActual();
-                MostrarFormUnico<FormMensajes>(idUsuario, rolUsuario);
-            };
+                MostrarFormUnico<FormMensajes>(idUsuarioActual, rolUsuario);
         }
 
         // ============================================================
@@ -335,11 +327,6 @@ namespace CapaPresentacion
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 0;
             }
-        }
-
-        private int ObtenerIdSecretariaLogueada()
-        {
-            return ObtenerIdUsuarioActual();
         }
     }
 }

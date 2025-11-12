@@ -111,12 +111,8 @@ namespace CapaDatos
         }
 
         // ==============================================================
-        // NUEVOS MÉTODOS PARA DASHBOARD HC
+        // MÉTODOS PARA DASHBOARD HC / DETALLES
         // ==============================================================
-
-        /// <summary>
-        /// Devuelve todas las historias clínicas con información de paciente y médico.
-        /// </summary>
         public DataTable ObtenerHistoriasDetalladas(int? idPaciente = null, DateTime? desde = null, DateTime? hasta = null)
         {
             var tabla = new DataTable();
@@ -158,9 +154,6 @@ namespace CapaDatos
             return tabla;
         }
 
-        /// <summary>
-        /// Devuelve una historia clínica completa (detallada) para exportar a PDF.
-        /// </summary>
         public DataTable ObtenerHistoriaDetalladaPorId(int idHistoria)
         {
             var tabla = new DataTable();
@@ -199,6 +192,89 @@ namespace CapaDatos
                 }
             }
             return tabla;
+        }
+
+        public DataTable ObtenerHistoriasPorPaciente(int idPaciente)
+        {
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    SELECT 
+                        hc.id_hc AS id_historia,
+                        hc.id_paciente,
+                        hc.mdc,
+                        hc.impresion_diagnostica,
+                        hc.diagnostico,
+                        hc.indicaciones,
+                        hc.antecedentes_patologicos,
+                        hc.evolucion,
+                        hc.tipo_consulta,
+                        hc.estado,
+                        hc.fecha_hora
+                    FROM historias_clinicas hc
+                    WHERE hc.id_paciente = @idPaciente
+                    ORDER BY hc.fecha_hora DESC;";
+
+                using (SqlCommand cmd = new SqlCommand(query, cn))
+                {
+                    cmd.Parameters.AddWithValue("@idPaciente", idPaciente);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+
+        public bool ActualizarHistoriaClinica(
+            int idHistoria,
+            string estado,
+            string motivo,
+            DateTime fechaHora,
+            string impresionDiagnostica,
+            string diagnostico,
+            string indicaciones,
+            string antecedentes,
+            string observaciones,
+            string tipoConsulta,
+            int idUsuario)
+        {
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    UPDATE historias_clinicas
+                    SET 
+                        mdc = @motivo,
+                        estado = @estado,
+                        fecha_hora = @fechaHora,
+                        impresion_diagnostica = @impresion,
+                        diagnostico = @diagnostico,
+                        indicaciones = @indicaciones,
+                        antecedentes_patologicos = @antecedentes,
+                        evolucion = @observaciones,
+                        tipo_consulta = @tipo,
+                        id_usuario = @idUsuario,
+                        modified_at = GETDATE()
+                    WHERE id_hc = @idHistoria;";
+
+                using (SqlCommand cmd = new SqlCommand(query, cn))
+                {
+                    cmd.Parameters.AddWithValue("@idHistoria", idHistoria);
+                    cmd.Parameters.AddWithValue("@estado", estado);
+                    cmd.Parameters.AddWithValue("@motivo", motivo);
+                    cmd.Parameters.AddWithValue("@fechaHora", fechaHora);
+                    cmd.Parameters.AddWithValue("@impresion", impresionDiagnostica);
+                    cmd.Parameters.AddWithValue("@diagnostico", diagnostico);
+                    cmd.Parameters.AddWithValue("@indicaciones", indicaciones);
+                    cmd.Parameters.AddWithValue("@antecedentes", antecedentes);
+                    cmd.Parameters.AddWithValue("@observaciones", observaciones);
+                    cmd.Parameters.AddWithValue("@tipo", tipoConsulta);
+                    cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+
+                    cn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
         }
     }
 }
