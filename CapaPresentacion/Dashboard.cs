@@ -149,7 +149,23 @@ namespace CapaPresentacion
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
-            sidebar.BtnHistoriasClick += (s, e) => MostrarFormUnico<FormHC>();
+
+            // ✅ Corrección: pasar el ID real del médico a FormHC
+            sidebar.BtnHistoriasClick += (s, e) =>
+            {
+                int idUsuario = ObtenerIdUsuarioActual();
+                if (idUsuario == 0)
+                {
+                    MessageBox.Show("No se pudo obtener el ID del usuario médico.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Crear y abrir FormHC con el ID real
+                var formHC = new FormHC { IdUsuarioActual = idUsuario };
+                MostrarFormUnico(formHC);
+            };
+
             sidebar.BtnSolicitudesClick += (s, e) => MostrarFormUnico<FormSolicitudes>();
             sidebar.BtnResultadosClick += (s, e) => MostrarFormUnico<FormResultados>();
             sidebar.BtnMensajesClick += (s, e) =>
@@ -209,6 +225,25 @@ namespace CapaPresentacion
             nuevoForm.TopLevel = false;
             nuevoForm.Show();
             nuevoForm.BringToFront();
+        }
+
+        // ✅ Nueva sobrecarga para instancias ya creadas
+        private void MostrarFormUnico(Form form)
+        {
+            var existente = MdiChildren.FirstOrDefault(f => f.GetType() == form.GetType());
+            if (existente != null)
+            {
+                existente.BringToFront();
+                existente.WindowState = FormWindowState.Normal;
+                return;
+            }
+
+            form.MdiParent = this;
+            form.FormBorderStyle = FormBorderStyle.None;
+            form.Dock = DockStyle.Fill;
+            form.TopLevel = false;
+            form.Show();
+            form.BringToFront();
         }
 
         // ============================================================

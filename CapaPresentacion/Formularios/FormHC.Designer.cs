@@ -7,12 +7,10 @@ namespace CapaPresentacion.Formularios
     {
         private System.ComponentModel.IContainer components = null;
 
-        // Header
         private Panel headerPanel;
         private PictureBox picHeader;
         private Label lblHeader;
 
-        // Contenido
         private GroupBox grpDatos;
         private Panel panelScroll;
         private TableLayoutPanel grid;
@@ -47,13 +45,11 @@ namespace CapaPresentacion.Formularios
         private Label lblTipoConsulta;
         private ComboBox cboTipoConsulta;
 
-        // Footer
         private Panel footerPanel;
         private FlowLayoutPanel flowFooter;
         private Button btnGuardar;
         private Button btnCancelar;
 
-        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -65,7 +61,6 @@ namespace CapaPresentacion.Formularios
         {
             components = new System.ComponentModel.Container();
 
-            // ====== Form ======
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(241, 244, 246);
@@ -77,7 +72,6 @@ namespace CapaPresentacion.Formularios
             StartPosition = FormStartPosition.CenterParent;
             Text = "Historia Clínica";
 
-            // ====== Header ======
             headerPanel = new Panel
             {
                 BackColor = Color.FromArgb(41, 57, 71),
@@ -107,7 +101,6 @@ namespace CapaPresentacion.Formularios
             headerPanel.Controls.Add(picHeader);
             headerPanel.Controls.Add(lblHeader);
 
-            // ====== Footer ======
             footerPanel = new Panel
             {
                 BackColor = Color.Transparent,
@@ -138,7 +131,6 @@ namespace CapaPresentacion.Formularios
             flowFooter.Controls.Add(btnGuardar);
             footerPanel.Controls.Add(flowFooter);
 
-            // ====== Grupo Datos ======
             grpDatos = new GroupBox
             {
                 BackColor = Color.White,
@@ -152,7 +144,7 @@ namespace CapaPresentacion.Formularios
             {
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
-                Padding = new Padding(0, 0, 12, 0) // espacio p/ iconos de ErrorProvider
+                Padding = new Padding(0, 0, 12, 0)
             };
 
             grid = new TableLayoutPanel
@@ -165,21 +157,19 @@ namespace CapaPresentacion.Formularios
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 
-            // Definición de filas (alturas moderadas)
             grid.RowStyles.Clear();
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F)); // Paciente
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F)); // Estado
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F)); // Motivo
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F)); // FechaHora
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F)); // Imp. diag.
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F)); // Diagnóstico
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F)); // Indicaciones
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F)); // Antecedentes
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F)); // Observaciones
-            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F)); // Tipo consulta
-            grid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F)); // relleno
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+            grid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
-            // Helper para labels
             Label MakeLabel(string text)
             {
                 return new Label
@@ -191,7 +181,6 @@ namespace CapaPresentacion.Formularios
                 };
             }
 
-            // Controles
             lblPaciente = MakeLabel("Paciente");
             txtPaciente = new TextBox
             {
@@ -206,9 +195,17 @@ namespace CapaPresentacion.Formularios
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 IntegralHeight = false,
                 Anchor = AnchorStyles.Left,
-                Width = 220
+                Width = 220,
+                DisplayMember = "Text",
+                ValueMember = "Value"
             };
-            cboEstado.Items.AddRange(new object[] { "En curso", "Resuelto", "Pendiente", "Cerrado" });
+            cboEstado.DataSource = new[]
+            {
+                new { Text = "En curso",  Value = "abierta"   },
+                new { Text = "Cerrado",   Value = "cerrada"   },
+                new { Text = "Pendiente", Value = "archivada" }
+            };
+            //cboEstado.SelectedIndex = 0;
 
             lblMotivo = MakeLabel("Motivo");
             txtMotivo = new TextBox
@@ -228,19 +225,49 @@ namespace CapaPresentacion.Formularios
             };
 
             lblImpDiag = MakeLabel("Impresión diagnóstica");
-            txtImpresionDiag = new TextBox { Dock = DockStyle.Fill, Multiline = true, ScrollBars = ScrollBars.Vertical, Margin = new Padding(3, 3, 12, 3) };
+            txtImpresionDiag = new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Margin = new Padding(3, 3, 12, 3)
+            };
 
             lblDiagnostico = MakeLabel("Diagnóstico");
-            txtDiagnostico = new TextBox { Dock = DockStyle.Fill, Multiline = true, ScrollBars = ScrollBars.Vertical, Margin = new Padding(3, 3, 12, 3) };
+            txtDiagnostico = new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Margin = new Padding(3, 3, 12, 3)
+            };
 
             lblIndicaciones = MakeLabel("Indicaciones");
-            txtIndicaciones = new TextBox { Dock = DockStyle.Fill, Multiline = true, ScrollBars = ScrollBars.Vertical, Margin = new Padding(3, 3, 12, 3) };
+            txtIndicaciones = new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Margin = new Padding(3, 3, 12, 3)
+            };
 
             lblAntecedentes = MakeLabel("Antecedentes");
-            txtAntecedentes = new TextBox { Dock = DockStyle.Fill, Multiline = true, ScrollBars = ScrollBars.Vertical, Margin = new Padding(3, 3, 12, 3) };
+            txtAntecedentes = new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Margin = new Padding(3, 3, 12, 3)
+            };
 
             lblObservaciones = MakeLabel("Observaciones");
-            txtObservaciones = new TextBox { Dock = DockStyle.Fill, Multiline = true, ScrollBars = ScrollBars.Vertical, Margin = new Padding(3, 3, 12, 3) };
+            txtObservaciones = new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Margin = new Padding(3, 3, 12, 3)
+            };
 
             lblTipoConsulta = MakeLabel("Tipo de consulta");
             cboTipoConsulta = new ComboBox
@@ -248,19 +275,19 @@ namespace CapaPresentacion.Formularios
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 IntegralHeight = false,
                 Anchor = AnchorStyles.Left,
-                Width = 260
+                Width = 260,
+                DisplayMember = "Text",
+                ValueMember = "Value"
             };
-            cboTipoConsulta.Items.AddRange(new object[]
+            cboTipoConsulta.DataSource = new[]
             {
-                "Consulta",
-                "Control",
-                "Urgencia",
-                "Seguimiento",
-                "Interconsulta",
-                "Teleconsulta"
-            });
+                new { Text = "Consulta médica",   Value = "consulta"    },
+                new { Text = "Control",           Value = "control"     },
+                new { Text = "Urgencia / Guardia",Value = "guardia"     },
+                new { Text = "Internación",       Value = "internacion" }
+            };
+            //cboTipoConsulta.SelectedIndex = 0;
 
-            // Agregar a la grilla (fila, col)
             grid.Controls.Add(lblPaciente, 0, 0);
             grid.Controls.Add(txtPaciente, 1, 0);
 
@@ -294,12 +321,10 @@ namespace CapaPresentacion.Formularios
             panelScroll.Controls.Add(grid);
             grpDatos.Controls.Add(panelScroll);
 
-            // Compose
             Controls.Add(grpDatos);
             Controls.Add(footerPanel);
             Controls.Add(headerPanel);
 
-            // Accept/Cancel
             AcceptButton = btnGuardar;
             CancelButton = btnCancelar;
         }

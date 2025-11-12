@@ -1,5 +1,5 @@
 using System;
-using System.Text.RegularExpressions;
+using System.Drawing;
 using System.Windows.Forms;
 using CapaNegocio;
 
@@ -9,8 +9,9 @@ namespace CapaPresentacion.Formularios
     {
         private readonly ErrorProvider _ep;
         private readonly HistoriaClinicaNegocio _hcNegocio = new();
+        private AutoCompleteStringCollection _autoPacientes = new();
 
-        public int IdUsuarioActual { get; set; } // <- Se setea desde el Dashboard o formulario anterior
+        public int IdUsuarioActual { get; set; }
 
         public FormHC()
         {
@@ -18,18 +19,44 @@ namespace CapaPresentacion.Formularios
             _ep = new ErrorProvider { BlinkStyle = ErrorBlinkStyle.NeverBlink };
             AsignarErrorIconos();
 
+            Load += FormHC_Load;
+
             txtPaciente.KeyPress += (s, e) =>
             {
                 if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) && e.KeyChar != ' ')
                     e.Handled = true;
             };
 
+            btnGuardar.Click += BtnGuardar_Click;
+            btnCancelar.Click += (s, e) => Close();
+            KeyDown += (s, e) => { if (e.KeyCode == Keys.Escape) Close(); };
+        }
+
+        private void FormHC_Load(object? sender, EventArgs e)
+        {
+            ConfigurarAutocompletadoPacientes();
             if (cboEstado.Items.Count > 0) cboEstado.SelectedIndex = 0;
             if (cboTipoConsulta.Items.Count > 0) cboTipoConsulta.SelectedIndex = 0;
+        }
 
-            btnGuardar.Click += BtnGuardar_Click;
-            btnCancelar.Click += (s, e) => this.Close();
-            this.KeyDown += (s, e) => { if (e.KeyCode == Keys.Escape) this.Close(); };
+        private void ConfigurarAutocompletadoPacientes()
+        {
+            try
+            {
+                _autoPacientes = new AutoCompleteStringCollection();
+                var pacientes = _hcNegocio.ObtenerPacientes();
+                foreach (var p in pacientes)
+                    _autoPacientes.Add(p.NombreCompleto);
+
+                txtPaciente.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                txtPaciente.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                txtPaciente.AutoCompleteCustomSource = _autoPacientes;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error cargando pacientes:\n" + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void AsignarErrorIconos()
@@ -50,7 +77,10 @@ namespace CapaPresentacion.Formularios
             bool ok = true;
 
             string pac = txtPaciente.Text.Trim();
-            string estado = cboEstado.Text;
+            // Tomar los valores REALES que acepta la BD
+            string estado = Convert.ToString(cboEstado.SelectedValue) ?? "abierta";            // 'abierta','cerrada','archivada'
+            string tipo = Convert.ToString(cboTipoConsulta.SelectedValue) ?? "consulta";     // 'guardia','consulta','control','internacion'
+
             string motivo = txtMotivo.Text.Trim();
             DateTime fechaHora = dtpFechaHora.Value;
             string imp = txtImpresionDiag.Text.Trim();
@@ -58,12 +88,10 @@ namespace CapaPresentacion.Formularios
             string ind = txtIndicaciones.Text.Trim();
             string ant = txtAntecedentes.Text.Trim();
             string obs = txtObservaciones.Text.Trim();
-            string tipo = cboTipoConsulta.Text;
 
-            // Validaciones simples de presentación
             if (string.IsNullOrWhiteSpace(pac) || pac.Length < 3)
             {
-                _ep.SetError(txtPaciente, "Ingrese un nombre de paciente válido.");
+                _ep.SetError(txtPaciente, "Ingrese un paciente válido.");
                 ok = false;
             }
             if (string.IsNullOrWhiteSpace(diag))
@@ -82,7 +110,7 @@ namespace CapaPresentacion.Formularios
                 {
                     MessageBox.Show("Historia clínica registrada correctamente.",
                         "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
+                    Close();
                 }
                 else
                 {

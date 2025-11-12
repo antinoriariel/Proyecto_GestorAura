@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using CapaDatos;
 
@@ -9,25 +10,60 @@ namespace CapaNegocio
         private readonly HistoriaClinicaDAO _dao = new();
 
         public bool RegistrarHistoriaClinica(
-            string paciente, string estado, string motivo,
-            DateTime fechaHora, string impresionDiag, string diagnostico,
-            string indicaciones, string antecedentes, string observaciones,
-            string tipoConsulta, int idUsuario)
+            string nombrePaciente,
+            string estado,              // ya mapeado: 'abierta','cerrada','archivada'
+            string motivo,
+            DateTime fechaHora,
+            string impresionDiagnostica,
+            string diagnostico,
+            string indicaciones,
+            string antecedentes,
+            string observaciones,
+            string tipoConsulta,        // ya mapeado: 'guardia','consulta','control','internacion'
+            int idUsuarioActual)
         {
-            // Validaciones básicas a nivel negocio
-            if (string.IsNullOrWhiteSpace(paciente)) throw new ArgumentException("Paciente requerido");
-            if (string.IsNullOrWhiteSpace(estado)) throw new ArgumentException("Estado requerido");
-            if (string.IsNullOrWhiteSpace(diagnostico)) throw new ArgumentException("Diagnóstico requerido");
+            int idPaciente = BuscarIdPacientePorNombre(nombrePaciente);
+            if (idPaciente == 0)
+                throw new Exception("No se encontró un paciente con ese nombre.");
 
             return _dao.InsertarHistoriaClinica(
-                paciente, estado, motivo, fechaHora, impresionDiag,
-                diagnostico, indicaciones, antecedentes, observaciones,
-                tipoConsulta, idUsuario);
+                idPaciente,
+                idUsuarioActual,
+                motivo,
+                estado,
+                fechaHora,
+                impresionDiagnostica,
+                diagnostico,
+                indicaciones,
+                antecedentes,
+                observaciones,
+                tipoConsulta
+            );
         }
 
-        public DataTable ObtenerTodas()
+        public List<(int Id, string NombreCompleto)> ObtenerPacientes()
         {
-            return _dao.ObtenerHistoriasClinicas();
+            return _dao.ObtenerPacientes();
+        }
+
+        public int BuscarIdPacientePorNombre(string nombreCompleto)
+        {
+            var lista = _dao.ObtenerPacientes();
+            foreach (var p in lista)
+            {
+                if (string.Equals(p.NombreCompleto, nombreCompleto, StringComparison.OrdinalIgnoreCase))
+                    return p.Id;
+            }
+            return 0;
+        }
+
+        public List<String> BuscarPacientes(string texto)
+        {
+            var resultado = new List<string>();
+            var dt = _dao.BuscarPacientesPorNombre(texto);
+            foreach (DataRow row in dt.Rows)
+                resultado.Add(row["nombre_completo"].ToString()!);
+            return resultado;
         }
     }
 }
