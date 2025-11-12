@@ -150,7 +150,7 @@ namespace CapaPresentacion
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
 
-            // Historia clínica tradicional
+            // === HISTORIA CLÍNICA ===
             sidebar.BtnHistoriasClick += (s, e) =>
             {
                 int idUsuario = ObtenerIdUsuarioActual();
@@ -161,17 +161,17 @@ namespace CapaPresentacion
                     return;
                 }
 
-                var formHC = new FormHC();
+                var formHC = new FormHC(idUsuario); // ✅ constructor corregido
                 MostrarFormUnico(formHC);
             };
 
-            // Nueva opción: Panel de Historias Clínicas (FormDashHC)
+            // === DASHBOARD HC ===
             sidebar.BtnHCClick += (s, e) =>
             {
                 try
                 {
                     int idMedico = ObtenerIdUsuarioActual();
-                    var formDashHC = new FormDashHC();
+                    var formDashHC = new FormDashHC(idMedico);
                     MostrarFormUnico(formDashHC);
                 }
                 catch (Exception ex)
@@ -181,7 +181,7 @@ namespace CapaPresentacion
                 }
             };
 
-            // Adjuntos del paciente
+            // === ADJUNTOS ===
             sidebar.BtnAdjuntosClick += (s, e) =>
             {
                 try
@@ -197,7 +197,7 @@ namespace CapaPresentacion
                 }
             };
 
-            // Mensajes
+            // === MENSAJES ===
             sidebar.BtnMensajesClick += (s, e) =>
             {
                 int idUsuario = ObtenerIdUsuarioActual();

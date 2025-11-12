@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using CapaNegocio;
@@ -30,6 +30,12 @@ namespace CapaPresentacion.Formularios
             btnGuardar.Click += BtnGuardar_Click;
             btnCancelar.Click += (s, e) => Close();
             KeyDown += (s, e) => { if (e.KeyCode == Keys.Escape) Close(); };
+        }
+
+        // âœ… Constructor adicional para recibir directamente el ID del usuario
+        public FormHC(int idUsuarioActual) : this()
+        {
+            IdUsuarioActual = idUsuarioActual;
         }
 
         private void FormHC_Load(object? sender, EventArgs e)
@@ -77,9 +83,8 @@ namespace CapaPresentacion.Formularios
             bool ok = true;
 
             string pac = txtPaciente.Text.Trim();
-            // Tomar los valores REALES que acepta la BD
-            string estado = Convert.ToString(cboEstado.SelectedValue) ?? "abierta";            // 'abierta','cerrada','archivada'
-            string tipo = Convert.ToString(cboTipoConsulta.SelectedValue) ?? "consulta";     // 'guardia','consulta','control','internacion'
+            string estado = Convert.ToString(cboEstado.SelectedValue) ?? "abierta";
+            string tipo = Convert.ToString(cboTipoConsulta.SelectedValue) ?? "consulta";
 
             string motivo = txtMotivo.Text.Trim();
             DateTime fechaHora = dtpFechaHora.Value;
@@ -91,36 +96,43 @@ namespace CapaPresentacion.Formularios
 
             if (string.IsNullOrWhiteSpace(pac) || pac.Length < 3)
             {
-                _ep.SetError(txtPaciente, "Ingrese un paciente válido.");
+                _ep.SetError(txtPaciente, "Ingrese un paciente vÃ¡lido.");
                 ok = false;
             }
             if (string.IsNullOrWhiteSpace(diag))
             {
-                _ep.SetError(txtDiagnostico, "El diagnóstico es obligatorio.");
+                _ep.SetError(txtDiagnostico, "El diagnÃ³stico es obligatorio.");
                 ok = false;
             }
             if (!ok) return;
 
             try
             {
+                if (IdUsuarioActual <= 0)
+                {
+                    MessageBox.Show("Error: no se recibiÃ³ el ID del usuario actual.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 bool exito = _hcNegocio.RegistrarHistoriaClinica(
                     pac, estado, motivo, fechaHora, imp, diag, ind, ant, obs, tipo, IdUsuarioActual);
 
                 if (exito)
                 {
-                    MessageBox.Show("Historia clínica registrada correctamente.",
-                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Historia clÃ­nica registrada correctamente.",
+                        "Ã‰xito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Close();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo registrar la historia clínica.",
+                    MessageBox.Show("No se pudo registrar la historia clÃ­nica.",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar la historia clínica:\n" + ex.Message,
+                MessageBox.Show("Error al guardar la historia clÃ­nica:\n" + ex.Message,
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

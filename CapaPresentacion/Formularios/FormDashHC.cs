@@ -13,10 +13,12 @@ namespace CapaPresentacion.Formularios
         private readonly PacienteNegocio _pacNegocio = new();
 
         private DataTable _tablaHistorias = new();
+        private readonly int _idUsuarioActual;
 
-        public FormDashHC()
+        public FormDashHC(int idUsuarioActual)
         {
             InitializeComponent();
+            _idUsuarioActual = idUsuarioActual;
         }
 
         private void FormDashHC_Load(object sender, EventArgs e)
@@ -27,6 +29,9 @@ namespace CapaPresentacion.Formularios
             CargarHistorias();
         }
 
+        // ===============================================================
+        // CONFIGURACIÓN DE GRILLA
+        // ===============================================================
         private void ConfigurarControles()
         {
             dgvHistorias.EnableHeadersVisualStyles = false;
@@ -42,6 +47,9 @@ namespace CapaPresentacion.Formularios
             dgvHistorias.DefaultCellStyle.SelectionForeColor = Color.Black;
         }
 
+        // ===============================================================
+        // CARGA DE PACIENTES Y DATOS
+        // ===============================================================
         private void CargarPacientesCombo()
         {
             var dt = _pacNegocio.ObtenerListaSimple();
@@ -61,6 +69,9 @@ namespace CapaPresentacion.Formularios
             dgvHistorias.DataSource = _tablaHistorias;
         }
 
+        // ===============================================================
+        // BOTONES
+        // ===============================================================
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             CargarHistorias();
@@ -68,26 +79,62 @@ namespace CapaPresentacion.Formularios
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
-            if (dgvHistorias.CurrentRow == null) return;
+            if (dgvHistorias.CurrentRow == null)
+            {
+                MessageBox.Show("Seleccione una historia clínica para editar.", "Atención",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             int idHistoria = Convert.ToInt32(dgvHistorias.CurrentRow.Cells["id_historia"].Value);
-            //FormHC form = new(idHistoria);
-            //form.ShowDialog();
+
+            // Abre el nuevo formulario modal para editar
+            /*
+            using (FormEditarHC form = new(idHistoria))
+            {
+                form.ShowDialog();
+            }
+            */
+
+            // Refresca la lista al cerrar
             CargarHistorias();
         }
 
         private void btnAdjuntos_Click(object sender, EventArgs e)
         {
-            if (dgvHistorias.CurrentRow == null) return;
+            if (dgvHistorias.CurrentRow == null)
+            {
+                MessageBox.Show("Seleccione una historia clínica para ver los archivos adjuntos.",
+                    "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            int idPaciente = Convert.ToInt32(dgvHistorias.CurrentRow.Cells["id_paciente"].Value);
-            FormAdjuntosPaciente form = new(idPaciente);
-            form.ShowDialog();
+            // ✅ Obtener el DataRow subyacente, incluso si la columna está oculta
+            DataRowView drv = dgvHistorias.CurrentRow.DataBoundItem as DataRowView;
+            if (drv == null)
+            {
+                MessageBox.Show("No se pudo obtener la información del paciente.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int idPaciente = Convert.ToInt32(drv["id_paciente"]);
+
+            // Abrir el formulario de adjuntos pasando usuario + paciente
+            using (FormAdjuntosPaciente form = new(_idUsuarioActual, idPaciente))
+            {
+                form.ShowDialog();
+            }
         }
 
         private void btnExportarPDF_Click(object sender, EventArgs e)
         {
-            if (dgvHistorias.CurrentRow == null) return;
+            if (dgvHistorias.CurrentRow == null)
+            {
+                MessageBox.Show("Seleccione una historia clínica para exportar.",
+                    "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             int idHistoria = Convert.ToInt32(dgvHistorias.CurrentRow.Cells["id_historia"].Value);
             string nombrePaciente = dgvHistorias.CurrentRow.Cells["paciente"].Value.ToString();
@@ -103,7 +150,11 @@ namespace CapaPresentacion.Formularios
                 _hcNegocio.ExportarHistoriaClinicaPDF(idHistoria, sfd.FileName);
                 MessageBox.Show("PDF exportado correctamente.", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Process.Start(new ProcessStartInfo(sfd.FileName) { UseShellExecute = true });
+
+                Process.Start(new ProcessStartInfo(sfd.FileName)
+                {
+                    UseShellExecute = true
+                });
             }
         }
     }
