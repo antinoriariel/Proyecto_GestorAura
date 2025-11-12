@@ -53,8 +53,23 @@ namespace CapaDatos
         }
 
         /// <summary>
-        /// NUEVO: devuelve un DataTable con columnas (id_paciente, nombre, apellido),
-        /// pensado para combos/listas de selección rápida en la UI.
+        /// Devuelve un DataTable con nombre y apellido de un paciente específico.
+        /// </summary>
+        public DataTable ObtenerPacientePorId(int id)
+        {
+            using SqlConnection cn = new(conexion);
+            using SqlCommand cmd = new("SELECT nombre, apellido FROM pacientes WHERE id_paciente = @id", cn);
+            cmd.Parameters.AddWithValue("@id", id);
+            cn.Open();
+
+            var dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+
+        /// <summary>
+        /// NUEVO: devuelve un DataTable con columnas (id_paciente, nombre, apellido)
+        /// para combos/listas de selección rápida en la UI.
         /// </summary>
         public DataTable ObtenerListaSimple(bool soloActivos = true)
         {

@@ -131,6 +131,12 @@ namespace CapaNegocio
             Activo = p.Activo,
             FechaAlta = p.FechaAlta
         };
+
+        public DataTable ObtenerPacientePorId(int idPaciente)
+        {
+            return _dao.ObtenerPacientePorId(idPaciente);
+        }
+
     }
 
     // =======================================================

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using CapaNegocio;
+using CapaPresentacion.Controles;
+using CapaPresentacion.Formularios;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using CapaPresentacion.Controles;
-using CapaPresentacion.Formularios;
-using CapaNegocio;
 
 namespace CapaPresentacion
 {
@@ -149,6 +149,22 @@ namespace CapaPresentacion
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
             sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
+
+            // === PACIENTES ===
+            sidebar.BtnPacientesClick += (s, e) =>
+            {
+                try
+                {
+                    int idMedico = ObtenerIdUsuarioActual();
+                    var formDashPacientes = new FormDashPacientesMed(/*idMedico*/);
+                    MostrarFormUnico(formDashPacientes);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al abrir el panel de pacientes:\n" + ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
 
             // === HISTORIA CLÍNICA ===
             sidebar.BtnHistoriasClick += (s, e) =>

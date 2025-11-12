@@ -38,6 +38,29 @@ namespace CapaPresentacion.Formularios
             IdUsuarioActual = idUsuarioActual;
         }
 
+        // Constructor adicional con idUsuarioActual e idPaciente
+        public FormHC(int idUsuarioActual, int idPaciente) : this(idUsuarioActual)
+        {
+            // 🔹 Cargar automáticamente el paciente en el campo de texto
+            try
+            {
+                var pacienteNeg = new PacienteNegocio();
+                var dt = pacienteNeg.ObtenerPacientePorId(idPaciente); // método simple que devuelva el nombre completo
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    string nombreCompleto = $"{dt.Rows[0]["nombre"]} {dt.Rows[0]["apellido"]}";
+                    txtPaciente.Text = nombreCompleto;
+                    txtPaciente.Enabled = false; // evitar edición
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error cargando paciente:\n" + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
         private void FormHC_Load(object? sender, EventArgs e)
         {
             ConfigurarAutocompletadoPacientes();
