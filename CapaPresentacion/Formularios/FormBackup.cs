@@ -3,11 +3,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using CapaNegocio;
 
 namespace CapaPresentacion.Formularios
 {
     public partial class FormBackup : Form
     {
+        private readonly BackupNegocio _backupNegocio = new();
+
         public FormBackup()
         {
             InitializeComponent();
@@ -17,6 +20,11 @@ namespace CapaPresentacion.Formularios
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
+                dialog.Description = "Seleccione la carpeta donde se guardará el backup";
+
+                if (!string.IsNullOrWhiteSpace(txtRuta.Text))
+                    dialog.SelectedPath = txtRuta.Text;
+
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     txtRuta.Text = dialog.SelectedPath;
@@ -55,20 +63,33 @@ namespace CapaPresentacion.Formularios
                 return;
             }
 
-            // Simulación de creación de backup
-            string fileName = $"Backup_{DateTime.Now:yyyyMMdd_HHmmss}.bak";
-            string fullPath = Path.Combine(ruta, fileName);
-
             try
             {
-                File.Create(fullPath).Close();
-                MessageBox.Show($"Backup generado correctamente en:\n{fullPath}",
-                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnGenerarBackup.Enabled = false;
+                Cursor = Cursors.WaitCursor;
+
+                string carpetaFinal = _backupNegocio.GenerarBackupCompleto(ruta);
+
+                MessageBox.Show(
+                    $"Backup generado correctamente.\n\nCarpeta:\n{carpetaFinal}",
+                    "Éxito",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al generar backup: {ex.Message}",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error al generar backup:\n\n{ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+            finally
+            {
+                btnGenerarBackup.Enabled = true;
+                Cursor = Cursors.Default;
             }
         }
     }
