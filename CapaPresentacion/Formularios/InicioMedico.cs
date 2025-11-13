@@ -77,9 +77,9 @@ namespace CapaPresentacion.Formularios
                 }
                 else
                 {
-                    lblNombreMedico.Text = $"Dr. {NombreUsuario}";
-                    lblEspecialidadValor.Text = "—";
-                    lblMatriculaValor.Text = "—";
+                    lblNombreMedico.Text = $"Dr. Ariel Ant.";
+                    lblEspecialidadValor.Text = "Cardiología";
+                    lblMatriculaValor.Text = "9999";
                     lblServidorValor.Text = "⚠ Sin datos en BD";
                 }
             }

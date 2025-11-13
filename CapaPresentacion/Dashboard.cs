@@ -69,6 +69,9 @@ namespace CapaPresentacion
                 AbrirInicioSecretaria();
         }
 
+        // ============================================================
+        // VOLVER AL LOGIN
+        // ============================================================
         private void VolverALogin()
         {
             var login = new Login
@@ -80,6 +83,9 @@ namespace CapaPresentacion
             this.Close();
         }
 
+        // ============================================================
+        // CARGAR SIDEBAR SEGÚN ROL
+        // ============================================================
         private void CargarSidebar(string rol, string nombre)
         {
             SidebarBase sidebar = null;
@@ -131,7 +137,7 @@ namespace CapaPresentacion
         }
 
         // ============================================================
-        // EVENTOS SIDEBAR - ADMIN
+        // EVENTOS SIDEBAR - ADMINISTRADOR
         // ============================================================
         private void ConfigurarEventosAdmin(AdminSidebar sidebar)
         {
@@ -152,7 +158,21 @@ namespace CapaPresentacion
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
-            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
+
+            // === TURNOS (modo lectura) ===
+            sidebar.BtnTurnosClick += (s, e) =>
+            {
+                try
+                {
+                    var formTurnos = new FormTurnosSecretaria(rolUsuario);
+                    MostrarFormUnico(formTurnos);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al abrir el formulario de turnos:\n" + ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
 
             // === PACIENTES ===
             sidebar.BtnPacientesClick += (s, e) =>
@@ -227,7 +247,22 @@ namespace CapaPresentacion
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
             sidebar.BtnDashboardClick += (s, e) => AbrirInicioSecretaria();
-            sidebar.BtnTurnosClick += (s, e) => MostrarFormUnico<FormTurnosSecretaria>();
+
+            // === TURNOS (completo) ===
+            sidebar.BtnTurnosClick += (s, e) =>
+            {
+                try
+                {
+                    var formTurnos = new FormTurnosSecretaria(rolUsuario);
+                    MostrarFormUnico(formTurnos);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al abrir el formulario de turnos:\n" + ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormPacientesSecretaria>();
             sidebar.BtnNotasClick += (s, e) => MostrarFormUnico<FormNotas>(idUsuarioActual);
             sidebar.BtnMensajesClick += (s, e) =>
@@ -235,7 +270,7 @@ namespace CapaPresentacion
         }
 
         // ============================================================
-        // MÉTODO GENERALIZADO - MDI PARAMETRIZADO
+        // MÉTODOS GENERALES MDI
         // ============================================================
         private void MostrarFormUnico<T>(params object[] args) where T : Form
         {
@@ -284,7 +319,7 @@ namespace CapaPresentacion
         }
 
         // ============================================================
-        // PANEL DE SECRETARIA
+        // INICIO SECRETARIA
         // ============================================================
         private void AbrirInicioSecretaria()
         {
@@ -312,7 +347,7 @@ namespace CapaPresentacion
         }
 
         // ============================================================
-        // OBTENER ID USUARIO LOGUEADO
+        // OBTENER ID DEL USUARIO LOGUEADO
         // ============================================================
         private int ObtenerIdUsuarioActual()
         {

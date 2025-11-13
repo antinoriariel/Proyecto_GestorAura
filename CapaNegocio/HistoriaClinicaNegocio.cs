@@ -77,41 +77,38 @@ namespace CapaNegocio
         // NUEVOS MÉTODOS PARA DASHBOARD HC
         // ===============================
 
-        /// <summary>
-        /// Obtiene todas las historias clínicas con datos de paciente y médico.
-        /// Permite filtrar opcionalmente por paciente y fechas.
-        /// </summary>
         public DataTable ObtenerHistoriasDetalladas(int? idPaciente = null, DateTime? desde = null, DateTime? hasta = null)
         {
             return _dao.ObtenerHistoriasDetalladas(idPaciente, desde, hasta);
         }
 
         public bool ActualizarHistoriaClinica(
-    int idHistoria,
-    string estado,
-    string motivo,
-    DateTime fechaHora,
-    string impresionDiagnostica,
-    string diagnostico,
-    string indicaciones,
-    string antecedentes,
-    string observaciones,
-    string tipoConsulta,
-    int idUsuarioActual)
+            int idHistoria,
+            string estado,
+            string motivo,
+            DateTime fechaHora,
+            string impresionDiagnostica,
+            string diagnostico,
+            string indicaciones,
+            string antecedentes,
+            string observaciones,
+            string tipoConsulta,
+            int idUsuarioActual)
         {
             return _dao.ActualizarHistoriaClinica(
                 idHistoria, estado, motivo, fechaHora, impresionDiagnostica,
                 diagnostico, indicaciones, antecedentes, observaciones,
                 tipoConsulta, idUsuarioActual);
         }
+
         public DataTable ObtenerHistoriasPorPaciente(int idPaciente)
         {
             return _dao.ObtenerHistoriasPorPaciente(idPaciente);
         }
 
-        /// <summary>
-        /// Exporta una historia clínica a PDF en la ruta indicada.
-        /// </summary>
+        // =====================================
+        // EXPORTAR HISTORIA CLÍNICA A PDF (PRO)
+        // =====================================
         public void ExportarHistoriaClinicaPDF(int idHistoria, string rutaDestino)
         {
             var dt = _dao.ObtenerHistoriaDetalladaPorId(idHistoria);
@@ -120,80 +117,139 @@ namespace CapaNegocio
 
             DataRow row = dt.Rows[0];
 
-            // Crear documento PDF (usando nombres completos para evitar ambigüedades)
-            iTextSharp.text.Document doc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 50f, 50f, 60f, 60f);
-
+            Document doc = new Document(PageSize.A4, 55f, 55f, 70f, 60f);
             using (FileStream fs = new FileStream(rutaDestino, FileMode.Create))
             {
-                PdfWriter.GetInstance(doc, fs);
+                PdfWriter writer = PdfWriter.GetInstance(doc, fs);
                 doc.Open();
 
-                // Encabezado
-                var titulo = new iTextSharp.text.Paragraph("Historia Clínica",
-                    new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 18f, iTextSharp.text.Font.BOLD))
+                // ====== ENCABEZADO ======
+                PdfPTable header = new PdfPTable(2);
+                header.WidthPercentage = 100;
+                header.SetWidths(new float[] { 1.2f, 4f });
+                header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                string logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "logo_gestoraura.png");
+                if (File.Exists(logoPath))
                 {
-                    Alignment = iTextSharp.text.Element.ALIGN_CENTER,
+                    iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(logoPath);
+                    logo.ScaleAbsolute(70f, 70f);
+                    PdfPCell logoCell = new PdfPCell(logo)
+                    {
+                        Border = Rectangle.NO_BORDER,
+                        HorizontalAlignment = Element.ALIGN_LEFT,
+                        VerticalAlignment = Element.ALIGN_MIDDLE,
+                        PaddingBottom = 5f
+                    };
+                    header.AddCell(logoCell);
+                }
+                else
+                {
+                    header.AddCell(new PdfPCell(new Phrase("GestorAura", new Font(Font.FontFamily.HELVETICA, 16f, Font.BOLD)))
+                    {
+                        Border = Rectangle.NO_BORDER,
+                        PaddingTop = 25f
+                    });
+                }
+
+                PdfPCell titleCell = new PdfPCell(new Phrase("HISTORIA CLÍNICA\nSistema GestorAura",
+                    new Font(Font.FontFamily.HELVETICA, 16f, Font.BOLD, new BaseColor(0, 0, 0))))
+                {
+                    Border = Rectangle.NO_BORDER,
+                    HorizontalAlignment = Element.ALIGN_RIGHT,
+                    VerticalAlignment = Element.ALIGN_MIDDLE,
+                    PaddingTop = 15f
+                };
+                header.AddCell(titleCell);
+                doc.Add(header);
+
+                DrawLine(doc, writer, 50, 740);
+                doc.Add(new Paragraph("\n"));
+
+                // ====== DATOS DEL PACIENTE ======
+                PdfPTable tabla = new PdfPTable(2)
+                {
+                    WidthPercentage = 100,
                     SpacingAfter = 20f
                 };
-                doc.Add(titulo);
+                tabla.SetWidths(new float[] { 2f, 4f });
 
-                // Datos del paciente
-                var datosPaciente = new iTextSharp.text.pdf.PdfPTable(2)
+                Font fLabel = new Font(Font.FontFamily.HELVETICA, 11f, Font.BOLD, new BaseColor(0, 0, 0));
+                Font fValue = new Font(Font.FontFamily.HELVETICA, 11f, Font.NORMAL, BaseColor.BLACK);
+                BaseColor altColor = new BaseColor(238, 238, 238);
+
+                void AddRow(string label, string val, bool shaded)
                 {
-                    WidthPercentage = 100
+                    BaseColor bg = shaded ? altColor : BaseColor.WHITE;
+                    PdfPCell c1 = new PdfPCell(new Phrase(label, fLabel)) { Border = Rectangle.NO_BORDER, BackgroundColor = bg, Padding = 4f };
+                    PdfPCell c2 = new PdfPCell(new Phrase(val ?? "-", fValue)) { Border = Rectangle.NO_BORDER, BackgroundColor = bg, Padding = 4f };
+                    tabla.AddCell(c1);
+                    tabla.AddCell(c2);
+                }
+
+                bool shade = false;
+                AddRow("Paciente:", $"{row["nombre_paciente"]} {row["apellido_paciente"]}", shade = !shade);
+                AddRow("DNI:", row["dni_paciente"].ToString(), shade = !shade);
+                AddRow("Fecha de Nacimiento:", Convert.ToDateTime(row["f_nacimiento"]).ToString("dd/MM/yyyy"), shade = !shade);
+                AddRow("Médico:", $"{row["nombre_medico"]} {row["apellido_medico"]}", shade = !shade);
+                AddRow("Fecha y Hora:", Convert.ToDateTime(row["fecha_hora"]).ToString("dd/MM/yyyy HH:mm"), shade = !shade);
+                AddRow("Estado:", row["estado"].ToString(), shade = !shade);
+                AddRow("Tipo de Consulta:", row["tipo_consulta"].ToString(), shade = !shade);
+
+                doc.Add(tabla);
+
+                // ====== SECCIONES ======
+                Font fSec = new Font(Font.FontFamily.HELVETICA, 13f, Font.BOLD, new BaseColor(0, 136, 204)); // azul institucional
+                Font fBody = new Font(Font.FontFamily.HELVETICA, 11f, Font.NORMAL, BaseColor.DARK_GRAY);
+
+                void AddSection(string titulo, string contenido)
+                {
+                    Paragraph sec = new Paragraph(titulo + ":", fSec) { SpacingBefore = 8f, SpacingAfter = 4f };
+                    Paragraph body = new Paragraph(string.IsNullOrWhiteSpace(contenido) ? "-" : contenido, fBody)
+                    { SpacingAfter = 8f };
+                    doc.Add(sec);
+                    doc.Add(body);
+                }
+
+                AddSection("Motivo de consulta", row["motivo"].ToString());
+                AddSection("Impresión diagnóstica", row["impresion_diagnostica"].ToString());
+                AddSection("Diagnóstico final", row["diagnostico"].ToString());
+                AddSection("Indicaciones", row["indicaciones"].ToString());
+                AddSection("Antecedentes", row["antecedentes"].ToString());
+                AddSection("Observaciones", row["observaciones"].ToString());
+
+                // ====== FIRMA Y PIE ======
+                doc.Add(new Paragraph("\n"));
+                DrawLine(doc, writer, 120, 120);
+
+                Paragraph firma = new Paragraph("Firma del profesional",
+                    new Font(Font.FontFamily.HELVETICA, 10f, Font.ITALIC, BaseColor.GRAY))
+                {
+                    Alignment = Element.ALIGN_CENTER,
+                    SpacingAfter = 20f
                 };
-                datosPaciente.DefaultCell.Border = 0;
+                doc.Add(firma);
 
-                void AddRow(string label, string value)
+                Paragraph pie = new Paragraph($"Emitido automáticamente por GestorAura - {DateTime.Now:dd/MM/yyyy HH:mm}",
+                    new Font(Font.FontFamily.HELVETICA, 9f, Font.ITALIC, BaseColor.GRAY))
                 {
-                    datosPaciente.AddCell(new iTextSharp.text.Phrase(label,
-                        new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 11f, iTextSharp.text.Font.BOLD)));
-                    datosPaciente.AddCell(new iTextSharp.text.Phrase(value ?? "-",
-                        new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 11f)));
-                }
-
-                AddRow("Paciente:", $"{row["nombre_paciente"]} {row["apellido_paciente"]}");
-                AddRow("DNI:", row["dni_paciente"].ToString());
-                AddRow("Fecha de Nacimiento:", Convert.ToDateTime(row["f_nacimiento"]).ToString("dd/MM/yyyy"));
-                AddRow("Médico:", $"{row["nombre_medico"]} {row["apellido_medico"]}");
-                AddRow("Fecha y Hora:", Convert.ToDateTime(row["fecha_hora"]).ToString("dd/MM/yyyy HH:mm"));
-                AddRow("Estado:", row["estado"].ToString());
-                AddRow("Tipo de Consulta:", row["tipo_consulta"].ToString());
-                doc.Add(datosPaciente);
-
-                doc.Add(new iTextSharp.text.Paragraph("\n"));
-
-                // Secciones del cuerpo
-                void AddSection(string tituloSec, string contenido)
-                {
-                    var subtitulo = new iTextSharp.text.Paragraph(tituloSec,
-                        new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13f, iTextSharp.text.Font.BOLDITALIC))
-                    {
-                        SpacingBefore = 8f,
-                        SpacingAfter = 2f
-                    };
-                    doc.Add(subtitulo);
-                    doc.Add(new iTextSharp.text.Paragraph(contenido ?? "-",
-                        new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 11f)));
-                    doc.Add(new iTextSharp.text.Paragraph("\n"));
-                }
-
-                AddSection("Motivo de consulta:", row["motivo"].ToString());
-                AddSection("Impresión diagnóstica:", row["impresion_diagnostica"].ToString());
-                AddSection("Diagnóstico final:", row["diagnostico"].ToString());
-                AddSection("Indicaciones:", row["indicaciones"].ToString());
-                AddSection("Antecedentes:", row["antecedentes"].ToString());
-                AddSection("Observaciones:", row["observaciones"].ToString());
-
-                // Pie de página
-                doc.Add(new iTextSharp.text.Paragraph(
-                    $"Emitido automáticamente por GestorAura - {DateTime.Now:dd/MM/yyyy HH:mm}",
-                    new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9f,
-                        iTextSharp.text.Font.ITALIC, iTextSharp.text.BaseColor.GRAY)
-                ));
+                    Alignment = Element.ALIGN_CENTER
+                };
+                doc.Add(pie);
 
                 doc.Close();
             }
+        }
+
+        // ======= LÍNEA AUXILIAR =======
+        private static void DrawLine(Document doc, PdfWriter writer, float left, float y)
+        {
+            PdfContentByte cb = writer.DirectContent;
+            cb.SetColorStroke(BaseColor.LIGHT_GRAY);
+            cb.SetLineWidth(0.8f);
+            cb.MoveTo(left, y);
+            cb.LineTo(doc.PageSize.Width - left, y);
+            cb.Stroke();
         }
     }
 }
