@@ -1,177 +1,252 @@
-﻿namespace CapaPresentacion.Formularios
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace CapaPresentacion.Formularios
 {
     partial class FormMedicos
     {
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
+        private Panel panelHeader;
+        private Label lblTitulo;
 
-        private System.Windows.Forms.Panel headerPanel;
-        private System.Windows.Forms.PictureBox picHeader;
-        private System.Windows.Forms.Label lblHeader;
+        private FlowLayoutPanel panelBotones; // arriba del listado
+        private Button btnAgregar;
+        private Button btnModificar;
+        private Button btnEliminar;
+        private Button btnInactivar;
 
-        private System.Windows.Forms.GroupBox grpListado;
-        private System.Windows.Forms.DataGridView dgvMedicos;
+        private GroupBox gbListado;
+        private DataGridView dgvMedicos;
 
-        private System.Windows.Forms.Panel footerPanel;
-        private System.Windows.Forms.Button btnAgregar;
-        private System.Windows.Forms.Button btnModificar;
-        private System.Windows.Forms.Button btnEliminar;
-        private System.Windows.Forms.Button btnInactivar;
+        private GroupBox gbFicha;
+        private TableLayoutPanel tlpFicha;
 
-        /// <inheritdoc />
+        private Label lblUsername; private TextBox txtUsername;
+        private Label lblEmail; private TextBox txtEmail;
+        private Label lblTelefono; private TextBox txtTelefono;
+        private Label lblNombre; private TextBox txtNombre;
+        private Label lblApellido; private TextBox txtApellido;
+        private Label lblDni; private TextBox txtDni;
+        private Label lblNacimiento; private DateTimePicker dtpNacimiento;
+        private Label lblEspecialidad; private TextBox txtEspecialidad;
+        private Label lblMatProv; private TextBox txtMatProv;
+        private Label lblMatNac; private TextBox txtMatNac;
+        private CheckBox chkActivo;
+
+        private FlowLayoutPanel panelFichaBotones;
+        private Button btnNuevoFicha;
+        private Button btnGuardarFicha;
+        private Button btnCancelarFicha;
+
+        private StatusStrip statusStrip;
+        private ToolStripStatusLabel lblTotal;
+
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-                components.Dispose();
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
-            headerPanel = new Panel();
-            picHeader = new PictureBox();
-            lblHeader = new Label();
-            grpListado = new GroupBox();
-            dgvMedicos = new DataGridView();
-            footerPanel = new Panel();
-            btnAgregar = new Button();
-            btnModificar = new Button();
-            btnEliminar = new Button();
-            btnInactivar = new Button();
+            this.components = new Container();
+            this.panelHeader = new Panel();
+            this.lblTitulo = new Label();
 
-            headerPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picHeader).BeginInit();
-            grpListado.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvMedicos).BeginInit();
-            footerPanel.SuspendLayout();
-            SuspendLayout();
-            // 
-            // headerPanel
-            // 
-            headerPanel.BackColor = Color.FromArgb(41, 57, 71);
-            headerPanel.Controls.Add(picHeader);
-            headerPanel.Controls.Add(lblHeader);
-            headerPanel.Dock = DockStyle.Top;
-            headerPanel.Location = new Point(21, 12);
-            headerPanel.Name = "headerPanel";
-            headerPanel.Size = new Size(676, 48);
-            headerPanel.TabIndex = 0;
-            // 
-            // picHeader
-            // 
-            picHeader.Image = Properties.Resources.medicoIcon;
-            picHeader.Location = new Point(14, 9);
-            picHeader.Name = "picHeader";
-            picHeader.Size = new Size(35, 30);
-            picHeader.SizeMode = PictureBoxSizeMode.Zoom;
-            picHeader.TabStop = false;
-            // 
-            // lblHeader
-            // 
-            lblHeader.AutoSize = true;
-            lblHeader.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
-            lblHeader.ForeColor = Color.White;
-            lblHeader.Location = new Point(56, 14);
-            lblHeader.Name = "lblHeader";
-            lblHeader.Size = new Size(223, 30);
-            lblHeader.TabIndex = 1;
-            lblHeader.Text = "Gestión de Médicos";
-            // 
-            // grpListado
-            // 
-            grpListado.BackColor = Color.White;
-            grpListado.Controls.Add(dgvMedicos);
-            grpListado.Dock = DockStyle.Fill;
-            grpListado.Location = new Point(21, 60);
-            grpListado.Name = "grpListado";
-            grpListado.Padding = new Padding(14, 12, 14, 12);
-            grpListado.Size = new Size(676, 340);
-            grpListado.TabIndex = 1;
-            grpListado.TabStop = false;
-            grpListado.Text = "Listado de médicos";
-            // 
-            // dgvMedicos
-            // 
-            dgvMedicos.AllowUserToAddRows = false;
-            dgvMedicos.AllowUserToDeleteRows = false;
-            dgvMedicos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvMedicos.BackgroundColor = Color.White;
-            dgvMedicos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvMedicos.Dock = DockStyle.Fill;
-            dgvMedicos.Location = new Point(14, 28);
-            dgvMedicos.MultiSelect = false;
-            dgvMedicos.Name = "dgvMedicos";
-            dgvMedicos.ReadOnly = true;
-            dgvMedicos.RowHeadersVisible = false;
-            dgvMedicos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMedicos.Size = new Size(648, 300);
-            dgvMedicos.TabIndex = 0;
-            // 
-            // footerPanel
-            // 
-            footerPanel.BackColor = Color.Transparent;
-            footerPanel.Controls.Add(btnAgregar);
-            footerPanel.Controls.Add(btnModificar);
-            footerPanel.Controls.Add(btnEliminar);
-            footerPanel.Controls.Add(btnInactivar);
-            footerPanel.Dock = DockStyle.Bottom;
-            footerPanel.Location = new Point(21, 400);
-            footerPanel.Name = "footerPanel";
-            footerPanel.Padding = new Padding(0, 6, 0, 0);
-            footerPanel.Size = new Size(676, 60);
-            footerPanel.TabIndex = 2;
-            // 
-            // btnAgregar
-            // 
-            btnAgregar.AutoSize = true;
-            btnAgregar.Text = "➕ Agregar";
-            btnAgregar.Location = new Point(20, 15);
-            // 
-            // btnModificar
-            // 
-            btnModificar.AutoSize = true;
-            btnModificar.Text = "✏️ Modificar";
-            btnModificar.Location = new Point(140, 15);
-            // 
-            // btnEliminar
-            // 
-            btnEliminar.AutoSize = true;
-            btnEliminar.Text = "🗑️ Eliminar";
-            btnEliminar.Location = new Point(260, 15);
-            // 
-            // btnInactivar
-            // 
-            btnInactivar.AutoSize = true;
-            btnInactivar.Text = "🚫 Inactivar";
-            btnInactivar.Location = new Point(380, 15);
-            // 
-            // FormMedicos
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(241, 244, 246);
-            ClientSize = new Size(718, 472);
-            ControlBox = false;
-            Controls.Add(grpListado);
-            Controls.Add(footerPanel);
-            Controls.Add(headerPanel);
-            FormBorderStyle = FormBorderStyle.None;
-            KeyPreview = true;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "FormMedicos";
-            Padding = new Padding(21, 12, 21, 12);
-            StartPosition = FormStartPosition.CenterParent;
-            Text = "Gestión de Médicos";
+            this.panelBotones = new FlowLayoutPanel();
+            this.btnAgregar = new Button();
+            this.btnModificar = new Button();
+            this.btnEliminar = new Button();
+            this.btnInactivar = new Button();
 
-            headerPanel.ResumeLayout(false);
-            headerPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)picHeader).EndInit();
-            grpListado.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvMedicos).EndInit();
-            footerPanel.ResumeLayout(false);
-            footerPanel.PerformLayout();
-            ResumeLayout(false);
+            this.gbListado = new GroupBox();
+            this.dgvMedicos = new DataGridView();
+
+            this.gbFicha = new GroupBox();
+            this.tlpFicha = new TableLayoutPanel();
+
+            this.lblUsername = new Label(); this.txtUsername = new TextBox();
+            this.lblEmail = new Label(); this.txtEmail = new TextBox();
+            this.lblTelefono = new Label(); this.txtTelefono = new TextBox();
+            this.lblNombre = new Label(); this.txtNombre = new TextBox();
+            this.lblApellido = new Label(); this.txtApellido = new TextBox();
+            this.lblDni = new Label(); this.txtDni = new TextBox();
+            this.lblNacimiento = new Label(); this.dtpNacimiento = new DateTimePicker();
+            this.lblEspecialidad = new Label(); this.txtEspecialidad = new TextBox();
+            this.lblMatProv = new Label(); this.txtMatProv = new TextBox();
+            this.lblMatNac = new Label(); this.txtMatNac = new TextBox();
+            this.chkActivo = new CheckBox();
+
+            this.panelFichaBotones = new FlowLayoutPanel();
+            this.btnNuevoFicha = new Button();
+            this.btnGuardarFicha = new Button();
+            this.btnCancelarFicha = new Button();
+
+            this.statusStrip = new StatusStrip();
+            this.lblTotal = new ToolStripStatusLabel();
+
+            // Form
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.Text = "Gestión de Médicos";
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.KeyPreview = true;
+            this.MinimumSize = new System.Drawing.Size(1000, 720);
+            this.ClientSize = new System.Drawing.Size(1100, 750);
+            this.Controls.Add(this.gbFicha);
+            this.Controls.Add(this.gbListado);
+            this.Controls.Add(this.panelBotones);
+            this.Controls.Add(this.panelHeader);
+            this.Controls.Add(this.statusStrip);
+
+            // Header
+            this.panelHeader.Dock = DockStyle.Top;
+            this.panelHeader.Height = 55;
+            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(33, 42, 62);
+            this.panelHeader.Padding = new Padding(16, 10, 16, 10);
+            this.panelHeader.Controls.Add(this.lblTitulo);
+
+            this.lblTitulo.Dock = DockStyle.Fill;
+            this.lblTitulo.ForeColor = System.Drawing.Color.White;
+            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.Text = "Gestión de Médicos";
+            this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
+            // Botones (arriba del listado)
+            this.panelBotones.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            this.panelBotones.FlowDirection = FlowDirection.LeftToRight;
+            this.panelBotones.Location = new System.Drawing.Point(16, 60);
+            this.panelBotones.Size = new System.Drawing.Size(640, 44);
+            this.panelBotones.WrapContents = false;
+            this.panelBotones.Controls.Add(this.btnAgregar);
+            this.panelBotones.Controls.Add(this.btnModificar);
+            this.panelBotones.Controls.Add(this.btnEliminar);
+            this.panelBotones.Controls.Add(this.btnInactivar);
+
+            this.btnAgregar.Text = "➕ Nuevo";
+            this.btnAgregar.Width = 120; this.btnAgregar.Height = 36;
+            this.btnModificar.Text = "✏️ Editar";
+            this.btnModificar.Width = 120; this.btnModificar.Height = 36;
+            this.btnEliminar.Text = "🗑️ Eliminar";
+            this.btnEliminar.Width = 120; this.btnEliminar.Height = 36;
+            this.btnInactivar.Text = "🚫 Inactivar";
+            this.btnInactivar.Width = 120; this.btnInactivar.Height = 36;
+
+            // Listado
+            this.gbListado.Text = "Listado de médicos";
+            this.gbListado.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            this.gbListado.Location = new System.Drawing.Point(16, 110);
+            this.gbListado.Size = new System.Drawing.Size(1068, 330);
+            this.gbListado.Padding = new Padding(10);
+            this.gbListado.Controls.Add(this.dgvMedicos);
+
+            this.dgvMedicos.Dock = DockStyle.Fill;
+            this.dgvMedicos.AllowUserToAddRows = false;
+            this.dgvMedicos.AllowUserToDeleteRows = false;
+            this.dgvMedicos.AllowUserToOrderColumns = true;
+            this.dgvMedicos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvMedicos.BackgroundColor = System.Drawing.Color.White;
+            this.dgvMedicos.BorderStyle = BorderStyle.None;
+            this.dgvMedicos.MultiSelect = false;
+            this.dgvMedicos.ReadOnly = true;
+            this.dgvMedicos.RowHeadersVisible = false;
+            this.dgvMedicos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            this.dgvMedicos.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.dgvMedicos.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10F);
+
+            // Ficha
+            this.gbFicha.Text = "Ficha del médico";
+            this.gbFicha.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            this.gbFicha.Location = new System.Drawing.Point(16, 448);
+            this.gbFicha.Size = new System.Drawing.Size(1068, 230);
+            this.gbFicha.Padding = new Padding(10);
+            this.gbFicha.Controls.Add(this.tlpFicha);
+            this.gbFicha.Controls.Add(this.panelFichaBotones);
+
+            // TableLayout (3 filas x 6 columnas)
+            this.tlpFicha.Dock = DockStyle.Top;
+            this.tlpFicha.ColumnCount = 6;
+            this.tlpFicha.RowCount = 3;
+            this.tlpFicha.AutoSize = true;
+            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14f));
+            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19f));
+            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14f));
+            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19f));
+            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14f));
+            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20f));
+
+            // Fila 1
+            this.lblUsername.Text = "Usuario"; this.lblUsername.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblUsername, 0, 0);
+            this.tlpFicha.Controls.Add(this.txtUsername, 1, 0);
+
+            this.lblEmail.Text = "Email"; this.lblEmail.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblEmail, 2, 0);
+            this.tlpFicha.Controls.Add(this.txtEmail, 3, 0);
+
+            this.lblTelefono.Text = "Teléfono"; this.lblTelefono.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblTelefono, 4, 0);
+            this.tlpFicha.Controls.Add(this.txtTelefono, 5, 0);
+
+            // Fila 2
+            this.lblNombre.Text = "Nombre"; this.lblNombre.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblNombre, 0, 1);
+            this.tlpFicha.Controls.Add(this.txtNombre, 1, 1);
+
+            this.lblApellido.Text = "Apellido"; this.lblApellido.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblApellido, 2, 1);
+            this.tlpFicha.Controls.Add(this.txtApellido, 3, 1);
+
+            this.lblDni.Text = "DNI"; this.lblDni.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblDni, 4, 1);
+            this.tlpFicha.Controls.Add(this.txtDni, 5, 1);
+
+            // Fila 3
+            this.lblNacimiento.Text = "F. Nacimiento"; this.lblNacimiento.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblNacimiento, 0, 2);
+            this.dtpNacimiento.Format = DateTimePickerFormat.Short;
+            this.tlpFicha.Controls.Add(this.dtpNacimiento, 1, 2);
+
+            this.lblEspecialidad.Text = "Especialidad"; this.lblEspecialidad.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblEspecialidad, 2, 2);
+            this.tlpFicha.Controls.Add(this.txtEspecialidad, 3, 2);
+
+            this.lblMatProv.Text = "Matrícula Prov."; this.lblMatProv.AutoSize = true;
+            this.tlpFicha.Controls.Add(this.lblMatProv, 4, 2);
+            this.tlpFicha.Controls.Add(this.txtMatProv, 5, 2);
+
+            // Fila 4 (debajo del layout)
+            this.lblMatNac.Text = "Matrícula Nac."; this.lblMatNac.AutoSize = true;
+            this.lblMatNac.Location = new System.Drawing.Point(20, 150);
+            this.txtMatNac.Location = new System.Drawing.Point(120, 146);
+            this.txtMatNac.Width = 200;
+            this.chkActivo.Text = "Activo"; this.chkActivo.Checked = true;
+            this.chkActivo.Location = new System.Drawing.Point(350, 148);
+
+            this.gbFicha.Controls.Add(this.lblMatNac);
+            this.gbFicha.Controls.Add(this.txtMatNac);
+            this.gbFicha.Controls.Add(this.chkActivo);
+
+            // Estirar inputs
+            foreach (Control c in new Control[] { txtUsername, txtEmail, txtTelefono, txtNombre, txtApellido, txtDni, txtEspecialidad, txtMatProv })
+                if (c is TextBox t) t.Dock = DockStyle.Fill;
+
+            // Botones de ficha
+            this.panelFichaBotones.Dock = DockStyle.Bottom;
+            this.panelFichaBotones.Height = 48;
+            this.panelFichaBotones.FlowDirection = FlowDirection.RightToLeft;
+            this.panelFichaBotones.Controls.Add(this.btnCancelarFicha);
+            this.panelFichaBotones.Controls.Add(this.btnGuardarFicha);
+            this.panelFichaBotones.Controls.Add(this.btnNuevoFicha);
+
+            this.btnNuevoFicha.Text = "➕ Nuevo"; this.btnNuevoFicha.Width = 120; this.btnNuevoFicha.Height = 36;
+            this.btnGuardarFicha.Text = "💾 Guardar"; this.btnGuardarFicha.Width = 120; this.btnGuardarFicha.Height = 36;
+            this.btnCancelarFicha.Text = "✖ Cancelar"; this.btnCancelarFicha.Width = 120; this.btnCancelarFicha.Height = 36;
+
+            // Status
+            this.statusStrip.Dock = DockStyle.Bottom;
+            this.statusStrip.Items.Add(this.lblTotal);
+            this.lblTotal.Text = "Total: 0";
         }
         #endregion
     }

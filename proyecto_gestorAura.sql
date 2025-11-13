@@ -29,7 +29,7 @@ BEGIN
         deleted_at DATETIME2 NULL,
         activo BIT NOT NULL DEFAULT 1,
         rol VARCHAR(20) NOT NULL
-            CONSTRAINT CHK_Rol_Valido CHECK (rol IN ('medico', 'secretaria', 'administrador')),
+            CONSTRAINT CHK_Rol_Valido CHECK (rol IN ('medico', 'secretaria', 'administrador', 'administrativo')),
 
         CONSTRAINT PK_ID_USUARIO PRIMARY KEY (id_usuario),
         CONSTRAINT UQ_email UNIQUE (email),
@@ -257,6 +257,43 @@ BEGIN
 END
 GO
 
+USE proyecto_gestorAura;
+GO
+
+-- ===========================================================
+--  Tabla: notas_secretaria
+--  Descripción: Registra las notas personales de cada secretaria.
+--  Relación: 1 secretaria (users.rol='secretaria') → N notas.
+-- ===========================================================
+
+IF OBJECT_ID('notas_secretaria', 'U') IS NULL
+BEGIN
+    CREATE TABLE notas_secretaria (
+        id_nota INT IDENTITY(1,1) PRIMARY KEY,
+        id_secretaria INT NOT NULL,
+        titulo NVARCHAR(100) NOT NULL,
+        cuerpo NVARCHAR(MAX) NOT NULL,
+        fecha_creacion DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+        fecha_modificacion DATETIME2 NULL,
+        activo BIT NOT NULL DEFAULT 1
+    );
+END
+GO
+
+-- 🔹 Crear la FK luego de que la tabla users ya exista
+IF NOT EXISTS (
+    SELECT * FROM sys.foreign_keys WHERE name = 'FK_NotasSecretaria_Users'
+)
+BEGIN
+    ALTER TABLE notas_secretaria
+    ADD CONSTRAINT FK_NotasSecretaria_Users
+        FOREIGN KEY (id_secretaria)
+        REFERENCES users(id_usuario)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE;
+END
+GO
+
 ------------------------------------------------------------------------------------------------------------------
 -- Usuarios basicos insert
 INSERT INTO users (username,password_hash,password_salt,email,nombre,apellido,dni,f_nacimiento,telefono,created_at,activo,rol) VALUES (
@@ -372,4 +409,55 @@ INSERT INTO localidades (nombre, id_provincia, nombre_departamento, codigo_posta
 ('Villa Olivari', @IdProvinciaCorrientes, NULL, NULL),
 ('Yapeyú', @IdProvinciaCorrientes, 'San Martín', NULL),
 ('Yataytí Calle', @IdProvinciaCorrientes, NULL, NULL);
+GO
+
+USE proyecto_gestorAura;
+GO
+
+-- ===========================================================
+--  Tabla: mensajes_usuarios
+--  Descripción: Registra mensajes enviados entre usuarios del sistema.
+-- ===========================================================
+
+IF OBJECT_ID('mensajes_usuarios', 'U') IS NULL
+BEGIN
+    CREATE TABLE mensajes_usuarios (
+        id_mensaje INT IDENTITY(1,1) PRIMARY KEY,
+
+        id_remitente INT NOT NULL,
+        id_destinatario INT NOT NULL,
+
+        cuerpo NVARCHAR(MAX) NOT NULL,
+
+        fecha_creacion DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+
+        -- Relaciones (sin cascadas para evitar múltiples paths)
+        CONSTRAINT FK_Mensaje_Remitente FOREIGN KEY (id_remitente)
+            REFERENCES users(id_usuario)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+
+        CONSTRAINT FK_Mensaje_Destinatario FOREIGN KEY (id_destinatario)
+            REFERENCES users(id_usuario)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION
+    );
+END
+GO
+
+USE proyecto_gestorAura;
+GO
+
+CREATE OR ALTER VIEW vw_mensajes_detalle AS
+SELECT
+    m.id_mensaje,
+    m.id_remitente,
+    CONCAT(u1.nombre, ' ', u1.apellido) AS nombre_remitente,
+    m.id_destinatario,
+    CONCAT(u2.nombre, ' ', u2.apellido) AS nombre_destinatario,
+    m.cuerpo,
+    m.fecha_creacion
+FROM mensajes_usuarios AS m
+INNER JOIN users AS u1 ON m.id_remitente = u1.id_usuario
+INNER JOIN users AS u2 ON m.id_destinatario = u2.id_usuario;
 GO
