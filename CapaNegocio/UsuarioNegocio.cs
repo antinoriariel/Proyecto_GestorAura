@@ -9,28 +9,30 @@ namespace CapaNegocio
         private readonly UsuarioDAO _usuarioDAO = new();
 
         // ===============================================================
-        // MÉTODO LOGIN
+        // MÉTODO LOGIN (CORREGIDO)
         // ===============================================================
         public UsuarioLoginResult? Login(string username, string password)
         {
             DataRow? row = _usuarioDAO.ObtenerUsuarioPorUsername(username);
-            if (row == null) return null;
-            if (!(bool)row["activo"]) return null;
 
+            // Usuario NO existe → devolver null
+            if (row == null)
+                return null;
+
+            // Extraer hash/salt
             byte[] hash = (byte[])row["password_hash"];
             byte[] salt = (byte[])row["password_salt"];
 
-            bool valido = PasswordHelper.ValidarPassword(password, hash, salt);
-            if (valido)
-            {
-                return new UsuarioLoginResult
-                {
-                    Rol = row["rol"].ToString()!,
-                    NombreCompleto = $"{row["nombre"]} {row["apellido"]}"
-                };
-            }
+            bool passwordCorrecta = PasswordHelper.ValidarPassword(password, hash, salt);
 
-            return null;
+            // Devolver SIEMPRE el estado del usuario
+            return new UsuarioLoginResult
+            {
+                Rol = row["rol"].ToString()!,
+                NombreCompleto = $"{row["nombre"]} {row["apellido"]}",
+                Activo = (bool)row["activo"],
+                PasswordValida = passwordCorrecta
+            };
         }
 
         // ===============================================================

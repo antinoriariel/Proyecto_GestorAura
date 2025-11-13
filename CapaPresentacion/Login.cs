@@ -15,12 +15,11 @@ namespace CapaPresentacion
         {
             InitializeComponent();
 
-            this.AcceptButton = btnLogin;  // Enter hace login
-            this.CancelButton = btnClose;  // Esc cierra el formulario
-            this.KeyPreview = true;        // Capturar teclas globales
+            this.AcceptButton = btnLogin;
+            this.CancelButton = btnClose;
+            this.KeyPreview = true;
             this.KeyDown += Login_KeyDown;
 
-            // Configuración visual del formulario
             this.FormBorderStyle = FormBorderStyle.None;
             this.BackColor = Color.Teal;
 
@@ -76,7 +75,7 @@ namespace CapaPresentacion
         }
 
         // ============================================================
-        // EVENTO: BOTÓN LOGIN
+        // EVENTO: BOTÓN LOGIN (CORREGIDO)
         // ============================================================
         private void btnLogin_Click(object sender, EventArgs e)
         {
@@ -99,29 +98,8 @@ namespace CapaPresentacion
 
             UsuarioLoginResult? userData = usuarioNegocio.Login(usuario, contraseña);
 
-            if (userData != null)
-            {
-                // Ocultar login actual
-                this.Hide();
-
-                // ✅ CORREGIDO: se pasa también el username real al Dashboard
-                var dashboard_form = new Dashboard(userData.Rol, userData.NombreCompleto, usuario);
-
-                // Cuando se cierre el Dashboard (cerrar sesión o cambiar usuario),
-                // volvemos a mostrar el login
-                dashboard_form.FormClosed += (s, args) =>
-                {
-                    if (!this.IsDisposed)
-                    {
-                        this.Show();
-                        txtPassword.Clear();
-                        txtUsername.Focus();
-                    }
-                };
-
-                dashboard_form.Show();
-            }
-            else
+            // Usuario NO existe
+            if (userData == null)
             {
                 intentosFallidos++;
                 MessageBox.Show("Usuario o contraseña incorrectos.",
@@ -129,14 +107,53 @@ namespace CapaPresentacion
 
                 txtPassword.Clear();
                 txtPassword.Focus();
-
-                if (intentosFallidos >= 3)
-                {
-                    MessageBox.Show("Demasiados intentos fallidos. Cerrando la aplicación.",
-                        "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    this.Close();
-                }
+                return;
             }
+
+            // Usuario inactivo
+            if (!userData.Activo)
+            {
+                MessageBox.Show(
+                    "El usuario se encuentra deshabilitado para iniciar sesión.",
+                    "Acceso denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                txtPassword.Clear();
+                txtPassword.Focus();
+                return;
+            }
+
+            // Contraseña incorrecta
+            if (!userData.PasswordValida)
+            {
+                intentosFallidos++;
+                MessageBox.Show("Usuario o contraseña incorrectos.",
+                    "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                txtPassword.Clear();
+                txtPassword.Focus();
+                return;
+            }
+
+            // ============================
+            // LOGIN CORRECTO
+            // ============================
+            this.Hide();
+
+            var dashboard_form = new Dashboard(userData.Rol, userData.NombreCompleto, usuario);
+
+            dashboard_form.FormClosed += (s, args) =>
+            {
+                if (!this.IsDisposed)
+                {
+                    this.Show();
+                    txtPassword.Clear();
+                    txtUsername.Focus();
+                }
+            };
+
+            dashboard_form.Show();
         }
 
         // ============================================================
