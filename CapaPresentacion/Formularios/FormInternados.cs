@@ -1,105 +1,68 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using CapaNegocio;
 
 namespace CapaPresentacion.Formularios
 {
     public partial class FormInternados : Form
     {
+        private readonly PacienteNegocio _pacienteNegocio = new();
+
         public FormInternados()
         {
             InitializeComponent();
-            CargarCamas();
+            CargarPacientes();
         }
 
-        private void CargarCamas()
+        private void CargarPacientes()
         {
-            tblCamas.Controls.Clear();
-
-            // Datos de ejemplo (nombre, apellido, dni, estado)
-            string[,] camas = new string[,]
+            try
             {
-                { "101", "Juan", "Pérez", "30123456", "Ocupada" },
-                { "102", "", "", "", "Libre" },
-                { "201", "María", "Gómez", "28987654", "Ocupada" },
-                { "202", "", "", "", "Libre" },
-                { "301", "Pedro", "Ruiz", "33222111", "Ocupada" },
-                { "302", "", "", "", "Libre" },
-                { "401", "Ana", "Torres", "27888999", "Ocupada" },
-                { "402", "", "", "", "Libre" },
-                { "501", "Carlos", "Díaz", "30111222", "Ocupada" },
-                { "502", "", "", "", "Libre" },
-                { "601", "", "", "", "Libre" },
-                { "602", "Laura", "Rivas", "35666111", "Ocupada" }
-            };
+                // Traemos todos los pacientes (activos e inactivos)
+                var lista = _pacienteNegocio.ObtenerPacientes();
 
-            int total = camas.GetLength(0);
-            for (int i = 0; i < total; i++)
+                // Ordenamos por Apellido, Nombre
+                var ordenada = lista
+                    .OrderBy(p => p.Apellido)
+                    .ThenBy(p => p.Nombre)
+                    .ToList();
+
+                dgvPacientes.DataSource = null;
+                dgvPacientes.DataSource = ordenada;
+            }
+            catch (Exception ex)
             {
-                var panelCama = CrearPanelCama(
-                    camas[i, 0],
-                    camas[i, 1],
-                    camas[i, 2],
-                    camas[i, 3],
-                    camas[i, 4]
+                MessageBox.Show(
+                    "Ocurrió un error al cargar los pacientes:\n" + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
                 );
-                tblCamas.Controls.Add(panelCama);
             }
         }
 
-        private Panel CrearPanelCama(string nroCama, string nombre, string apellido, string dni, string estado)
+        private void btnActualizar_Click(object sender, EventArgs e)
         {
-            var panel = new Panel
-            {
-                Dock = DockStyle.Fill,
-                Margin = new Padding(6),
-                BackColor = estado == "Ocupada"
-                    ? Color.LightCoral
-                    : Color.LightGreen,
-                BorderStyle = BorderStyle.FixedSingle
-            };
+            CargarPacientes();
+        }
 
-            // Layout interno para alinear ícono y texto
-            var layout = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                RowCount = 2,
-                ColumnCount = 1
-            };
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, estado == "Ocupada" ? 60F : 0F)); // espacio para ícono solo si está ocupada
-            layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        // Ajustamos algunas columnas cuando termina el binding
+        private void dgvPacientes_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (dgvPacientes.Columns.Contains("IdPaciente"))
+                dgvPacientes.Columns["IdPaciente"].Visible = false;
 
-            // Solo mostrar ícono si está ocupada
-            if (estado == "Ocupada")
-            {
-                var picCama = new PictureBox
-                {
-                    Image = Properties.Resources.hospitalBedIcon,
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                    Dock = DockStyle.Fill,
-                    Margin = new Padding(20) // padding de 20px
-                };
-                layout.Controls.Add(picCama, 0, 0);
-            }
+            if (dgvPacientes.Columns.Contains("FechaAlta"))
+                dgvPacientes.Columns["FechaAlta"].HeaderText = "Fecha alta";
 
-            // Texto
-            var lbl = new Label
-            {
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
-                ForeColor = Color.Black,
-                Text =
-                    $"Cama {nroCama}\n" +
-                    $"{(string.IsNullOrEmpty(nombre) ? "—" : nombre + " " + apellido)}\n" +
-                    $"{(string.IsNullOrEmpty(dni) ? "" : "DNI: " + dni)}"
-            };
+            if (dgvPacientes.Columns.Contains("FechaNac"))
+                dgvPacientes.Columns["FechaNac"].HeaderText = "F. Nacimiento";
 
-            layout.Controls.Add(lbl, 0, 1);
-
-            panel.Controls.Add(layout);
-            return panel;
+            // Hacemos que la columna de alergias ocupe el espacio restante
+            if (dgvPacientes.Columns.Contains("Alergias"))
+                dgvPacientes.Columns["Alergias"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
     }
 }
