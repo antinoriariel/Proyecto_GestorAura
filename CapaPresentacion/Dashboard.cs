@@ -13,8 +13,8 @@ namespace CapaPresentacion
     {
         private readonly string rolUsuario;
         private readonly string nombreCompleto;
-        private readonly string username; // nombre real de usuario
-        private readonly int idUsuarioActual; // ✅ id obtenido desde la BD
+        private readonly string username;         // nombre real de usuario
+        private readonly int idUsuarioActual;     // id obtenido desde la BD
 
         public Dashboard(string rolUsuario, string nombreCompleto, string username)
         {
@@ -62,11 +62,18 @@ namespace CapaPresentacion
 
             // Abrir formulario inicial según rol
             if (rolUsuario.Equals("administrador", StringComparison.OrdinalIgnoreCase))
+            {
                 MostrarFormUnico<InicioAdmin>();
+            }
             else if (rolUsuario.Equals("medico", StringComparison.OrdinalIgnoreCase))
-                MostrarFormUnico<InicioMedico>();
+            {
+                // ✅ Se pasa el id real + username + rol al InicioMedico
+                MostrarFormUnico<InicioMedico>(idUsuarioActual, username, rolUsuario);
+            }
             else if (rolUsuario.Equals("secretaria", StringComparison.OrdinalIgnoreCase))
+            {
                 AbrirInicioSecretaria();
+            }
         }
 
         // ============================================================
@@ -157,7 +164,10 @@ namespace CapaPresentacion
         private void ConfigurarEventosMedico(MedicoSidebar sidebar)
         {
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
-            sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioMedico>();
+
+            // ✅ SIEMPRE pasar el id + username + rol
+            sidebar.BtnDashboardClick += (s, e) =>
+                MostrarFormUnico<InicioMedico>(idUsuarioActual, username, rolUsuario);
 
             // === TURNOS (modo lectura) ===
             sidebar.BtnTurnosClick += (s, e) =>
@@ -179,7 +189,7 @@ namespace CapaPresentacion
             {
                 try
                 {
-                    var formDashPacientes = new FormDashPacientesMed(idUsuarioActual); // ✅ id del médico actual
+                    var formDashPacientes = new FormDashPacientesMed(idUsuarioActual);
                     MostrarFormUnico(formDashPacientes);
                 }
                 catch (Exception ex)
@@ -283,6 +293,7 @@ namespace CapaPresentacion
             }
 
             Form nuevoForm;
+
             try
             {
                 nuevoForm = (Form)Activator.CreateInstance(typeof(T), args);
