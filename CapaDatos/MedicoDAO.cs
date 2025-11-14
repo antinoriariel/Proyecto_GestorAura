@@ -15,6 +15,9 @@ namespace CapaDatos
                   ?? throw new ConfigurationErrorsException("Falta connectionStrings: conexionBD");
         }
 
+        // ============================================================
+        // LISTAR MÉDICOS
+        // ============================================================
         public DataTable Listar()
         {
             using var con = new SqlConnection(_cn);
@@ -22,21 +25,19 @@ namespace CapaDatos
                 SELECT 
                     u.id_usuario,
                     m.id_medico,
-                    u.nombre        AS Nombre,
-                    u.apellido      AS Apellido,
-                    m.especialidad  AS Especialidad,
-                    COALESCE(NULLIF(LTRIM(RTRIM(m.matricula_provincial)),''), m.matricula_nacional) AS Matricula,
+                    u.nombre AS Nombre,
+                    u.apellido AS Apellido,
+                    m.especialidad AS Especialidad,
+                    m.matricula_provincial AS MatriculaProvincial,
+                    m.matricula_nacional AS MatriculaNacional,
                     u.username,
                     u.email,
                     u.dni,
                     u.f_nacimiento,
                     u.telefono,
-                    m.matricula_provincial,
-                    m.matricula_nacional,
                     u.activo
-                FROM medicos AS m
-                INNER JOIN users AS u
-                    ON u.id_usuario = m.id_usuario
+                FROM medicos m
+                INNER JOIN users u ON u.id_usuario = m.id_usuario
                 WHERE u.rol = 'medico' AND u.deleted_at IS NULL
                 ORDER BY u.apellido, u.nombre;", con);
 
@@ -45,6 +46,45 @@ namespace CapaDatos
             return tabla;
         }
 
+        // ============================================================
+        // OBTENER MÉDICO POR ID_USUARIO (1 SOLO REGISTRO)
+        // ============================================================
+        public DataRow? ObtenerMedicoPorIdUsuario(int idUsuario)
+        {
+            using var con = new SqlConnection(_cn);
+            using var da = new SqlDataAdapter(@"
+                SELECT 
+                    u.id_usuario,
+                    m.id_medico,
+                    u.username,
+                    u.nombre,
+                    u.apellido,
+                    u.email,
+                    u.dni,
+                    u.f_nacimiento,
+                    u.telefono,
+                    u.activo,
+                    m.especialidad AS Especialidad,
+                    m.matricula_provincial AS MatriculaProvincial,
+                    m.matricula_nacional AS MatriculaNacional
+                FROM medicos m
+                INNER JOIN users u ON m.id_usuario = u.id_usuario
+                WHERE u.id_usuario = @id
+                  AND u.rol = 'medico'
+                  AND u.deleted_at IS NULL;",
+                con);
+
+            da.SelectCommand.Parameters.AddWithValue("@id", idUsuario);
+
+            var tabla = new DataTable();
+            da.Fill(tabla);
+
+            return tabla.Rows.Count == 0 ? null : tabla.Rows[0];
+        }
+
+        // ============================================================
+        // CREAR MÉDICO
+        // ============================================================
         public (int idUsuario, int idMedico) Crear(
             string username, string email, string nombre, string apellido, long dni,
             DateTime fNac, string? telefono, bool activo,
@@ -56,7 +96,6 @@ namespace CapaDatos
 
             try
             {
-                // Password placeholder (deberías reemplazar por tu flujo real)
                 var cmdUser = new SqlCommand(@"
 INSERT INTO users (username,password_hash,password_salt,email,nombre,apellido,dni,f_nacimiento,telefono,created_at,activo,rol)
 VALUES (@username, 0x01, 0x01, @email, @nombre, @apellido, @dni, @f_nac, @telefono, SYSUTCDATETIME(), @activo, 'medico');
@@ -95,6 +134,9 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx);
             }
         }
 
+        // ============================================================
+        // ACTUALIZAR MÉDICO
+        // ============================================================
         public void Actualizar(
             int idUsuario, int idMedico,
             string username, string email, string nombre, string apellido, long dni,
@@ -144,6 +186,9 @@ WHERE id_medico=@idM;", con, tx);
             }
         }
 
+        // ============================================================
+        // ELIMINAR
+        // ============================================================
         public void Eliminar(int idUsuario)
         {
             using var con = new SqlConnection(_cn);
@@ -152,7 +197,6 @@ WHERE id_medico=@idM;", con, tx);
 
             try
             {
-                // ON DELETE CASCADE borra fila de medicos
                 var cmd = new SqlCommand("DELETE FROM users WHERE id_usuario=@id;", con, tx);
                 cmd.Parameters.AddWithValue("@id", idUsuario);
                 cmd.ExecuteNonQuery();
@@ -165,12 +209,19 @@ WHERE id_medico=@idM;", con, tx);
             }
         }
 
+        // ============================================================
+        // ACTIVAR / DESACTIVAR
+        // ============================================================
         public void SetActivo(int idUsuario, bool activo)
         {
             using var con = new SqlConnection(_cn);
-            var cmd = new SqlCommand("UPDATE users SET activo=@a, modified_at=SYSUTCDATETIME() WHERE id_usuario=@id;", con);
+            var cmd = new SqlCommand(
+                "UPDATE users SET activo=@a, modified_at=SYSUTCDATETIME() WHERE id_usuario=@id;",
+                con);
+
             cmd.Parameters.AddWithValue("@a", activo ? 1 : 0);
             cmd.Parameters.AddWithValue("@id", idUsuario);
+
             con.Open();
             cmd.ExecuteNonQuery();
         }
