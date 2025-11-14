@@ -164,7 +164,10 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx);
             bool activo,
             string especialidad,
             string matriculaProv,
-            string? matriculaNac)
+            string? matriculaNac,
+            byte[]? newHash,
+            byte[]? newSalt
+        )
         {
             using var con = new SqlConnection(_cn);
             con.Open();
@@ -172,12 +175,25 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx);
 
             try
             {
-                var cmdU = new SqlCommand(@"
+                string sqlUser = @"
 UPDATE users
-SET username=@username, email=@email, nombre=@nombre, apellido=@apellido,
-    dni=@dni, f_nacimiento=@f_nac, telefono=@tel, modified_at=SYSUTCDATETIME(), activo=@activo
-WHERE id_usuario=@idU;", con, tx);
+SET username=@username,
+    email=@email,
+    nombre=@nombre,
+    apellido=@apellido,
+    dni=@dni,
+    f_nacimiento=@f_nac,
+    telefono=@tel,
+    modified_at=SYSUTCDATETIME(),
+    activo=@activo
+";
 
+                if (newHash != null && newSalt != null)
+                    sqlUser += ", password_hash=@hash, password_salt=@salt";
+
+                sqlUser += " WHERE id_usuario=@idU;";
+
+                var cmdU = new SqlCommand(sqlUser, con, tx);
                 cmdU.Parameters.AddWithValue("@username", username);
                 cmdU.Parameters.AddWithValue("@email", email);
                 cmdU.Parameters.AddWithValue("@nombre", nombre);
@@ -187,11 +203,22 @@ WHERE id_usuario=@idU;", con, tx);
                 cmdU.Parameters.AddWithValue("@tel", (object?)telefono ?? DBNull.Value);
                 cmdU.Parameters.AddWithValue("@activo", activo ? 1 : 0);
                 cmdU.Parameters.AddWithValue("@idU", idUsuario);
+
+                if (newHash != null && newSalt != null)
+                {
+                    cmdU.Parameters.Add("@hash", SqlDbType.VarBinary, 256).Value = newHash;
+                    cmdU.Parameters.Add("@salt", SqlDbType.VarBinary, 128).Value = newSalt;
+                }
+
                 cmdU.ExecuteNonQuery();
 
+                // Actualiza tabla médics
                 var cmdM = new SqlCommand(@"
 UPDATE medicos
-SET especialidad=@esp, matricula_provincial=@mp, matricula_nacional=@mn, modified_at=SYSUTCDATETIME()
+SET especialidad=@esp,
+    matricula_provincial=@mp,
+    matricula_nacional=@mn,
+    modified_at=SYSUTCDATETIME()
 WHERE id_medico=@idM;", con, tx);
 
                 cmdM.Parameters.AddWithValue("@esp", especialidad);
@@ -208,6 +235,7 @@ WHERE id_medico=@idM;", con, tx);
                 throw;
             }
         }
+
 
         // ============================================================
         // ELIMINAR

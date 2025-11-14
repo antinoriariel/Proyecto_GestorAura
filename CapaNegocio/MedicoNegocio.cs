@@ -43,20 +43,22 @@ namespace CapaNegocio
     );
 
     public record MedicoActualizarDto(
-        int IdUsuario,
-        int IdMedico,
-        string Username,
-        string Email,
-        string Nombre,
-        string Apellido,
-        long Dni,
-        DateTime FechaNacimiento,
-        string? Telefono,
-        bool Activo,
-        string Especialidad,
-        string MatriculaProvincial,
-        string? MatriculaNacional
-    );
+    int IdUsuario,
+    int IdMedico,
+    string Username,
+    string Email,
+    string Nombre,
+    string Apellido,
+    long Dni,
+    DateTime FechaNacimiento,
+    string? Telefono,
+    bool Activo,
+    string Especialidad,
+    string MatriculaProvincial,
+    string? MatriculaNacional,
+    string? NewPassword // <--- AGREGADO
+);
+
 
     public class MedicoNegocio
     {
@@ -94,7 +96,16 @@ namespace CapaNegocio
         // (no cambia contraseña aquí, sólo datos básicos)
         // ============================================================
         public void Actualizar(MedicoActualizarDto dto)
-            => _dao.Actualizar(
+        {
+            byte[]? newHash = null;
+            byte[]? newSalt = null;
+
+            if (!string.IsNullOrWhiteSpace(dto.NewPassword))
+            {
+                (newHash, newSalt) = PasswordHelper.CrearPasswordHash(dto.NewPassword);
+            }
+
+            _dao.Actualizar(
                 dto.IdUsuario,
                 dto.IdMedico,
                 dto.Username,
@@ -107,8 +118,11 @@ namespace CapaNegocio
                 dto.Activo,
                 dto.Especialidad,
                 dto.MatriculaProvincial,
-                dto.MatriculaNacional
+                dto.MatriculaNacional,
+                newHash,
+                newSalt
             );
+        }
 
         public void Eliminar(int idUsuario) => _dao.Eliminar(idUsuario);
 

@@ -342,7 +342,7 @@ namespace CapaPresentacion.Formularios
                     _neg.Crear(dto);
                 }
                 else if (_modo == ModoEdicion.Editar &&
-                         _idUsuarioSel.HasValue && _idMedicoSel.HasValue)
+         _idUsuarioSel.HasValue && _idMedicoSel.HasValue)
                 {
                     var dto = new MedicoActualizarDto(
                         _idUsuarioSel.Value,
@@ -357,11 +357,13 @@ namespace CapaPresentacion.Formularios
                         chkActivo.Checked,
                         txtEspecialidad.Text.Trim(),
                         txtMatProv.Text.Trim(),
-                        string.IsNullOrWhiteSpace(txtMatNac.Text) ? null : txtMatNac.Text.Trim()
+                        string.IsNullOrWhiteSpace(txtMatNac.Text) ? null : txtMatNac.Text.Trim(),
+                        string.IsNullOrWhiteSpace(txtPass.Text) ? null : txtPass.Text.Trim()
                     );
 
                     _neg.Actualizar(dto);
                 }
+
 
                 _modo = ModoEdicion.Ninguno;
                 HabilitarFicha(false);
