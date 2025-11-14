@@ -105,5 +105,22 @@ namespace CapaNegocio
                 throw new Exception("Error al obtener usuarios de chat: " + ex.Message);
             }
         }
+
+
+        // ===============================================================
+        // LISTADO COMPLETO DE USUARIOS
+        // ===============================================================
+        public DataTable ListarUsuarios(string filtro = "")
+        {
+            try
+            {
+                return _usuarioDAO.ListarUsuarios(filtro);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener el listado de usuarios: " + ex.Message);
+            }
+        }
+
     }
 }

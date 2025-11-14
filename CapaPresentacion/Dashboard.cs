@@ -151,11 +151,11 @@ namespace CapaPresentacion
             sidebar.BtnCerrarSesionClick += (s, e) => VolverALogin();
             sidebar.BtnDashboardClick += (s, e) => MostrarFormUnico<InicioAdmin>();
             sidebar.BtnUsuariosClick += (s, e) => MostrarFormUnico<FormCargaUsuarios>();
+            sidebar.BtnListadoUsuariosClick += (s, e) => MostrarFormUnico<FormListadoUsuarios>();
             sidebar.BtnMedicosClick += (s, e) => MostrarFormUnico<FormMedicos>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
             sidebar.BtnBackupClick += (s, e) => MostrarFormUnico<FormBackup>();
             sidebar.BtnConfiguracionClick += (s, e) => MostrarFormUnico<FormConfiguracionAdmin>();
-
         }
 
         // ============================================================

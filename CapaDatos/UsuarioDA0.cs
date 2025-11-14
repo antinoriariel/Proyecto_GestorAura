@@ -184,5 +184,50 @@ namespace CapaDatos
                 }
             }
         }
+
+
+        // ===============================================================
+        // LISTAR USUARIOS (CON FILTRO OPCIONAL)
+        // ===============================================================
+        public DataTable ListarUsuarios(string filtro)
+        {
+            using (SqlConnection conn = new SqlConnection(conexion))
+            {
+                string query = @"
+        SELECT 
+            id_usuario,
+            username,
+            nombre,
+            apellido,
+            email,
+            rol,
+            dni,
+            f_nacimiento,
+            telefono,
+            activo
+        FROM users
+        WHERE (@filtro = '' 
+               OR username LIKE @like
+               OR nombre  LIKE @like
+               OR apellido LIKE @like
+               OR email   LIKE @like
+               OR rol     LIKE @like)
+        ORDER BY apellido, nombre;";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.Add("@filtro", SqlDbType.VarChar, 100).Value = filtro ?? string.Empty;
+                    cmd.Parameters.Add("@like", SqlDbType.VarChar, 100).Value = "%" + (filtro ?? string.Empty) + "%";
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new();
+                        da.Fill(dt);
+                        return dt;
+                    }
+                }
+            }
+        }
+
     }
 }
