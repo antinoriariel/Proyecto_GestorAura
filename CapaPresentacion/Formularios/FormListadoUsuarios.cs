@@ -99,7 +99,44 @@ namespace CapaPresentacion.Formularios
         }
 
         // ============================================================
-        // EVENTOS
+        // OBTENER USUARIO SELECCIONADO (ID, username, activo)
+        // ============================================================
+        private bool TryObtenerUsuarioSeleccionado(out int idUsuario, out string username, out bool activo)
+        {
+            idUsuario = 0;
+            username = string.Empty;
+            activo = false;
+
+            if (dgvUsuarios.CurrentRow == null)
+                return false;
+
+            // Verificamos que exista la columna en la grilla
+            if (!dgvUsuarios.Columns.Contains("id_usuario"))
+                return false;
+
+            DataGridViewRow fila = dgvUsuarios.CurrentRow;
+
+            object idValue = fila.Cells["id_usuario"].Value;
+            if (idValue == null || idValue == DBNull.Value)
+                return false;
+
+            idUsuario = Convert.ToInt32(idValue);
+
+            if (dgvUsuarios.Columns.Contains("username"))
+                username = fila.Cells["username"].Value?.ToString() ?? string.Empty;
+
+            if (dgvUsuarios.Columns.Contains("activo"))
+            {
+                object activoValue = fila.Cells["activo"].Value;
+                if (activoValue != null && activoValue != DBNull.Value)
+                    activo = Convert.ToBoolean(activoValue);
+            }
+
+            return true;
+        }
+
+        // ============================================================
+        // EVENTOS BÁSICOS
         // ============================================================
         private void btnBuscar_Click(object sender, EventArgs e)
         {
@@ -111,6 +148,123 @@ namespace CapaPresentacion.Formularios
         {
             txtBuscar.Text = string.Empty;
             CargarUsuarios();
+        }
+
+        // ------------------------------------------------------------
+        // INACTIVAR USUARIO
+        // ------------------------------------------------------------
+        private void btnInactivar_Click(object sender, EventArgs e)
+        {
+            if (!TryObtenerUsuarioSeleccionado(out int idUsuario, out string username, out bool activo))
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la lista.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (!activo)
+            {
+                MessageBox.Show("El usuario ya se encuentra inactivo.", "Información",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DialogResult dr = MessageBox.Show(
+                $"¿Está seguro que desea inactivar al usuario '{username}'?",
+                "Confirmar inactivación",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (dr != DialogResult.Yes)
+                return;
+
+            try
+            {
+                _usuarioNegocio.CambiarEstadoUsuario(idUsuario, false);
+                CargarUsuarios(txtBuscar.Text.Trim());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al inactivar el usuario:\n\n" + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ------------------------------------------------------------
+        // ACTIVAR USUARIO
+        // ------------------------------------------------------------
+        private void btnActivar_Click(object sender, EventArgs e)
+        {
+            if (!TryObtenerUsuarioSeleccionado(out int idUsuario, out string username, out bool activo))
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la lista.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (activo)
+            {
+                MessageBox.Show("El usuario ya se encuentra activo.", "Información",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DialogResult dr = MessageBox.Show(
+                $"¿Está seguro que desea volver a activar al usuario '{username}'?",
+                "Confirmar activación",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (dr != DialogResult.Yes)
+                return;
+
+            try
+            {
+                _usuarioNegocio.CambiarEstadoUsuario(idUsuario, true);
+                CargarUsuarios(txtBuscar.Text.Trim());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al activar el usuario:\n\n" + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ------------------------------------------------------------
+        // ELIMINAR USUARIO
+        // ------------------------------------------------------------
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (!TryObtenerUsuarioSeleccionado(out int idUsuario, out string username, out bool _))
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la lista.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DialogResult dr = MessageBox.Show(
+                $"¿Está seguro que desea eliminar definitivamente al usuario '{username}'?\n\n" +
+                "Esta acción no se puede deshacer.",
+                "Confirmar eliminación",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (dr != DialogResult.Yes)
+                return;
+
+            try
+            {
+                _usuarioNegocio.EliminarUsuario(idUsuario);
+                CargarUsuarios(txtBuscar.Text.Trim());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar el usuario:\n\n" + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -106,7 +106,6 @@ namespace CapaNegocio
             }
         }
 
-
         // ===============================================================
         // LISTADO COMPLETO DE USUARIOS
         // ===============================================================
@@ -122,5 +121,34 @@ namespace CapaNegocio
             }
         }
 
+        // ===============================================================
+        // CAMBIAR ESTADO (ACTIVO/INACTIVO)
+        // ===============================================================
+        public void CambiarEstadoUsuario(int idUsuario, bool activo)
+        {
+            try
+            {
+                _usuarioDAO.CambiarEstadoUsuario(idUsuario, activo);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al cambiar el estado del usuario: " + ex.Message);
+            }
+        }
+
+        // ===============================================================
+        // ELIMINAR USUARIO
+        // ===============================================================
+        public void EliminarUsuario(int idUsuario)
+        {
+            try
+            {
+                _usuarioDAO.EliminarUsuario(idUsuario);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al eliminar el usuario: " + ex.Message);
+            }
+        }
     }
 }

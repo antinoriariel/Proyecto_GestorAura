@@ -12,6 +12,9 @@ namespace CapaPresentacion.Formularios
         private TextBox txtBuscar;
         private Button btnBuscar;
         private Button btnRefrescar;
+        private Button btnInactivar;
+        private Button btnActivar;
+        private Button btnEliminar;
         private GroupBox grpListado;
         private DataGridView dgvUsuarios;
         private Label lblTotal;
@@ -32,6 +35,9 @@ namespace CapaPresentacion.Formularios
             txtBuscar = new TextBox();
             btnBuscar = new Button();
             btnRefrescar = new Button();
+            btnInactivar = new Button();
+            btnActivar = new Button();
+            btnEliminar = new Button();
             grpListado = new GroupBox();
             dgvUsuarios = new DataGridView();
             lblTotal = new Label();
@@ -87,6 +93,42 @@ namespace CapaPresentacion.Formularios
             btnRefrescar.UseVisualStyleBackColor = true;
             btnRefrescar.Click += btnRefrescar_Click;
 
+            // btnInactivar
+            btnInactivar.Location = new Point(585, 88);
+            btnInactivar.Name = "btnInactivar";
+            btnInactivar.Size = new Size(90, 26);
+            btnInactivar.Text = "Inactivar";
+            btnInactivar.FlatStyle = FlatStyle.Flat;
+            btnInactivar.FlatAppearance.BorderSize = 0;
+            btnInactivar.BackColor = Color.FromArgb(255, 193, 7);   // amarillo
+            btnInactivar.ForeColor = Color.White;
+            btnInactivar.UseVisualStyleBackColor = false;
+            btnInactivar.Click += btnInactivar_Click;
+
+            // btnActivar
+            btnActivar.Location = new Point(685, 88);
+            btnActivar.Name = "btnActivar";
+            btnActivar.Size = new Size(90, 26);
+            btnActivar.Text = "Activar";
+            btnActivar.FlatStyle = FlatStyle.Flat;
+            btnActivar.FlatAppearance.BorderSize = 0;
+            btnActivar.BackColor = Color.FromArgb(76, 175, 80);    // verde
+            btnActivar.ForeColor = Color.White;
+            btnActivar.UseVisualStyleBackColor = false;
+            btnActivar.Click += btnActivar_Click;
+
+            // btnEliminar
+            btnEliminar.Location = new Point(785, 88);
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Size = new Size(90, 26);
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.FlatStyle = FlatStyle.Flat;
+            btnEliminar.FlatAppearance.BorderSize = 0;
+            btnEliminar.BackColor = Color.FromArgb(244, 67, 54);   // rojo
+            btnEliminar.ForeColor = Color.White;
+            btnEliminar.UseVisualStyleBackColor = false;
+            btnEliminar.Click += btnEliminar_Click;
+
             // grpListado
             grpListado.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             grpListado.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
@@ -129,6 +171,9 @@ namespace CapaPresentacion.Formularios
             };
 
             Controls.Add(grpListado);
+            Controls.Add(btnEliminar);
+            Controls.Add(btnActivar);
+            Controls.Add(btnInactivar);
             Controls.Add(btnRefrescar);
             Controls.Add(btnBuscar);
             Controls.Add(txtBuscar);

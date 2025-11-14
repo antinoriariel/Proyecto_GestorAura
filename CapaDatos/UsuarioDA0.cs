@@ -229,5 +229,41 @@ namespace CapaDatos
             }
         }
 
+        // ===============================================================
+        // CAMBIAR ESTADO ACTIVO
+        // ===============================================================
+        public void CambiarEstadoUsuario(int idUsuario, bool activo)
+        {
+            using (SqlConnection conn = new SqlConnection(conexion))
+            {
+                conn.Open();
+                string query = "UPDATE users SET activo = @activo WHERE id_usuario = @id";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@activo", activo);
+                    cmd.Parameters.AddWithValue("@id", idUsuario);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        // ===============================================================
+        // ELIMINAR USUARIO
+        // ===============================================================
+        public void EliminarUsuario(int idUsuario)
+        {
+            using (SqlConnection conn = new SqlConnection(conexion))
+            {
+                conn.Open();
+                string query = "DELETE FROM users WHERE id_usuario = @id";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", idUsuario);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
