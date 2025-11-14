@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CapaPresentacion.Formularios
@@ -6,10 +7,11 @@ namespace CapaPresentacion.Formularios
     partial class FormMedicos
     {
         private IContainer components = null;
+
         private Panel panelHeader;
         private Label lblTitulo;
 
-        private FlowLayoutPanel panelBotones; // arriba del listado
+        private FlowLayoutPanel panelBotones;
         private Button btnAgregar;
         private Button btnModificar;
         private Button btnEliminar;
@@ -33,6 +35,9 @@ namespace CapaPresentacion.Formularios
         private Label lblMatNac; private TextBox txtMatNac;
         private CheckBox chkActivo;
 
+        private Label lblPass; private TextBox txtPass;
+        private Label lblPass2; private TextBox txtPass2;
+
         private FlowLayoutPanel panelFichaBotones;
         private Button btnNuevoFicha;
         private Button btnGuardarFicha;
@@ -48,9 +53,11 @@ namespace CapaPresentacion.Formularios
         }
 
         #region Windows Form Designer generated code
+
         private void InitializeComponent()
         {
             this.components = new Container();
+
             this.panelHeader = new Panel();
             this.lblTitulo = new Label();
 
@@ -78,6 +85,9 @@ namespace CapaPresentacion.Formularios
             this.lblMatNac = new Label(); this.txtMatNac = new TextBox();
             this.chkActivo = new CheckBox();
 
+            this.lblPass = new Label(); this.txtPass = new TextBox();
+            this.lblPass2 = new Label(); this.txtPass2 = new TextBox();
+
             this.panelFichaBotones = new FlowLayoutPanel();
             this.btnNuevoFicha = new Button();
             this.btnGuardarFicha = new Button();
@@ -91,8 +101,8 @@ namespace CapaPresentacion.Formularios
             this.Text = "Gestión de Médicos";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.KeyPreview = true;
-            this.MinimumSize = new System.Drawing.Size(1000, 720);
-            this.ClientSize = new System.Drawing.Size(1100, 750);
+            this.MinimumSize = new Size(1000, 720);
+            this.ClientSize = new Size(1100, 750);
             this.Controls.Add(this.gbFicha);
             this.Controls.Add(this.gbListado);
             this.Controls.Add(this.panelBotones);
@@ -102,41 +112,36 @@ namespace CapaPresentacion.Formularios
             // Header
             this.panelHeader.Dock = DockStyle.Top;
             this.panelHeader.Height = 55;
-            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(33, 42, 62);
+            this.panelHeader.BackColor = Color.FromArgb(33, 42, 62);
             this.panelHeader.Padding = new Padding(16, 10, 16, 10);
             this.panelHeader.Controls.Add(this.lblTitulo);
 
             this.lblTitulo.Dock = DockStyle.Fill;
-            this.lblTitulo.ForeColor = System.Drawing.Color.White;
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = Color.White;
+            this.lblTitulo.Font = new Font("Consolas", 18F, FontStyle.Bold);
             this.lblTitulo.Text = "Gestión de Médicos";
-            this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblTitulo.TextAlign = ContentAlignment.MiddleLeft;
 
             // Botones (arriba del listado)
-            this.panelBotones.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            this.panelBotones.Location = new Point(16, 60);
+            this.panelBotones.Size = new Size(700, 44);
             this.panelBotones.FlowDirection = FlowDirection.LeftToRight;
-            this.panelBotones.Location = new System.Drawing.Point(16, 60);
-            this.panelBotones.Size = new System.Drawing.Size(640, 44);
             this.panelBotones.WrapContents = false;
+
+            ConfigurarBotonCabecera(this.btnAgregar, "➕ Nuevo");
+            ConfigurarBotonCabecera(this.btnModificar, "✏ Editar");
+            ConfigurarBotonCabecera(this.btnEliminar, "🗑 Eliminar");
+            ConfigurarBotonCabecera(this.btnInactivar, "🚫 Inactivar");
+
             this.panelBotones.Controls.Add(this.btnAgregar);
             this.panelBotones.Controls.Add(this.btnModificar);
             this.panelBotones.Controls.Add(this.btnEliminar);
             this.panelBotones.Controls.Add(this.btnInactivar);
 
-            this.btnAgregar.Text = "➕ Nuevo";
-            this.btnAgregar.Width = 120; this.btnAgregar.Height = 36;
-            this.btnModificar.Text = "✏️ Editar";
-            this.btnModificar.Width = 120; this.btnModificar.Height = 36;
-            this.btnEliminar.Text = "🗑️ Eliminar";
-            this.btnEliminar.Width = 120; this.btnEliminar.Height = 36;
-            this.btnInactivar.Text = "🚫 Inactivar";
-            this.btnInactivar.Width = 120; this.btnInactivar.Height = 36;
-
             // Listado
             this.gbListado.Text = "Listado de médicos";
-            this.gbListado.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.gbListado.Location = new System.Drawing.Point(16, 110);
-            this.gbListado.Size = new System.Drawing.Size(1068, 330);
+            this.gbListado.Location = new Point(16, 110);
+            this.gbListado.Size = new Size(1068, 330);
             this.gbListado.Padding = new Padding(10);
             this.gbListado.Controls.Add(this.dgvMedicos);
 
@@ -144,110 +149,140 @@ namespace CapaPresentacion.Formularios
             this.dgvMedicos.AllowUserToAddRows = false;
             this.dgvMedicos.AllowUserToDeleteRows = false;
             this.dgvMedicos.AllowUserToOrderColumns = true;
-            this.dgvMedicos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvMedicos.BackgroundColor = System.Drawing.Color.White;
+            this.dgvMedicos.BackgroundColor = Color.White;
             this.dgvMedicos.BorderStyle = BorderStyle.None;
             this.dgvMedicos.MultiSelect = false;
             this.dgvMedicos.ReadOnly = true;
             this.dgvMedicos.RowHeadersVisible = false;
             this.dgvMedicos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMedicos.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.dgvMedicos.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10F);
 
             // Ficha
             this.gbFicha.Text = "Ficha del médico";
-            this.gbFicha.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            this.gbFicha.Location = new System.Drawing.Point(16, 448);
-            this.gbFicha.Size = new System.Drawing.Size(1068, 230);
+            this.gbFicha.Location = new Point(16, 448);
+            this.gbFicha.Size = new Size(1068, 260);
             this.gbFicha.Padding = new Padding(10);
             this.gbFicha.Controls.Add(this.tlpFicha);
             this.gbFicha.Controls.Add(this.panelFichaBotones);
 
-            // TableLayout (3 filas x 6 columnas)
+            // TableLayout
             this.tlpFicha.Dock = DockStyle.Top;
             this.tlpFicha.ColumnCount = 6;
-            this.tlpFicha.RowCount = 3;
+            this.tlpFicha.RowCount = 5;
             this.tlpFicha.AutoSize = true;
-            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14f));
-            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19f));
-            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14f));
-            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19f));
-            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14f));
-            this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20f));
 
-            // Fila 1
-            this.lblUsername.Text = "Usuario"; this.lblUsername.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblUsername, 0, 0);
-            this.tlpFicha.Controls.Add(this.txtUsername, 1, 0);
+            for (int i = 0; i < 6; i++)
+                this.tlpFicha.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.6F));
 
-            this.lblEmail.Text = "Email"; this.lblEmail.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblEmail, 2, 0);
-            this.tlpFicha.Controls.Add(this.txtEmail, 3, 0);
+            // ---- Fila 0 ----
+            lblUsername.Text = "Usuario:"; lblUsername.AutoSize = true;
+            lblEmail.Text = "Email:"; lblEmail.AutoSize = true;
+            lblTelefono.Text = "Teléfono:"; lblTelefono.AutoSize = true;
 
-            this.lblTelefono.Text = "Teléfono"; this.lblTelefono.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblTelefono, 4, 0);
-            this.tlpFicha.Controls.Add(this.txtTelefono, 5, 0);
+            this.tlpFicha.Controls.Add(lblUsername, 0, 0);
+            this.tlpFicha.Controls.Add(txtUsername, 1, 0);
+            this.tlpFicha.Controls.Add(lblEmail, 2, 0);
+            this.tlpFicha.Controls.Add(txtEmail, 3, 0);
+            this.tlpFicha.Controls.Add(lblTelefono, 4, 0);
+            this.tlpFicha.Controls.Add(txtTelefono, 5, 0);
 
-            // Fila 2
-            this.lblNombre.Text = "Nombre"; this.lblNombre.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblNombre, 0, 1);
-            this.tlpFicha.Controls.Add(this.txtNombre, 1, 1);
+            // ---- Fila 1 ----
+            lblNombre.Text = "Nombre:"; lblNombre.AutoSize = true;
+            lblApellido.Text = "Apellido:"; lblApellido.AutoSize = true;
+            lblDni.Text = "DNI:"; lblDni.AutoSize = true;
 
-            this.lblApellido.Text = "Apellido"; this.lblApellido.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblApellido, 2, 1);
-            this.tlpFicha.Controls.Add(this.txtApellido, 3, 1);
+            this.tlpFicha.Controls.Add(lblNombre, 0, 1);
+            this.tlpFicha.Controls.Add(txtNombre, 1, 1);
+            this.tlpFicha.Controls.Add(lblApellido, 2, 1);
+            this.tlpFicha.Controls.Add(txtApellido, 3, 1);
+            this.tlpFicha.Controls.Add(lblDni, 4, 1);
+            this.tlpFicha.Controls.Add(txtDni, 5, 1);
 
-            this.lblDni.Text = "DNI"; this.lblDni.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblDni, 4, 1);
-            this.tlpFicha.Controls.Add(this.txtDni, 5, 1);
+            // ---- Fila 2 ----
+            lblNacimiento.Text = "F. Nac."; lblNacimiento.AutoSize = true;
+            lblEspecialidad.Text = "Especialidad:"; lblEspecialidad.AutoSize = true;
+            lblMatProv.Text = "Matrícula Prov."; lblMatProv.AutoSize = true;
 
-            // Fila 3
-            this.lblNacimiento.Text = "F. Nacimiento"; this.lblNacimiento.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblNacimiento, 0, 2);
             this.dtpNacimiento.Format = DateTimePickerFormat.Short;
-            this.tlpFicha.Controls.Add(this.dtpNacimiento, 1, 2);
 
-            this.lblEspecialidad.Text = "Especialidad"; this.lblEspecialidad.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblEspecialidad, 2, 2);
-            this.tlpFicha.Controls.Add(this.txtEspecialidad, 3, 2);
+            this.tlpFicha.Controls.Add(lblNacimiento, 0, 2);
+            this.tlpFicha.Controls.Add(dtpNacimiento, 1, 2);
+            this.tlpFicha.Controls.Add(lblEspecialidad, 2, 2);
+            this.tlpFicha.Controls.Add(txtEspecialidad, 3, 2);
+            this.tlpFicha.Controls.Add(lblMatProv, 4, 2);
+            this.tlpFicha.Controls.Add(txtMatProv, 5, 2);
 
-            this.lblMatProv.Text = "Matrícula Prov."; this.lblMatProv.AutoSize = true;
-            this.tlpFicha.Controls.Add(this.lblMatProv, 4, 2);
-            this.tlpFicha.Controls.Add(this.txtMatProv, 5, 2);
+            // ---- Fila 3 ----
+            lblMatNac.Text = "Matrícula Nac."; lblMatNac.AutoSize = true;
+            chkActivo.Text = "Activo"; chkActivo.AutoSize = true;
 
-            // Fila 4 (debajo del layout)
-            this.lblMatNac.Text = "Matrícula Nac."; this.lblMatNac.AutoSize = true;
-            this.lblMatNac.Location = new System.Drawing.Point(20, 150);
-            this.txtMatNac.Location = new System.Drawing.Point(120, 146);
-            this.txtMatNac.Width = 200;
-            this.chkActivo.Text = "Activo"; this.chkActivo.Checked = true;
-            this.chkActivo.Location = new System.Drawing.Point(350, 148);
+            this.tlpFicha.Controls.Add(lblMatNac, 0, 3);
+            this.tlpFicha.Controls.Add(txtMatNac, 1, 3);
+            this.tlpFicha.Controls.Add(chkActivo, 2, 3);
 
-            this.gbFicha.Controls.Add(this.lblMatNac);
-            this.gbFicha.Controls.Add(this.txtMatNac);
-            this.gbFicha.Controls.Add(this.chkActivo);
+            // ---- Fila 4 (Contraseñas) ----
+            lblPass.Text = "Contraseña:"; lblPass.AutoSize = true;
+            txtPass.PasswordChar = '●';
 
-            // Estirar inputs
-            foreach (Control c in new Control[] { txtUsername, txtEmail, txtTelefono, txtNombre, txtApellido, txtDni, txtEspecialidad, txtMatProv })
-                if (c is TextBox t) t.Dock = DockStyle.Fill;
+            lblPass2.Text = "Repetir:"; lblPass2.AutoSize = true;
+            txtPass2.PasswordChar = '●';
+
+            this.tlpFicha.Controls.Add(lblPass, 0, 4);
+            this.tlpFicha.Controls.Add(txtPass, 1, 4);
+            this.tlpFicha.Controls.Add(lblPass2, 2, 4);
+            this.tlpFicha.Controls.Add(txtPass2, 3, 4);
 
             // Botones de ficha
             this.panelFichaBotones.Dock = DockStyle.Bottom;
             this.panelFichaBotones.Height = 48;
             this.panelFichaBotones.FlowDirection = FlowDirection.RightToLeft;
-            this.panelFichaBotones.Controls.Add(this.btnCancelarFicha);
-            this.panelFichaBotones.Controls.Add(this.btnGuardarFicha);
-            this.panelFichaBotones.Controls.Add(this.btnNuevoFicha);
 
-            this.btnNuevoFicha.Text = "➕ Nuevo"; this.btnNuevoFicha.Width = 120; this.btnNuevoFicha.Height = 36;
-            this.btnGuardarFicha.Text = "💾 Guardar"; this.btnGuardarFicha.Width = 120; this.btnGuardarFicha.Height = 36;
-            this.btnCancelarFicha.Text = "✖ Cancelar"; this.btnCancelarFicha.Width = 120; this.btnCancelarFicha.Height = 36;
+            ConfigurarBotonFicha(btnNuevoFicha, "➕ Nuevo");
+            ConfigurarBotonFicha(btnGuardarFicha, "💾 Guardar");
+            ConfigurarBotonFicha(btnCancelarFicha, "✖ Cancelar");
 
-            // Status
+            this.panelFichaBotones.Controls.Add(btnCancelarFicha);
+            this.panelFichaBotones.Controls.Add(btnGuardarFicha);
+            this.panelFichaBotones.Controls.Add(btnNuevoFicha);
+
+            // Estilo inputs (Dock Fill para que ocupen bien la celda)
+            foreach (Control c in new Control[]
+            {
+                txtUsername, txtEmail, txtTelefono,
+                txtNombre, txtApellido, txtDni,
+                txtEspecialidad, txtMatProv, txtMatNac,
+                txtPass, txtPass2
+            })
+            {
+                if (c is TextBox t)
+                {
+                    t.Dock = DockStyle.Fill;
+                }
+            }
+
+            // StatusStrip
             this.statusStrip.Dock = DockStyle.Bottom;
             this.statusStrip.Items.Add(this.lblTotal);
             this.lblTotal.Text = "Total: 0";
         }
+
+        private void ConfigurarBotonCabecera(Button b, string texto)
+        {
+            b.Text = texto;
+            b.Width = 140;
+            b.Height = 36;
+            b.Font = new Font("Consolas", 11F, FontStyle.Bold);
+            b.Margin = new Padding(4, 4, 4, 4);
+        }
+
+        private void ConfigurarBotonFicha(Button b, string texto)
+        {
+            b.Text = texto;
+            b.Width = 120;
+            b.Height = 36;
+            b.Font = new Font("Consolas", 11F, FontStyle.Bold);
+            b.Margin = new Padding(4, 4, 4, 4);
+        }
+
         #endregion
     }
 }

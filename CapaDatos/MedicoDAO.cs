@@ -83,12 +83,22 @@ namespace CapaDatos
         }
 
         // ============================================================
-        // CREAR MÉDICO
+        // CREAR MÉDICO (con hash + salt)
         // ============================================================
         public (int idUsuario, int idMedico) Crear(
-            string username, string email, string nombre, string apellido, long dni,
-            DateTime fNac, string? telefono, bool activo,
-            string especialidad, string matriculaProv, string? matriculaNac)
+            string username,
+            byte[] passwordHash,
+            byte[] passwordSalt,
+            string email,
+            string nombre,
+            string apellido,
+            long dni,
+            DateTime fNac,
+            string? telefono,
+            bool activo,
+            string especialidad,
+            string matriculaProv,
+            string? matriculaNac)
         {
             using var con = new SqlConnection(_cn);
             con.Open();
@@ -97,11 +107,15 @@ namespace CapaDatos
             try
             {
                 var cmdUser = new SqlCommand(@"
-INSERT INTO users (username,password_hash,password_salt,email,nombre,apellido,dni,f_nacimiento,telefono,created_at,activo,rol)
-VALUES (@username, 0x01, 0x01, @email, @nombre, @apellido, @dni, @f_nac, @telefono, SYSUTCDATETIME(), @activo, 'medico');
+INSERT INTO users 
+    (username, password_hash, password_salt, email, nombre, apellido, dni, f_nacimiento, telefono, created_at, activo, rol)
+VALUES 
+    (@username, @hash, @salt, @email, @nombre, @apellido, @dni, @f_nac, @telefono, SYSUTCDATETIME(), @activo, 'medico');
 SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx);
 
                 cmdUser.Parameters.AddWithValue("@username", username);
+                cmdUser.Parameters.Add("@hash", SqlDbType.VarBinary, 256).Value = passwordHash;
+                cmdUser.Parameters.Add("@salt", SqlDbType.VarBinary, 128).Value = passwordSalt;
                 cmdUser.Parameters.AddWithValue("@email", email);
                 cmdUser.Parameters.AddWithValue("@nombre", nombre);
                 cmdUser.Parameters.AddWithValue("@apellido", apellido);
@@ -138,10 +152,19 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx);
         // ACTUALIZAR MÉDICO
         // ============================================================
         public void Actualizar(
-            int idUsuario, int idMedico,
-            string username, string email, string nombre, string apellido, long dni,
-            DateTime fNac, string? telefono, bool activo,
-            string especialidad, string matriculaProv, string? matriculaNac)
+            int idUsuario,
+            int idMedico,
+            string username,
+            string email,
+            string nombre,
+            string apellido,
+            long dni,
+            DateTime fNac,
+            string? telefono,
+            bool activo,
+            string especialidad,
+            string matriculaProv,
+            string? matriculaNac)
         {
             using var con = new SqlConnection(_cn);
             con.Open();

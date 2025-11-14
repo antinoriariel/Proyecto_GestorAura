@@ -24,16 +24,39 @@ namespace CapaNegocio
         public string? MatriculaNacional { get; set; }
     }
 
+    // ============================
+    // DTOs
+    // ============================
     public record MedicoCrearDto(
-        string Username, string Email, string Nombre, string Apellido, long Dni,
-        DateTime FechaNacimiento, string? Telefono, bool Activo,
-        string Especialidad, string MatriculaProvincial, string? MatriculaNacional);
+        string Username,
+        string Password,
+        string Email,
+        string Nombre,
+        string Apellido,
+        long Dni,
+        DateTime FechaNacimiento,
+        string? Telefono,
+        bool Activo,
+        string Especialidad,
+        string MatriculaProvincial,
+        string? MatriculaNacional
+    );
 
     public record MedicoActualizarDto(
-        int IdUsuario, int IdMedico,
-        string Username, string Email, string Nombre, string Apellido, long Dni,
-        DateTime FechaNacimiento, string? Telefono, bool Activo,
-        string Especialidad, string MatriculaProvincial, string? MatriculaNacional);
+        int IdUsuario,
+        int IdMedico,
+        string Username,
+        string Email,
+        string Nombre,
+        string Apellido,
+        long Dni,
+        DateTime FechaNacimiento,
+        string? Telefono,
+        bool Activo,
+        string Especialidad,
+        string MatriculaProvincial,
+        string? MatriculaNacional
+    );
 
     public class MedicoNegocio
     {
@@ -41,16 +64,51 @@ namespace CapaNegocio
 
         public DataTable Listar() => _dao.Listar();
 
+        // ============================================================
+        // CREAR MÉDICO (con hash + salt usando PasswordHelper)
+        // ============================================================
         public (int idUsuario, int idMedico) Crear(MedicoCrearDto dto)
-            => _dao.Crear(dto.Username, dto.Email, dto.Nombre, dto.Apellido, dto.Dni,
-                           dto.FechaNacimiento, dto.Telefono, dto.Activo,
-                           dto.Especialidad, dto.MatriculaProvincial, dto.MatriculaNacional);
+        {
+            // Crear hash + salt usando tu helper real
+            var (hash, salt) = PasswordHelper.CrearPasswordHash(dto.Password);
 
+            return _dao.Crear(
+                dto.Username,
+                hash,
+                salt,
+                dto.Email,
+                dto.Nombre,
+                dto.Apellido,
+                dto.Dni,
+                dto.FechaNacimiento,
+                dto.Telefono,
+                dto.Activo,
+                dto.Especialidad,
+                dto.MatriculaProvincial,
+                dto.MatriculaNacional
+            );
+        }
+
+        // ============================================================
+        // ACTUALIZAR
+        // (no cambia contraseña aquí, sólo datos básicos)
+        // ============================================================
         public void Actualizar(MedicoActualizarDto dto)
-            => _dao.Actualizar(dto.IdUsuario, dto.IdMedico,
-                               dto.Username, dto.Email, dto.Nombre, dto.Apellido, dto.Dni,
-                               dto.FechaNacimiento, dto.Telefono, dto.Activo,
-                               dto.Especialidad, dto.MatriculaProvincial, dto.MatriculaNacional);
+            => _dao.Actualizar(
+                dto.IdUsuario,
+                dto.IdMedico,
+                dto.Username,
+                dto.Email,
+                dto.Nombre,
+                dto.Apellido,
+                dto.Dni,
+                dto.FechaNacimiento,
+                dto.Telefono,
+                dto.Activo,
+                dto.Especialidad,
+                dto.MatriculaProvincial,
+                dto.MatriculaNacional
+            );
 
         public void Eliminar(int idUsuario) => _dao.Eliminar(idUsuario);
 
