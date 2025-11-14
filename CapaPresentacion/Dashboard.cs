@@ -154,8 +154,8 @@ namespace CapaPresentacion
             sidebar.BtnMedicosClick += (s, e) => MostrarFormUnico<FormMedicos>();
             sidebar.BtnPacientesClick += (s, e) => MostrarFormUnico<FormInternados>();
             sidebar.BtnBackupClick += (s, e) => MostrarFormUnico<FormBackup>();
-            sidebar.BtnConfiguracionClick += (s, e) =>
-                MessageBox.Show("⚙️ Configuración en desarrollo.", "Info");
+            sidebar.BtnConfiguracionClick += (s, e) => MostrarFormUnico<FormConfiguracionAdmin>();
+
         }
 
         // ============================================================
